@@ -1,0 +1,70 @@
+<UserControl x:Class="NusaLite.Views.LyricsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="560" Height="158">
+    <Grid Margin="16,12,16,14">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="104" />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Width="104" VerticalAlignment="Top">
+            <Grid Width="84" Height="84">
+                <Border CornerRadius="17" Background="{StaticResource AccentDiagonalBrush}"
+                        Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
+                    <Path Data="{StaticResource IconMusic}" Fill="White" Width="30" Height="30" Stretch="Uniform" Opacity="0.92" />
+                </Border>
+                <Border CornerRadius="17">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
+                    </Border.Background>
+                </Border>
+                <Border CornerRadius="17" BorderThickness="1" BorderBrush="#1FFFFFFF" />
+            </Grid>
+            <TextBlock Text="{Binding TrackTitle}" Style="{StaticResource TitleText}" FontSize="10.5"
+                       Margin="0,7,0,0" MaxWidth="100" TextTrimming="CharacterEllipsis" />
+            <TextBlock Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="9"
+                       Margin="0,2,0,0" MaxWidth="100" TextTrimming="CharacterEllipsis" />
+        </StackPanel>
+
+        <Border Grid.Column="1" Width="1" Background="{StaticResource AmberBrush}" Opacity="0.4"
+                Margin="0,2,12,2" />
+
+        <Grid Grid.Column="2" Margin="14,0,0,0">
+            <StackPanel VerticalAlignment="Center" Margin="0,0,0,10">
+                <TextBlock Text="{Binding LyricPrev}" Style="{StaticResource BaseText}" FontSize="12.5"
+                           Foreground="#59FFFFFF" MaxWidth="330" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="CurrentLine" Text="{Binding LyricCurrent}" Style="{StaticResource TitleText}"
+                           FontSize="17.5" FontWeight="SemiBold" TextWrapping="Wrap" LineHeight="23"
+                           MaxHeight="48" MaxWidth="350" Margin="0,7,0,7" />
+                <TextBlock Text="{Binding LyricNext}" Style="{StaticResource BaseText}" FontSize="12.5"
+                           Foreground="#59FFFFFF" MaxWidth="330" TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Style="{StaticResource IconButton}" Width="18" Height="16" Click="OffsetMinus_Click"
+                        ToolTip="Lirik lebih cepat">
+                    <Path Data="{StaticResource IconMinus}" Style="{StaticResource StrokeIcon}" Width="9" Height="9" />
+                </Button>
+                <TextBlock Text="{Binding LyricOffsetText}" Style="{StaticResource TinyText}" FontSize="8.5"
+                           Foreground="{StaticResource AmberBrush}" FontWeight="SemiBold"
+                           VerticalAlignment="Center" Margin="1,0" />
+                <Button Style="{StaticResource IconButton}" Width="18" Height="16" Click="OffsetPlus_Click"
+                        ToolTip="Lirik lebih lambat">
+                    <Path Data="{StaticResource IconPlus}" Style="{StaticResource StrokeIcon}" Width="9" Height="9" />
+                </Button>
+            </StackPanel>
+
+            <Border Background="#E60A0D18" CornerRadius="12" Padding="16,10"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Visibility="{Binding ShowLyricsMessage, Converter={StaticResource BoolVis}}">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="{StaticResource IconLyrics}" Style="{StaticResource StrokeIcon}" Width="15" Height="15"
+                          Opacity="0.6" Margin="0,0,8,0" />
+                    <TextBlock Text="{Binding LyricsMessage}" Style="{StaticResource CaptionText}" FontSize="11" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,55 @@
+<UserControl x:Class="NusaLite.Views.IdleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="176" Height="34" IsHitTestVisible="False">
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="LensGlint"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0.62" To="1" Duration="0:0:3.2"
+                                     AutoReverse="True" RepeatBehavior="Forever">
+                        <DoubleAnimation.EasingFunction>
+                            <SineEase EasingMode="EaseInOut" />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid>
+        <Grid Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Ellipse Fill="#08090C" Stroke="#252A33" StrokeThickness="1" />
+            <Ellipse Width="9" Height="9">
+                <Ellipse.Fill>
+                    <RadialGradientBrush GradientOrigin="0.34,0.28" Center="0.5,0.5" RadiusX="0.62" RadiusY="0.62">
+                        <GradientStop Color="#40577A" Offset="0" />
+                        <GradientStop Color="#172235" Offset="0.48" />
+                        <GradientStop Color="#06080C" Offset="1" />
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse x:Name="LensGlint" Width="2.4" Height="2.4" Fill="{StaticResource AmberBrush}" Opacity="0.9"
+                     HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,3.2,0,0" />
+            <Ellipse Width="1.1" Height="1.1" Fill="{StaticResource RoseBrush}" Opacity="0.8"
+                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,4.1,3.4" />
+        </Grid>
+        <Path Data="{StaticResource IconBolt}" Fill="{StaticResource MintBrush}" Width="9" Height="9" Stretch="Uniform"
+              HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14,0,0,0"
+              Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
+        <Ellipse Width="4.5" Height="4.5" Fill="{StaticResource RoseBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Margin="0,0,15,0">
+            <Ellipse.Style>
+                <Style TargetType="Ellipse">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Ellipse.Style>
+        </Ellipse>
+    </Grid>
+</UserControl>

@@ -1,0 +1,107 @@
+<UserControl x:Class="NusaLite.Views.PlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:NusaLite.Controls"
+             Width="512" Height="158">
+    <Grid Margin="16,14,16,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="108" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Width="108" Height="108" VerticalAlignment="Top">
+            <Border CornerRadius="20" Background="{StaticResource AccentDiagonalBrush}"
+                    Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
+                <Path Data="{StaticResource IconMusic}" Fill="White" Width="40" Height="40" Stretch="Uniform" Opacity="0.92" />
+            </Border>
+            <Border CornerRadius="20">
+                <Border.Background>
+                    <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
+            <Border CornerRadius="20" BorderThickness="1" BorderBrush="#1FFFFFFF" />
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="17,1,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding TrackTitle}" Style="{StaticResource TitleText}" FontSize="16" />
+                <controls:EqBars Grid.Column="1" Width="17" Height="11" Margin="8,0,0,0" VerticalAlignment="Center"
+                                 Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
+            </Grid>
+
+            <TextBlock Grid.Row="1" Text="{Binding TrackArtist}" Style="{StaticResource CaptionText}"
+                       Margin="0,3,0,0" FontSize="11.5" />
+
+            <controls:LyricTicker Grid.Row="2" Current="{Binding LyricCurrent}" Height="16" FontSize="11.5"
+                                  VerticalAlignment="Center" Margin="0,0,0,3"
+                                  Visibility="{Binding HasLyrics, Converter={StaticResource BoolVis}}" />
+
+            <StackPanel Grid.Row="3" Margin="0,0,0,0">
+                <Grid x:Name="SeekArea" Height="13" Background="Transparent" Cursor="Hand"
+                      MouseLeftButtonDown="SeekArea_MouseLeftButtonDown"
+                      MouseMove="SeekArea_MouseMove"
+                      MouseLeftButtonUp="SeekArea_MouseLeftButtonUp">
+                    <ProgressBar Style="{StaticResource SlimProgress}" VerticalAlignment="Center"
+                                 Value="{Binding TrackProgress, Mode=OneWay}" />
+                </Grid>
+                <DockPanel Margin="0,2,0,0">
+                    <TextBlock Text="{Binding PositionText}" Style="{StaticResource TinyText}" FontSize="9.5" />
+                    <TextBlock DockPanel.Dock="Right" Text="{Binding DurationText}" Style="{StaticResource TinyText}"
+                               FontSize="9.5" HorizontalAlignment="Right" />
+                </DockPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="4" Margin="0,7,0,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource IconButton}" Width="28" Height="28" Click="Previous_Click"
+                            ToolTip="Sebelumnya">
+                        <Path Data="{StaticResource IconPrev}" Style="{StaticResource FillIcon}" Width="15" Height="15" />
+                    </Button>
+                    <Button Style="{StaticResource PlayButton}" Margin="8,0" Click="Play_Click" ToolTip="Putar / jeda">
+                        <Grid Width="16" Height="16">
+                            <Path Data="{StaticResource IconPlay}" Fill="#05060C" Width="13" Height="13" Stretch="Uniform"
+                                  Margin="1,0,0,0" Visibility="{Binding IsPlaying, Converter={StaticResource InvBoolVis}}" />
+                            <Path Data="{StaticResource IconPause}" Fill="#05060C" Width="11" Height="11" Stretch="Uniform"
+                                  Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
+                        </Grid>
+                    </Button>
+                    <Button Style="{StaticResource IconButton}" Width="28" Height="28" Click="Next_Click"
+                            ToolTip="Berikutnya">
+                        <Path Data="{StaticResource IconNext}" Style="{StaticResource FillIcon}" Width="15" Height="15" />
+                    </Button>
+
+                    <Rectangle Width="1" Height="18" Fill="{StaticResource LineBrush}" Margin="12,0" />
+
+                    <Button Style="{StaticResource IconButton}" Width="24" Height="24" Click="Mute_Click" ToolTip="Bisu">
+                        <Grid>
+                            <Path Data="{StaticResource IconVolume}" Style="{StaticResource StrokeIcon}" Width="15" Height="15"
+                                  Visibility="{Binding IsMuted, Converter={StaticResource InvBoolVis}}" />
+                            <Path Data="{StaticResource IconMute}" Style="{StaticResource StrokeIcon}" Width="15" Height="15"
+                                  Visibility="{Binding IsMuted, Converter={StaticResource BoolVis}}" />
+                        </Grid>
+                    </Button>
+                    <Slider Width="66" Margin="7,0,0,0" VerticalAlignment="Center" Style="{StaticResource SlimSlider}"
+                            Minimum="0" Maximum="100" Value="{Binding VolumeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#12FFD37A"
+                        BorderBrush="#2EFFD37A" BorderThickness="1" CornerRadius="9" Padding="8,3">
+                    <TextBlock Text="{Binding TrackSource}" Style="{StaticResource TinyText}" FontSize="9.5"
+                               Foreground="{StaticResource AmberBrush}" />
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

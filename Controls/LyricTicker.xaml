@@ -1,0 +1,25 @@
+<UserControl x:Class="NusaLite.Controls.LyricTicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             IsHitTestVisible="False"
+             ClipToBounds="True">
+    <Grid ClipToBounds="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="AccentBar" Width="2" Height="10" CornerRadius="1"
+                Background="{StaticResource GoldBrush}" VerticalAlignment="Center" Opacity="0.8" />
+
+        <TextBlock x:Name="Line" Grid.Column="1" Margin="8,0,0,0"
+                   FontFamily="{StaticResource UiFont}"
+                   FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   Foreground="#E6FFFFFF" TextTrimming="CharacterEllipsis"
+                   VerticalAlignment="Center">
+            <TextBlock.RenderTransform>
+                <TranslateTransform x:Name="LineSlide" />
+            </TextBlock.RenderTransform>
+        </TextBlock>
+    </Grid>
+</UserControl>
