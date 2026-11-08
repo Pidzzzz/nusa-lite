@@ -32,6 +32,8 @@ NusaLite adalah notch hidup di bagian atas layar Windows. Ia muncul saat dibutuh
 
 Dibangun native dengan **WPF + .NET 8**, NusaLite memakai media session Windows, Core Audio, dan API lirik publik untuk menghadirkan informasi yang relevan tepat di atas layar.
 
+**Unduh:** [Halaman Releases](https://github.com/Pidzzzz/nusa-lite/releases) — satu file NusaLite.exe, tanpa perlu instal .NET. Lihat juga [Catatan Rilis (PATCHNOTES.md)](PATCHNOTES.md).
+
 ## Tampilan
 
 <p align="center">

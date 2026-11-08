@@ -2,20 +2,33 @@
 
 ## v1.2.0 — 9 November 2026
 
-Kontrol hover dan klik yang lebih tenang untuk notch.
+Kontrol hover dan klik yang lebih tenang, plus pembaruan tampilan dan font.
+
+> **Catatan pemasangan** — File `.exe` belum ditandatangani secara digital. Saat pertama dijalankan, Windows SmartScreen mungkin menampilkan peringatan; klik **More info** lalu **Run anyway** untuk melanjutkan.
 
 ### Fitur baru
 
 - **Hover Dwell** — Notch tidak lagi langsung membesar saat kursor hanya melintas; kini menunggu jeda niat singkat (`HoverDelayMs`, default 400 ms) sebelum membuka. Bila diatur ke `0`, perilakunya kembali seperti semula.
 - **Click Guard** — Mode tembus klik total. Saat aktif, notch tidak menangkap klik sama sekali dan tidak membesar oleh hover. Diaktifkan dari tray menu ("Click Guard (tembus klik)") atau `Win + Alt + G`. Peek tetap boleh tampil.
 - **Auto Click Guard** — Bila diaktifkan, Click Guard menyala otomatis selama jendela aplikasi lain sedang dalam keadaan maximized, lalu lepas sendiri begitu kondisi berakhir. Tidak aktif terhadap manual guard, notch sendiri, atau desktop.
+- **Guard Ghost** — Selama Click Guard aktif, notch dibuat tembus pandang. Notch memudar lebih jelas saat kursor mendekat, dan kembali tembus pandang ketika kursor menjauh.
 - **Hotkey baru** — `Win + Alt + G` untuk toggle Click Guard.
+
+### Perbaikan
+
+- **Click Guard tidak lagi terkunci di lirik besar** — Saat Click Guard aktif, island tidak lagi berpindah ke tampilan Lyrics besar ketika lagu baru mulai diputar; island tetap di Idle kecuali saat Peek muncul sesaat.
+
+### UI / Visual
+
+- **Lirik Idle & teks kecil lebih terbaca** — Ukuran lirik di tampilan Idle, judul/artis di tampilan Lyrics, dan lirik mini di Hub dinaikkan; spesifikasi ukuran island Idle ikut disesuaikan.
+- **Font Inter** — Keluarga font UI diganti ke **Inter** (open source, lisensi OFL) yang dibundel bersama aplikasi, dengan fallback aman ke SF Pro lalu Segoe UI.
 
 ### Pengaturan baru
 
 - `HoverDelayMs` — jeda hover sebelum notch membuka (default `400`).
 - `ClickGuardEnabled` — status Click Guard manual (default `false`).
 - `AutoClickGuard` — aktifkan Click Guard otomatis saat ada jendela maximized (default `false`).
+- `GuardOpacity` — tingkat transparansi notch saat Click Guard aktif (default `0.5`).
 
 ---
 

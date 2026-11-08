@@ -6,7 +6,7 @@
 
 ## Status saat ini
 - Sedang dikerjakan: <!-- tulis satu tugas aktif di sini, contoh: persistensi Shelf setelah restart -->
-- Terakhir selesai: Ganti font UI ke Inter (dibundel) + fallback aman (9 Nov 2026)
+- Terakhir selesai: Rilis v1.2.0 disiapkan — versi disinkronkan, workflow Release (.github/workflows/release.yml), PATCHNOTES & README diperbarui, tag v1.2.0 dipush (9 Nov 2026)
 - Langkah berikutnya persis: <!-- tulis langkah konkret berikutnya, contoh: tambahkan Load/Save di ShelfService lewat SettingsStore -->
 - Blocker / keputusan penting: Limit harian OpenCode free — pakai workflow AGENTS.md + file ini supaya sesi tidak mulai dari nol.
 
@@ -31,3 +31,4 @@
 - Bugfix: selama Click Guard aktif island tidak lagi pindah ke Lyrics besar saat lagu baru. Penegakan di SwitchTo (tolak view non-Idle/non-Peek tanpa explicitRequest) + di OnViewModelPropertyChanged (paksa Idle saat guard); parameter explicitRequest=true hanya dari OpenView/OnViewRequested (hotkey/tray). _viewBeforeGuard tidak ditimpa bila guard sudah aktif.
 - Keterbacaan: IdleView LyricTicker FontSize 10.5->12, Height 15->17, FontWeight Medium, Foreground InkBrush, MaxWidth 288->320; BuildIdleSpec ukur 12/Medium, tinggi 34->38, clamp 198..360 -> 216..400, radius 12->19.3. LyricsView TitleLine 9.5->10.5 & ArtistLine 8.5->10; HubView LyricTicker 9->10.5, Height 12->14. Baris lirik utama tidak diubah.
 - Font UI diganti ke Inter (open source, OFL): Fonts/Inter-Regular/Medium/SemiBold.ttf + OFL.txt didaftarkan sebagai Resource di csproj; UiFont & DisplayFont di Styles.xaml kini "./Fonts/#Inter" dengan fallback SF Pro -> Segoe UI. Catatan: font kini dibundel => ukuran installer/publish naik beberapa ratus KB per bobot font (~1,2 MB total untuk 3 bobot).
+- Siapkan rilis v1.2.0: sinkron versi 1.2.0 (csproj + package.json), tambah .github/workflows/release.yml (publish single-file exe + buat GitHub Release saat tag v* dipush), entri v1.2.0 di PATCHNOTES.md + catatan SmartScreen, baris Unduh + tautan PATCHNOTES di README.md. Commit "release: v1.2.0" dan tag v1.2.0 dipush ke main (tidak ada kode aplikasi yang diubah).
