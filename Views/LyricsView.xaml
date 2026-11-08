@@ -25,9 +25,9 @@
                 </Border>
                 <Border x:Name="ArtOutline" CornerRadius="16" BorderThickness="1" BorderBrush="#1FFFFFFF" />
             </Grid>
-            <TextBlock x:Name="TitleLine" Text="{Binding TrackTitle}" Style="{StaticResource TitleText}" FontSize="9.5"
+            <TextBlock x:Name="TitleLine" Text="{Binding TrackTitle}" Style="{StaticResource TitleText}" FontSize="10.5"
                        Margin="0,6,0,0" MaxWidth="66" TextTrimming="CharacterEllipsis" />
-            <TextBlock x:Name="ArtistLine" Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="8.5"
+            <TextBlock x:Name="ArtistLine" Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="10"
                        Margin="0,2,0,0" MaxWidth="66" TextTrimming="CharacterEllipsis" />
         </StackPanel>
 

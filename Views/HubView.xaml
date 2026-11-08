@@ -51,7 +51,7 @@
                 <Grid Margin="0,1,0,0" Height="12">
                     <TextBlock Text="{Binding TrackSource}" Style="{StaticResource TinyText}" FontSize="9"
                                Visibility="{Binding HasLyrics, Converter={StaticResource InvBoolVis}}" />
-                    <controls:LyricTicker Current="{Binding LyricCurrent}" FontSize="9" Height="12"
+                    <controls:LyricTicker Current="{Binding LyricCurrent}" FontSize="10.5" Height="14"
                                           MaxWidth="150" HorizontalAlignment="Left"
                                           Visibility="{Binding HasLyrics, Converter={StaticResource BoolVis}}" />
                 </Grid>

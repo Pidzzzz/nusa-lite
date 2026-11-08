@@ -57,7 +57,10 @@ Dibangun native dengan **WPF + .NET 8**, NusaLite memakai media session Windows,
 | **Shelf** | Tarik file atau folder ke Shelf untuk akses cepat (tersimpan otomatis antar restart). |
 | **Peek** | Notifikasi ringkas untuk perubahan volume, status daya, dan media. |
 | **Fullscreen Auto-Hide** | Otomatis sembunyi saat game atau video layar penuh (F11/VLC/YouTube) aktif. |
-| **Global Hotkeys** | Akses cepat dengan shortcut keyboard global (`Win + Alt + N/P/S/L/F`). |
+| **Hover Dwell** | Notch baru membesar setelah kursor berhenti sebentar di atasnya, jadi kursor yang sekadar lewat tidak mengganggu. |
+| **Click Guard** | Mode tembus klik total: notch tidak menangkap klik dan tidak membesar saat hover. Toggle manual dari tray atau `Win + Alt + G`. |
+| **Auto Click Guard** | Saat jendela aplikasi lain sedang maximized, Click Guard otomatis aktif dan lepas begitu kondisi berakhir. |
+| **Global Hotkeys** | Akses cepat dengan shortcut keyboard global (`Win + Alt + N/P/S/L/F/G`). |
 | **Single-Instance Wake** | Menjalankan ulang aplikasi langsung memanggil dan membuka island yang sudah aktif. |
 | **Tray menu** | Buka setiap view, toggle auto-hide, toggle shortcut, sematkan di layar, atau keluar. |
 | **Autostart** | Daftarkan NusaLite ke Windows Run key langsung dari tray menu. |

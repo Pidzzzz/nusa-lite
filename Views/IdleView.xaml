@@ -8,8 +8,9 @@
               HorizontalAlignment="Left" VerticalAlignment="Center"
               Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
 
-        <controls:LyricTicker Current="{Binding IdleLine}" FontSize="10.5" Height="15"
-                              MaxWidth="288" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <controls:LyricTicker Current="{Binding IdleLine}" FontSize="12" Height="17"
+                              FontWeight="Medium" Foreground="{StaticResource InkBrush}"
+                              MaxWidth="320" HorizontalAlignment="Center" VerticalAlignment="Center">
             <controls:LyricTicker.Style>
                 <Style TargetType="controls:LyricTicker">
                     <Setter Property="Visibility" Value="Visible" />

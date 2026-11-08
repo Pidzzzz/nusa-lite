@@ -5,10 +5,12 @@ namespace NusaLite.Interop;
 internal static class NativeMethods
 {
     public const int GwlExStyle = -20;
+    public const int GwlStyle = -16;
     public const int WsExTransparent = 0x00000020;
     public const int WsExToolWindow = 0x00000080;
     public const int WsExLayered = 0x00080000;
     public const int WsExNoActivate = 0x08000000;
+    public const int WsMaximize = 0x01000000;
 
     public static readonly IntPtr HwndTopmost = new(-1);
 

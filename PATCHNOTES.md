@@ -1,5 +1,24 @@
 # Patch Notes
 
+## v1.2.0 — 9 November 2026
+
+Kontrol hover dan klik yang lebih tenang untuk notch.
+
+### Fitur baru
+
+- **Hover Dwell** — Notch tidak lagi langsung membesar saat kursor hanya melintas; kini menunggu jeda niat singkat (`HoverDelayMs`, default 400 ms) sebelum membuka. Bila diatur ke `0`, perilakunya kembali seperti semula.
+- **Click Guard** — Mode tembus klik total. Saat aktif, notch tidak menangkap klik sama sekali dan tidak membesar oleh hover. Diaktifkan dari tray menu ("Click Guard (tembus klik)") atau `Win + Alt + G`. Peek tetap boleh tampil.
+- **Auto Click Guard** — Bila diaktifkan, Click Guard menyala otomatis selama jendela aplikasi lain sedang dalam keadaan maximized, lalu lepas sendiri begitu kondisi berakhir. Tidak aktif terhadap manual guard, notch sendiri, atau desktop.
+- **Hotkey baru** — `Win + Alt + G` untuk toggle Click Guard.
+
+### Pengaturan baru
+
+- `HoverDelayMs` — jeda hover sebelum notch membuka (default `400`).
+- `ClickGuardEnabled` — status Click Guard manual (default `false`).
+- `AutoClickGuard` — aktifkan Click Guard otomatis saat ada jendela maximized (default `false`).
+
+---
+
 ## v1.1.0 — 9 November 2026
 
 Update besar untuk UI, tray, lirik, shelf, dan penataan window.

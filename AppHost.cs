@@ -38,6 +38,7 @@ public sealed class AppHost : IDisposable
             _tray.PinToggleRequested += () => _viewModel.IsPinned = !_viewModel.IsPinned;
             _tray.AutoLyricsToggled += enabled => _window?.SetAutoLyricsEnabled(enabled);
             _tray.FullscreenAutoHideToggled += enabled => _window?.SetFullscreenAutoHide(enabled);
+            _tray.ClickGuardToggled += enabled => _window?.SetClickGuard(enabled);
             _tray.GlobalHotkeysToggled += enabled => _window?.SetGlobalHotkeysEnabled(enabled);
             _tray.ExitRequested += () => Application.Current.Shutdown();
 
@@ -46,6 +47,7 @@ public sealed class AppHost : IDisposable
 
             _window = new MainWindow(_viewModel);
             _window.Show();
+            _window.SetClickGuard(_settings.Current.ClickGuardEnabled);
 
             _ = _viewModel.InitializeAsync();
         }

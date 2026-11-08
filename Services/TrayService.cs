@@ -15,6 +15,7 @@ public sealed class TrayService : IDisposable
     private readonly WinForms.ToolStripMenuItem _pinItem;
     private readonly WinForms.ToolStripMenuItem _autoLyricsItem;
     private readonly WinForms.ToolStripMenuItem _fullscreenItem;
+    private readonly WinForms.ToolStripMenuItem _clickGuardItem;
     private readonly WinForms.ToolStripMenuItem _hotkeyItem;
     private readonly WinForms.ToolStripMenuItem _startupItem;
     private Stream? _iconStream;
@@ -61,6 +62,10 @@ public sealed class TrayService : IDisposable
         _fullscreenItem.CheckOnClick = false;
         _menu.Items.Add(_fullscreenItem);
 
+        _clickGuardItem = Item("Click Guard (tembus klik)", (_, _) => ToggleClickGuard());
+        _clickGuardItem.CheckOnClick = false;
+        _menu.Items.Add(_clickGuardItem);
+
         _hotkeyItem = Item("Shortcut global (Win+Alt+N)", (_, _) => ToggleGlobalHotkeys());
         _hotkeyItem.CheckOnClick = false;
         _menu.Items.Add(_hotkeyItem);
@@ -77,6 +82,7 @@ public sealed class TrayService : IDisposable
             _pinItem.Checked = _isPinned();
             _autoLyricsItem.Checked = _settings.Current.AutoLyricsOnPlay;
             _fullscreenItem.Checked = _settings.Current.FullscreenAutoHide;
+            _clickGuardItem.Checked = _settings.Current.ClickGuardEnabled;
             _hotkeyItem.Checked = _settings.Current.EnableGlobalHotkeys;
             _startupItem.Checked = Autostart.IsEnabled();
         };
@@ -103,6 +109,8 @@ public sealed class TrayService : IDisposable
     public event Action<bool>? AutoLyricsToggled;
 
     public event Action<bool>? FullscreenAutoHideToggled;
+
+    public event Action<bool>? ClickGuardToggled;
 
     public event Action<bool>? GlobalHotkeysToggled;
 
@@ -137,6 +145,15 @@ public sealed class TrayService : IDisposable
         _settings.Save();
         _fullscreenItem.Checked = enabled;
         FullscreenAutoHideToggled?.Invoke(enabled);
+    }
+
+    private void ToggleClickGuard()
+    {
+        var enabled = !_settings.Current.ClickGuardEnabled;
+        _settings.Current.ClickGuardEnabled = enabled;
+        _settings.Save();
+        _clickGuardItem.Checked = enabled;
+        ClickGuardToggled?.Invoke(enabled);
     }
 
     private void ToggleGlobalHotkeys()

@@ -73,8 +73,8 @@
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
-    <FontFamily x:Key="DisplayFont">SF Pro Display, Segoe UI Variable Display, Segoe UI, Segoe UI Symbol</FontFamily>
-    <FontFamily x:Key="UiFont">SF Pro Text, SF Pro Display, Segoe UI Variable Text, Segoe UI, Segoe UI Symbol</FontFamily>
+    <FontFamily x:Key="DisplayFont">./Fonts/#Inter, SF Pro Display, Segoe UI Variable Display, Segoe UI, Segoe UI Symbol</FontFamily>
+    <FontFamily x:Key="UiFont">./Fonts/#Inter, SF Pro Text, SF Pro Display, Segoe UI Variable Text, Segoe UI, Segoe UI Symbol</FontFamily>
 
     <Style x:Key="BaseText" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />

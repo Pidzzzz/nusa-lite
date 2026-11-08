@@ -19,6 +19,14 @@ public sealed class AppSettings
 
     public bool PinOpen { get; set; }
 
+    public bool ClickGuardEnabled { get; set; }
+
+    public bool AutoClickGuard { get; set; }
+
+    public double GuardOpacity { get; set; } = 0.5;
+
+    public int HoverDelayMs { get; set; } = 400;
+
     public string WaterDate { get; set; } = string.Empty;
 
     public int WaterTodayMl { get; set; }

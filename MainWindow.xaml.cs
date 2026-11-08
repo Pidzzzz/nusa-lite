@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -30,6 +31,7 @@ public partial class MainWindow : Window
     private readonly DispatcherTimer _hoverTimer;
     private readonly DispatcherTimer _clickTimer;
     private readonly DispatcherTimer _fullscreenTimer;
+    private readonly DispatcherTimer _ghostTimer;
     private readonly Dictionary<IslandView, UserControl> _viewCache = new();
     private readonly List<Border> _dots = new();
     private readonly SolidColorBrush _dotIdleBrush = new(Color.FromArgb(140, 255, 255, 255));
@@ -41,6 +43,7 @@ public partial class MainWindow : Window
     private const int HotkeyShelfId = 9003;
     private const int HotkeyLyricsId = 9004;
     private const int HotkeyFocusId = 9005;
+    private const int HotkeyClickGuardId = 9006;
 
     private IntPtr _hwnd;
     private HwndSource? _hwndSource;
@@ -51,6 +54,12 @@ public partial class MainWindow : Window
     private IslandView _viewBeforePeek = IslandView.Idle;
     private IslandView _viewBeforeDrag = IslandView.Hub;
     private bool _hover;
+    private bool _dwellPending;
+    private bool _clickGuard;
+    private bool _autoGuarded;
+    private bool _ghostFaded;
+    private IslandView _viewBeforeGuard = IslandView.Idle;
+    private DispatcherTimer? _dwellTimer;
     private bool _peekActive;
     private bool _dragActive;
     private bool _dotsVisible;
@@ -97,6 +106,9 @@ public partial class MainWindow : Window
         _fullscreenTimer.Tick += FullscreenTimer_Tick;
         _fullscreenTimer.Start();
 
+        _ghostTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(350) };
+        _ghostTimer.Tick += GhostTimer_Tick;
+
         _viewModel.PeekRequested += OnPeekRequested;
         _viewModel.ViewRequested += OnViewRequested;
         _viewModel.PinRequested += OnPinRequested;
@@ -114,8 +126,10 @@ public partial class MainWindow : Window
         Closed += (_, _) =>
         {
             _hoverTimer.Stop();
+            _dwellTimer?.Stop();
             _clickTimer.Stop();
             _fullscreenTimer.Stop();
+            _ghostTimer.Stop();
             UnregisterHotkeys();
             _hwndSource?.RemoveHook(HwndHook);
             _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
@@ -138,7 +152,7 @@ public partial class MainWindow : Window
         }
 
         _viewModel.IsPinned = true;
-        SwitchTo(view, force: true);
+        SwitchTo(view, force: true, explicitRequest: true);
     }
 
     public void ToggleIsland()
@@ -257,6 +271,122 @@ public partial class MainWindow : Window
         }
     }
 
+    private bool IsEffectiveGuard => _clickGuard || _autoGuarded;
+
+    public void SetClickGuard(bool enabled)
+    {
+        if (enabled && !_clickGuard)
+        {
+            _viewBeforeGuard = _view;
+        }
+
+        _clickGuard = enabled;
+        CancelDwellIfGuarded();
+        UpdateClickThrough();
+        ApplyGuardGhost();
+    }
+
+    private double ClampedGuardOpacity()
+    {
+        var value = _viewModel.Settings.Current.GuardOpacity;
+        if (value < 0.15)
+        {
+            return 0.15;
+        }
+
+        return value > 1.0 ? 1.0 : value;
+    }
+
+    private void ApplyGuardGhost()
+    {
+        if (_clickGuard)
+        {
+            _ghostTimer.Stop();
+            _ghostFaded = false;
+            AnimateWindowOpacity(0.95);
+        }
+        else
+        {
+            _ghostTimer.Stop();
+            _ghostFaded = false;
+            AnimateWindowOpacity(1.0);
+        }
+    }
+
+    private void BumpGhost()
+    {
+        if (!_clickGuard)
+        {
+            return;
+        }
+
+        AnimateWindowOpacity(0.95);
+        _ghostFaded = false;
+    }
+
+    private void UpdateGhostByCursor()
+    {
+        if (!_clickGuard || _peekActive)
+        {
+            return;
+        }
+
+        var near = IsCursorNearIsland();
+
+        if (near && !_ghostFaded)
+        {
+            _ghostTimer.Stop();
+            AnimateWindowOpacity(ClampedGuardOpacity());
+            _ghostFaded = true;
+        }
+        else if (!near && _ghostFaded && !_ghostTimer.IsEnabled)
+        {
+            _ghostTimer.Start();
+        }
+    }
+
+    private void GhostTimer_Tick(object? sender, EventArgs e)
+    {
+        _ghostTimer.Stop();
+
+        if (!_clickGuard || _peekActive)
+        {
+            return;
+        }
+
+        if (!IsCursorNearIsland())
+        {
+            AnimateWindowOpacity(0.95);
+            _ghostFaded = false;
+        }
+    }
+
+    private void AnimateWindowOpacity(double target)
+    {
+        var animation = new DoubleAnimation(target, TimeSpan.FromMilliseconds(250))
+        {
+            FillBehavior = FillBehavior.HoldEnd
+        };
+        BeginAnimation(OpacityProperty, animation);
+    }
+
+    private void CancelDwellIfGuarded()
+    {
+        if (IsEffectiveGuard && _dwellPending)
+        {
+            _dwellPending = false;
+            _dwellTimer?.Stop();
+        }
+    }
+
+    private void ToggleClickGuard()
+    {
+        var enabled = !_viewModel.Settings.Current.ClickGuardEnabled;
+        _viewModel.Settings.Current.ClickGuardEnabled = enabled;
+        _viewModel.Settings.Save();
+        SetClickGuard(enabled);
+    }
+
     public void SetGlobalHotkeysEnabled(bool enabled)
     {
         if (enabled)
@@ -318,6 +448,7 @@ public partial class MainWindow : Window
             NativeMethods.RegisterHotKey(_hwnd, HotkeyShelfId,  mod, 0x53); // Win + Alt + S
             NativeMethods.RegisterHotKey(_hwnd, HotkeyLyricsId, mod, 0x4C); // Win + Alt + L
             NativeMethods.RegisterHotKey(_hwnd, HotkeyFocusId,  mod, 0x46); // Win + Alt + F
+            NativeMethods.RegisterHotKey(_hwnd, HotkeyClickGuardId, mod, 0x47); // Win + Alt + G
             _hotkeysRegistered = true;
         }
         catch (Exception ex)
@@ -340,6 +471,7 @@ public partial class MainWindow : Window
             NativeMethods.UnregisterHotKey(_hwnd, HotkeyShelfId);
             NativeMethods.UnregisterHotKey(_hwnd, HotkeyLyricsId);
             NativeMethods.UnregisterHotKey(_hwnd, HotkeyFocusId);
+            NativeMethods.UnregisterHotKey(_hwnd, HotkeyClickGuardId);
         }
         catch (Exception ex)
         {
@@ -376,6 +508,10 @@ public partial class MainWindow : Window
                     break;
                 case HotkeyFocusId:
                     OpenView(IslandView.Focus);
+                    handled = true;
+                    break;
+                case HotkeyClickGuardId:
+                    ToggleClickGuard();
                     handled = true;
                     break;
             }
@@ -429,8 +565,14 @@ public partial class MainWindow : Window
 
     // ----- Views ---------------------------------------------------------
 
-    private void SwitchTo(IslandView view, bool fast = false, bool force = false)
+    private void SwitchTo(IslandView view, bool fast = false, bool force = false, bool explicitRequest = false)
     {
+        if (_clickGuard && !explicitRequest &&
+            view != IslandView.Idle && view != IslandView.Peek)
+        {
+            return;
+        }
+
         if (_peekActive && view != IslandView.Peek)
         {
             _peekActive = false;
@@ -653,10 +795,10 @@ public partial class MainWindow : Window
 
     private IslandSpec BuildIdleSpec()
     {
-        var widest = MeasureTextWidth(_viewModel.IdleLine, _uiFont, 10.5, FontWeights.Normal);
+        var widest = MeasureTextWidth(_viewModel.IdleLine, _uiFont, 12, FontWeights.Medium);
         var width = Math.Ceiling((widest + 88) / 12) * 12;
-        width = Math.Clamp(width, 198, 360);
-        return new IslandSpec(width, 34, 12, 0);
+        width = Math.Clamp(width, 216, 400);
+        return new IslandSpec(width, 38, 19.3, 0);
     }
 
     private IslandSpec BuildLyricsSpec(bool compact)
@@ -708,6 +850,15 @@ public partial class MainWindow : Window
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (_clickGuard && _view != IslandView.Idle && _view != IslandView.Peek &&
+            e.PropertyName is nameof(MainViewModel.TrackTitle) or nameof(MainViewModel.TrackArtist)
+                or nameof(MainViewModel.HasMedia) or nameof(MainViewModel.HasLyrics)
+                or nameof(MainViewModel.LyricCurrent) or nameof(MainViewModel.IdleLine))
+        {
+            SwitchTo(IslandView.Idle, force: true);
+            return;
+        }
+
         if (_view == IslandView.Idle)
         {
             switch (e.PropertyName)
@@ -784,11 +935,12 @@ public partial class MainWindow : Window
             return;
         }
 
-        var passThrough = IsVisible &&
-                          _browserForeground &&
-                          !_hover &&
-                          !_viewModel.IsPinned &&
-                          !_dragActive;
+        var passThrough = IsEffectiveGuard ||
+                          (IsVisible &&
+                           _browserForeground &&
+                           !_hover &&
+                           !_viewModel.IsPinned &&
+                           !_dragActive);
 
         WindowStyler.SetClickThrough(_hwnd, passThrough);
     }
@@ -815,7 +967,52 @@ public partial class MainWindow : Window
             }
         }
 
+        var autoGuarded = _viewModel.Settings.Current.AutoClickGuard &&
+                          !_clickGuard &&
+                          IsForegroundMaximizedApp();
+        if (autoGuarded != _autoGuarded)
+        {
+            _autoGuarded = autoGuarded;
+            CancelDwellIfGuarded();
+        }
+
         UpdateClickThrough();
+    }
+
+    private bool IsForegroundMaximizedApp()
+    {
+        if (_hwnd == IntPtr.Zero)
+        {
+            return false;
+        }
+
+        var fg = NativeMethods.GetForegroundWindow();
+        if (fg == IntPtr.Zero || fg == _hwnd)
+        {
+            return false;
+        }
+
+        if (!NativeMethods.IsWindowVisible(fg))
+        {
+            return false;
+        }
+
+        var sb = new StringBuilder(256);
+        NativeMethods.GetClassName(fg, sb, sb.Capacity);
+        var cls = sb.ToString();
+        if (cls is "Progman" or "WorkerW" or "Shell_TrayWnd" or "Shell_SecondaryTrayWnd" or "MultitaskingViewFrame")
+        {
+            return false;
+        }
+
+        NativeMethods.GetWindowThreadProcessId(fg, out var pid);
+        if (pid == 0 || pid == Environment.ProcessId)
+        {
+            return false;
+        }
+
+        var style = NativeMethods.GetWindowLongPtr(fg, NativeMethods.GwlStyle).ToInt64();
+        return (style & NativeMethods.WsMaximize) != 0;
     }
 
     private static IslandSpec SpecFor(IslandView view) => view switch
@@ -948,6 +1145,8 @@ public partial class MainWindow : Window
 
     private void HoverTimer_Tick(object? sender, EventArgs e)
     {
+        UpdateGhostByCursor();
+
         var inside = IsCursorInside();
 
         if (!inside)
@@ -979,6 +1178,16 @@ public partial class MainWindow : Window
 
     private bool IsCursorInside()
     {
+        return IsCursorWithinRect(2);
+    }
+
+    private bool IsCursorNearIsland()
+    {
+        return IsCursorWithinRect(24);
+    }
+
+    private bool IsCursorWithinRect(int margin)
+    {
         if (_hwnd == IntPtr.Zero || !NativeMethods.GetCursorPos(out var cursor))
         {
             return false;
@@ -991,15 +1200,15 @@ public partial class MainWindow : Window
 
         var scale = NativeMethods.GetDpiForWindow(_hwnd) / 96.0;
 
-        if (IsInside(cursor, IslandHost, window, scale))
+        if (IsInside(cursor, IslandHost, window, scale, margin))
         {
             return true;
         }
 
-        return _dotsVisible && DotsBar.ActualWidth > 0 && IsInside(cursor, DotsBar, window, scale);
+        return _dotsVisible && DotsBar.ActualWidth > 0 && IsInside(cursor, DotsBar, window, scale, margin);
     }
 
-    private bool IsInside(NativeMethods.Point cursor, FrameworkElement element, NativeMethods.Rect window, double scale)
+    private bool IsInside(NativeMethods.Point cursor, FrameworkElement element, NativeMethods.Rect window, double scale, int margin = 2)
     {
         var origin = element.TranslatePoint(new Point(0, 0), Root);
         var left = window.Left + origin.X * scale;
@@ -1007,13 +1216,71 @@ public partial class MainWindow : Window
         var right = left + element.ActualWidth * scale;
         var bottom = top + element.ActualHeight * scale;
 
-        return cursor.X >= left - 2 && cursor.X <= right + 2 && cursor.Y >= top - 2 && cursor.Y <= bottom + 2;
+        return cursor.X >= left - margin && cursor.X <= right + margin && cursor.Y >= top - margin && cursor.Y <= bottom + margin;
     }
 
     private void PointerEnter()
     {
+        if (IsEffectiveGuard)
+        {
+            return;
+        }
+
         _collapseTimer.Stop();
         if (_hover)
+        {
+            return;
+        }
+
+        var delay = _viewModel.Settings.Current.HoverDelayMs;
+        if (delay <= 0)
+        {
+            if (_dwellPending)
+            {
+                _dwellPending = false;
+                _dwellTimer?.Stop();
+            }
+
+            ExpandFromHover();
+            return;
+        }
+
+        if (_dwellPending)
+        {
+            return;
+        }
+
+        _dwellPending = true;
+        _dwellTimer ??= CreateDwellTimer();
+        _dwellTimer.Stop();
+        _dwellTimer.Interval = TimeSpan.FromMilliseconds(delay);
+        _dwellTimer.Start();
+    }
+
+    private DispatcherTimer CreateDwellTimer()
+    {
+        var timer = new DispatcherTimer(DispatcherPriority.Input);
+        timer.Tick += DwellTimer_Tick;
+        return timer;
+    }
+
+    private void DwellTimer_Tick(object? sender, EventArgs e)
+    {
+        _dwellTimer?.Stop();
+        _dwellPending = false;
+
+        if (IsEffectiveGuard || _hover || !IsCursorInside())
+        {
+            return;
+        }
+
+        ExpandFromHover();
+    }
+
+    private void ExpandFromHover()
+    {
+        _collapseTimer.Stop();
+        if (IsEffectiveGuard || _hover)
         {
             return;
         }
@@ -1037,6 +1304,12 @@ public partial class MainWindow : Window
 
     private void PointerLeave()
     {
+        if (_dwellPending)
+        {
+            _dwellPending = false;
+            _dwellTimer?.Stop();
+        }
+
         _hover = false;
         UpdateClickThrough();
         if (_viewModel.IsPinned || _dragActive)
@@ -1157,6 +1430,11 @@ public partial class MainWindow : Window
 
         _viewModel.FillPeek(kind);
 
+        if (_clickGuard)
+        {
+            BumpGhost();
+        }
+
         if (_peekActive)
         {
             _peekTimer.Stop();
@@ -1187,6 +1465,7 @@ public partial class MainWindow : Window
         }
 
         SwitchTo(target, force: true);
+        UpdateGhostByCursor();
     }
 
     private void OnPinRequested(bool pinned)
@@ -1211,12 +1490,12 @@ public partial class MainWindow : Window
         if (view == IslandView.Idle)
         {
             _viewModel.IsPinned = false;
-            SwitchTo(IslandView.Idle, force: true);
+            SwitchTo(IslandView.Idle, force: true, explicitRequest: true);
             return;
         }
 
         _viewModel.IsPinned = true;
-        SwitchTo(view, force: true);
+        SwitchTo(view, force: true, explicitRequest: true);
     }
 
     // ----- Drag and drop -------------------------------------------------

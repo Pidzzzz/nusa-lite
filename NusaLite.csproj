@@ -29,6 +29,9 @@
 
   <ItemGroup>
     <Resource Include="Assets\nusa.ico" />
+    <Resource Include="Fonts\Inter-Regular.ttf" />
+    <Resource Include="Fonts\Inter-Medium.ttf" />
+    <Resource Include="Fonts\Inter-SemiBold.ttf" />
   </ItemGroup>
 
 </Project>
