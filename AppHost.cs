@@ -29,13 +29,16 @@ public sealed class AppHost : IDisposable
             _power = new PowerService();
             _pomodoro = new PomodoroService(_settings);
             _water = new WaterService(_settings);
-            _shelf = new ShelfService();
+            _shelf = new ShelfService(_settings);
 
             _viewModel = new MainViewModel(_settings, _media, _lyrics, _audio, _power, _pomodoro, _water, _shelf);
 
             _tray = new TrayService(_settings, () => _viewModel.IsPinned);
             _tray.OpenRequested += view => _window?.OpenView(view);
             _tray.PinToggleRequested += () => _viewModel.IsPinned = !_viewModel.IsPinned;
+            _tray.AutoLyricsToggled += enabled => _window?.SetAutoLyricsEnabled(enabled);
+            _tray.FullscreenAutoHideToggled += enabled => _window?.SetFullscreenAutoHide(enabled);
+            _tray.GlobalHotkeysToggled += enabled => _window?.SetGlobalHotkeysEnabled(enabled);
             _tray.ExitRequested += () => Application.Current.Shutdown();
 
             _viewModel.NotifyRequested += (title, message) => _tray?.ShowNotification(title, message);
@@ -52,6 +55,21 @@ public sealed class AppHost : IDisposable
             MessageBox.Show(ex.Message, "NusaLite", MessageBoxButton.OK, MessageBoxImage.Error);
             Application.Current.Shutdown();
         }
+    }
+
+    public void Wake()
+    {
+        _window?.Dispatcher.Invoke(() =>
+        {
+            if (_window is not null)
+            {
+                if (!_window.IsVisible)
+                {
+                    _window.Show();
+                }
+                _window.WakeIsland();
+            }
+        });
     }
 
     public void Dispose()

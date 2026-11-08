@@ -25,11 +25,14 @@
             </Grid.ColumnDefinitions>
 
             <Grid Width="44" Height="44" VerticalAlignment="Center">
-                <Border CornerRadius="13" Background="{StaticResource AccentDiagonalBrush}"
+                <Grid.Effect>
+                    <DropShadowEffect Color="#8B5CF6" BlurRadius="20" ShadowDepth="0" Opacity="0.3" />
+                </Grid.Effect>
+                <Border CornerRadius="14,12,14,12" Background="{StaticResource AccentDiagonalBrush}"
                         Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
-                    <Path Data="{StaticResource IconMusic}" Fill="White" Width="20" Height="20" Stretch="Uniform" Opacity="0.95" />
+                    <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="20" Height="20" Stretch="Uniform" Opacity="0.95" />
                 </Border>
-                <Border CornerRadius="13">
+                <Border CornerRadius="14,12,14,12">
                     <Border.Background>
                         <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
                     </Border.Background>

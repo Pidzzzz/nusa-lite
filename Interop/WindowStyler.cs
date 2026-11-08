@@ -1,8 +1,8 @@
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace NusaLite.Interop;
-
-
 
 internal static class WindowStyler
 {
@@ -61,5 +61,84 @@ internal static class WindowStyler
         using var g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
         var scale = g.DpiX / 96.0;
         return new System.Windows.Point(p.X / scale, p.Y / scale);
+    }
+
+    public static bool IsForegroundFullscreen(IntPtr currentHwnd)
+    {
+        var fg = NativeMethods.GetForegroundWindow();
+        if (fg == IntPtr.Zero || fg == currentHwnd)
+        {
+            return false;
+        }
+
+        if (!NativeMethods.IsWindowVisible(fg))
+        {
+            return false;
+        }
+
+        var sb = new StringBuilder(256);
+        NativeMethods.GetClassName(fg, sb, sb.Capacity);
+        var cls = sb.ToString();
+
+        if (cls is "Progman" or "WorkerW" or "Shell_TrayWnd" or "Shell_SecondaryTrayWnd"
+            or "Windows.UI.Core.CoreWindow" or "MultitaskingViewFrame")
+        {
+            return false;
+        }
+
+        var currentMonitor = NativeMethods.MonitorFromWindow(currentHwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
+        var fgMonitor = NativeMethods.MonitorFromWindow(fg, NativeMethods.MONITOR_DEFAULTTONEAREST);
+
+        if (currentMonitor == IntPtr.Zero || fgMonitor == IntPtr.Zero || currentMonitor != fgMonitor)
+        {
+            return false;
+        }
+
+        var mi = new NativeMethods.MONITORINFO { cbSize = Marshal.SizeOf<NativeMethods.MONITORINFO>() };
+        if (!NativeMethods.GetMonitorInfo(currentMonitor, ref mi))
+        {
+            return false;
+        }
+
+        if (!NativeMethods.GetWindowRect(fg, out var fgRect))
+        {
+            return false;
+        }
+
+        return fgRect.Left <= mi.rcMonitor.Left &&
+               fgRect.Top <= mi.rcMonitor.Top &&
+               fgRect.Right >= mi.rcMonitor.Right &&
+               fgRect.Bottom >= mi.rcMonitor.Bottom;
+    }
+
+    public static bool? IsForegroundBrowser(IntPtr currentHwnd)
+    {
+        var fg = NativeMethods.GetForegroundWindow();
+        if (fg == IntPtr.Zero || fg == currentHwnd)
+        {
+            return null;
+        }
+
+        try
+        {
+            NativeMethods.GetWindowThreadProcessId(fg, out var pid);
+            if (pid == 0 || pid == Environment.ProcessId)
+            {
+                return null;
+            }
+
+            using var process = System.Diagnostics.Process.GetProcessById((int)pid);
+            var name = process.ProcessName;
+            return name.Contains("chrome", StringComparison.OrdinalIgnoreCase) ||
+                   name.Contains("msedge", StringComparison.OrdinalIgnoreCase) ||
+                   name.Contains("firefox", StringComparison.OrdinalIgnoreCase) ||
+                   name.Contains("brave", StringComparison.OrdinalIgnoreCase) ||
+                   name.Contains("opera", StringComparison.OrdinalIgnoreCase) ||
+                   name.Contains("vivaldi", StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

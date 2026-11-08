@@ -10,16 +10,19 @@
         </Grid.ColumnDefinitions>
 
         <Grid Width="108" Height="108" VerticalAlignment="Top">
-            <Border CornerRadius="20" Background="{StaticResource AccentDiagonalBrush}"
+            <Grid.Effect>
+                <DropShadowEffect Color="#8B5CF6" BlurRadius="28" ShadowDepth="0" Opacity="0.32" />
+            </Grid.Effect>
+            <Border CornerRadius="22,18,22,18" Background="{StaticResource AccentDiagonalBrush}"
                     Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
-                <Path Data="{StaticResource IconMusic}" Fill="White" Width="40" Height="40" Stretch="Uniform" Opacity="0.92" />
+                <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="40" Height="40" Stretch="Uniform" Opacity="0.92" />
             </Border>
-            <Border CornerRadius="20">
+            <Border CornerRadius="22,18,22,18">
                 <Border.Background>
                     <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
                 </Border.Background>
             </Border>
-            <Border CornerRadius="20" BorderThickness="1" BorderBrush="#1FFFFFFF" />
+            <Border CornerRadius="22,18,22,18" BorderThickness="1" BorderBrush="#1FFFFFFF" />
         </Grid>
 
         <Grid Grid.Column="1" Margin="17,1,0,0">
@@ -71,9 +74,9 @@
                     </Button>
                     <Button Style="{StaticResource PlayButton}" Margin="8,0" Click="Play_Click" ToolTip="Putar / jeda">
                         <Grid Width="16" Height="16">
-                            <Path Data="{StaticResource IconPlay}" Fill="#05060C" Width="13" Height="13" Stretch="Uniform"
+                            <Path Data="{StaticResource IconPlay}" Fill="#120B20" Width="13" Height="13" Stretch="Uniform"
                                   Margin="1,0,0,0" Visibility="{Binding IsPlaying, Converter={StaticResource InvBoolVis}}" />
-                            <Path Data="{StaticResource IconPause}" Fill="#05060C" Width="11" Height="11" Stretch="Uniform"
+                            <Path Data="{StaticResource IconPause}" Fill="#120B20" Width="11" Height="11" Stretch="Uniform"
                                   Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
                         </Grid>
                     </Button>
@@ -96,8 +99,8 @@
                             Minimum="0" Maximum="100" Value="{Binding VolumeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
-                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#12FFD37A"
-                        BorderBrush="#2EFFD37A" BorderThickness="1" CornerRadius="9" Padding="8,3">
+                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#12CDB4FF"
+                        BorderBrush="#2ECDB4FF" BorderThickness="1" CornerRadius="9" Padding="8,3">
                     <TextBlock Text="{Binding TrackSource}" Style="{StaticResource TinyText}" FontSize="9.5"
                                Foreground="{StaticResource AmberBrush}" />
                 </Border>

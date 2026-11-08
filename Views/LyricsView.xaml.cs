@@ -9,6 +9,7 @@ namespace NusaLite.Views;
 public partial class LyricsView : UserControl
 {
     private MainViewModel? _vm;
+    private bool? _compact;
 
     public LyricsView()
     {
@@ -75,4 +76,52 @@ public partial class LyricsView : UserControl
     private void OffsetMinus_Click(object sender, RoutedEventArgs e) => _vm?.ShiftLyricOffset(-500);
 
     private void OffsetPlus_Click(object sender, RoutedEventArgs e) => _vm?.ShiftLyricOffset(500);
+
+    public void ApplyLayout(bool compact, double width, double height)
+    {
+        if (!double.IsNaN(width) && width > 0)
+        {
+            Width = width;
+        }
+
+        if (!double.IsNaN(height) && height > 0)
+        {
+            Height = height;
+        }
+
+        if (_compact == compact)
+        {
+            return;
+        }
+
+        _compact = compact;
+        ApplyCompact(compact);
+    }
+
+    private void ApplyCompact(bool compact)
+    {
+        var artSize = compact ? 40.0 : 56.0;
+        ArtColumn.Width = compact ? 46 : 66;
+        ArtBox.Width = artSize;
+        ArtBox.Height = artSize;
+
+        var radius = new CornerRadius(compact ? 12 : 16);
+        ArtPlaceholder.CornerRadius = radius;
+        ArtImage.CornerRadius = radius;
+        ArtOutline.CornerRadius = radius;
+
+        TitleLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+        PrevLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+        NextLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+
+        Divider.Margin = compact ? new Thickness(0, 2, 10, 2) : new Thickness(0, 2, 12, 2);
+        LyricHost.Margin = compact ? new Thickness(12, 0, 0, 0) : new Thickness(14, 0, 0, 0);
+
+        CurrentLine.FontSize = compact ? 13.5 : 15.5;
+        CurrentLine.LineHeight = compact ? 17 : 19;
+        CurrentLine.MaxHeight = compact ? 18 : 38;
+        CurrentLine.TextWrapping = compact ? TextWrapping.NoWrap : TextWrapping.Wrap;
+        CurrentLine.TextTrimming = compact ? TextTrimming.CharacterEllipsis : TextTrimming.None;
+        CurrentLine.Margin = compact ? new Thickness(0, 2, 0, 2) : new Thickness(0, 3, 0, 3);
+    }
 }

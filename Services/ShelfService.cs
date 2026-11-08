@@ -15,9 +15,74 @@ public sealed class ShelfService
         ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".ico"
     };
 
+    private readonly SettingsStore? _settings;
+
     public ObservableCollection<ShelfItem> Items { get; } = new();
 
     public event Action? Changed;
+
+    public ShelfService(SettingsStore? settings = null)
+    {
+        _settings = settings;
+        LoadPersisted();
+    }
+
+    private void LoadPersisted()
+    {
+        if (_settings?.Current.ShelfPaths is null || _settings.Current.ShelfPaths.Count == 0)
+        {
+            return;
+        }
+
+        var valid = new List<string>();
+        foreach (var path in _settings.Current.ShelfPaths)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                continue;
+            }
+
+            try
+            {
+                var expanded = Environment.ExpandEnvironmentVariables(path.Trim().Trim('"'));
+                var isDirectory = Directory.Exists(expanded);
+                if (!isDirectory && !File.Exists(expanded))
+                {
+                    continue;
+                }
+
+                var full = System.IO.Path.GetFullPath(expanded);
+                if (Items.Any(item => string.Equals(item.Path, full, StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
+                Items.Add(CreateItem(full, isDirectory));
+                valid.Add(full);
+            }
+            catch (Exception ex)
+            {
+                Log.Write($"Failed to restore shelf item '{path}'.", ex);
+            }
+        }
+
+        if (_settings is not null && valid.Count != _settings.Current.ShelfPaths.Count)
+        {
+            _settings.Current.ShelfPaths = valid;
+            _settings.Save();
+        }
+    }
+
+    private void Persist()
+    {
+        if (_settings is null)
+        {
+            return;
+        }
+
+        _settings.Current.ShelfPaths = Items.Select(i => i.Path).ToList();
+        _settings.Save();
+    }
 
     public bool Add(string path)
     {
@@ -47,6 +112,7 @@ public sealed class ShelfService
             }
 
             Items.Add(CreateItem(full, isDirectory));
+            Persist();
             Changed?.Invoke();
             return true;
         }
@@ -80,6 +146,7 @@ public sealed class ShelfService
     {
         if (Items.Remove(item))
         {
+            Persist();
             Changed?.Invoke();
         }
     }
@@ -92,6 +159,7 @@ public sealed class ShelfService
         }
 
         Items.Clear();
+        Persist();
         Changed?.Invoke();
     }
 

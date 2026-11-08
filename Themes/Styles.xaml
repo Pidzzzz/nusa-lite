@@ -2,19 +2,19 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:infra="clr-namespace:NusaLite.Infrastructure">
 
-    <Color x:Key="VoidColor">#03040A</Color>
-    <Color x:Key="InkColor">#ECEFF7</Color>
-    <Color x:Key="MistColor">#8C94A8</Color>
+    <Color x:Key="VoidColor">#06030F</Color>
+    <Color x:Key="InkColor">#F3EEFF</Color>
+    <Color x:Key="MistColor">#9D94BC</Color>
     <Color x:Key="CyanColor">#64D2FF</Color>
-    <Color x:Key="IndigoColor">#0A84FF</Color>
-    <Color x:Key="VioletColor">#5E5CE6</Color>
-    <Color x:Key="AmberColor">#FFD37A</Color>
-    <Color x:Key="RoseColor">#FF7A9A</Color>
-    <Color x:Key="CoralColor">#FF8A5C</Color>
+    <Color x:Key="IndigoColor">#6A5AE0</Color>
+    <Color x:Key="VioletColor">#6D4AFF</Color>
+    <Color x:Key="AmberColor">#CDB4FF</Color>
+    <Color x:Key="RoseColor">#F0A6FF</Color>
+    <Color x:Key="CoralColor">#B57BFF</Color>
     <Color x:Key="MintColor">#6FE7D2</Color>
     <Color x:Key="AquaColor">#38D6E8</Color>
     <Color x:Key="LimeColor">#C7F36B</Color>
-    <Color x:Key="OrchidColor">#9B7BFF</Color>
+    <Color x:Key="OrchidColor">#7C5CFF</Color>
 
     <SolidColorBrush x:Key="VoidBrush" Color="{StaticResource VoidColor}" />
     <SolidColorBrush x:Key="InkBrush" Color="{StaticResource InkColor}" />
@@ -48,18 +48,18 @@
     <LinearGradientBrush x:Key="AquaBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="{StaticResource MintColor}" />
         <GradientStop Offset="0.52" Color="{StaticResource AquaColor}" />
-        <GradientStop Offset="1" Color="#5B8CFF" />
+        <GradientStop Offset="1" Color="#8F7BFF" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="EmberBrush" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Offset="0" Color="{StaticResource CoralColor}" />
-        <GradientStop Offset="0.55" Color="#FF5A6E" />
+        <GradientStop Offset="0.55" Color="#D96BFF" />
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="GoldBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="1" Color="#FFB36B" />
+        <GradientStop Offset="1" Color="#B79CFF" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="LimeBrush" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -80,6 +80,7 @@
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
         <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
         <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="LineHeight" Value="16.5" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
@@ -87,22 +88,26 @@
     <Style x:Key="TitleText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
         <Setter Property="FontSize" Value="15" />
+        <Setter Property="LineHeight" Value="19" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style x:Key="BigText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
         <Setter Property="FontSize" Value="22" />
+        <Setter Property="LineHeight" Value="28" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style x:Key="CaptionText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="FontSize" Value="11" />
+        <Setter Property="LineHeight" Value="15" />
         <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
     </Style>
 
     <Style x:Key="TinyText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="FontSize" Value="10" />
+        <Setter Property="LineHeight" Value="13" />
         <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
     </Style>
 
@@ -116,15 +121,55 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="10">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="11,9,11,9"
+                            RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="HoverScale" />
+                        </Border.RenderTransform>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1.1" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1.1" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#1EFFD37A" />
+                            <Setter TargetName="Bg" Property="Background" Value="#1ECDB4FF" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#30FFD37A" />
+                            <Setter TargetName="Bg" Property="Background" Value="#30CDB4FF" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -144,16 +189,55 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="11"
-                            Padding="{TemplateBinding Padding}">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="12,10,12,10"
+                            Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="HoverScale" />
+                        </Border.RenderTransform>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1.03" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1.03" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#26FFD37A" />
+                            <Setter TargetName="Bg" Property="Background" Value="#26CDB4FF" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#38FFD37A" />
+                            <Setter TargetName="Bg" Property="Background" Value="#38CDB4FF" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -162,27 +246,66 @@
     </Style>
 
     <Style x:Key="PrimaryButton" TargetType="Button">
-        <Setter Property="Foreground" Value="#05060C" />
+        <Setter Property="Foreground" Value="#120B20" />
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Background" Value="White" />
+        <Setter Property="Background" Value="#F6F1FF" />
         <Setter Property="Padding" Value="14,7" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="12"
-                            Padding="{TemplateBinding Padding}">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="13,11,13,11"
+                            Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="HoverScale" />
+                        </Border.RenderTransform>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1.03" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1.03" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#FFF1DF" />
+                            <Setter TargetName="Bg" Property="Background" Value="#EFE6FF" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#F3DEC4" />
+                            <Setter TargetName="Bg" Property="Background" Value="#E3D6FA" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -223,6 +346,8 @@
     <Geometry x:Key="IconChevronRight">M10,6 L16,12 L10,18</Geometry>
     <Geometry x:Key="IconMinus">M6,12 H18</Geometry>
     <Geometry x:Key="IconPlus">M12,6 V18 M6,12 H18</Geometry>
+    <Geometry x:Key="IconLock">M7,11 V7 A5,5 0 0 1 17,7 V11 M5,11 H19 V21 H5 Z M12,14.5 V17.5</Geometry>
+    <Geometry x:Key="IconUnlock">M7,11 V7 A5,5 0 0 1 17,7 M5,11 H19 V21 H5 Z M12,14.5 V17.5</Geometry>
 
     <Style x:Key="StrokeIcon" TargetType="Path">
         <Setter Property="Stroke" Value="{StaticResource InkBrush}" />
@@ -246,7 +371,7 @@
     <Style x:Key="SlimProgress" TargetType="ProgressBar">
         <Setter Property="Height" Value="3" />
         <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
-        <Setter Property="Background" Value="#33FFFFFF" />
+        <Setter Property="Background" Value="#2EE9DEFF" />
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />
         <Setter Property="Template">
@@ -264,21 +389,64 @@
     <Style x:Key="PlayButton" TargetType="Button">
         <Setter Property="Width" Value="36" />
         <Setter Property="Height" Value="36" />
-        <Setter Property="Background" Value="White" />
+        <Setter Property="Background" Value="#F6F1FF" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="18">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="19,17,19,17"
+                            RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="HoverScale" />
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect Color="#8B5CF6" BlurRadius="18" ShadowDepth="0" Opacity="0.32" />
+                        </Border.Effect>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1.055" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1.055" Duration="0:0:0.16">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleX"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="HoverScale" Storyboard.TargetProperty="ScaleY"
+                                                     To="1" Duration="0:0:0.22">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#FFF1DF" />
+                            <Setter TargetName="Bg" Property="Background" Value="#EFE6FF" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#F3DEC4" />
+                            <Setter TargetName="Bg" Property="Background" Value="#E3D6FA" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -293,7 +461,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
                     <Grid>
-                        <Border Height="3" VerticalAlignment="Center" CornerRadius="2" Background="#33FFFFFF" />
+                        <Border Height="3" VerticalAlignment="Center" CornerRadius="2" Background="#2EE9DEFF" />
                         <Track x:Name="PART_Track">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton Command="Slider.DecreaseLarge" Focusable="False">
@@ -308,7 +476,7 @@
                                 <Thumb Width="10" Height="10">
                                     <Thumb.Template>
                                         <ControlTemplate TargetType="Thumb">
-                                            <Ellipse Fill="White" />
+                                            <Ellipse Fill="#F3EEFF" />
                                         </ControlTemplate>
                                     </Thumb.Template>
                                 </Thumb>

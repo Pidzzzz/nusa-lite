@@ -338,7 +338,7 @@ public sealed class MediaService : IDisposable
 
     private void ResetPositionClock()
     {
-        _lastReportedPosition = TimeSpan.Zero;
+        _lastReportedPosition = TimeSpan.MinValue;
         _clockPosition = TimeSpan.Zero;
         _clockAt = default;
         _clockInitialized = false;
@@ -353,27 +353,49 @@ public sealed class MediaService : IDisposable
         var raw = ClampPosition(timeline.Position - timeline.StartTime, duration);
         var now = DateTimeOffset.Now;
 
+        // If media is actively playing, account for time passed since the media session reported the position.
+        // Windows SMTC only updates Position at specific points (seek, track change, pause/resume),
+        // with LastUpdatedTime indicating the exact timestamp of that measurement.
+        if (isPlaying &&
+            timeline.LastUpdatedTime > DateTimeOffset.MinValue &&
+            timeline.LastUpdatedTime < DateTimeOffset.MaxValue &&
+            timeline.LastUpdatedTime <= now)
+        {
+            var sinceUpdate = now - timeline.LastUpdatedTime;
+            if (sinceUpdate > TimeSpan.Zero && sinceUpdate < TimeSpan.FromHours(24))
+            {
+                raw = ClampPosition(raw + sinceUpdate, duration);
+            }
+        }
+
         if (!_clockInitialized)
         {
             _clockInitialized = true;
-            _lastReportedPosition = raw;
+            _lastReportedPosition = timeline.Position;
             _clockPosition = raw;
             _clockAt = now;
             _clockWasPlaying = isPlaying;
             return raw;
         }
 
-        if (raw != _lastReportedPosition)
+        if (timeline.Position != _lastReportedPosition)
         {
-            _lastReportedPosition = raw;
+            _lastReportedPosition = timeline.Position;
             _clockPosition = raw;
         }
-        else if (isPlaying && _clockWasPlaying)
+        else if (isPlaying)
         {
-            var elapsed = now - _clockAt;
-            if (elapsed > TimeSpan.Zero)
+            if (timeline.LastUpdatedTime > DateTimeOffset.MinValue && timeline.LastUpdatedTime <= now)
             {
-                _clockPosition += elapsed;
+                _clockPosition = raw;
+            }
+            else if (_clockWasPlaying)
+            {
+                var elapsed = now - _clockAt;
+                if (elapsed > TimeSpan.Zero)
+                {
+                    _clockPosition += elapsed;
+                }
             }
         }
 

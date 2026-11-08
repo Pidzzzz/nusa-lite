@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,11 +29,24 @@ public partial class MainWindow : Window
     private readonly DispatcherTimer _peekTimer;
     private readonly DispatcherTimer _hoverTimer;
     private readonly DispatcherTimer _clickTimer;
+    private readonly DispatcherTimer _fullscreenTimer;
     private readonly Dictionary<IslandView, UserControl> _viewCache = new();
     private readonly List<Border> _dots = new();
     private readonly SolidColorBrush _dotIdleBrush = new(Color.FromArgb(140, 255, 255, 255));
+    private readonly FontFamily _uiFont;
+    private readonly FontFamily _displayFont;
+
+    private const int HotkeyToggleId = 9001;
+    private const int HotkeyPlayerId = 9002;
+    private const int HotkeyShelfId = 9003;
+    private const int HotkeyLyricsId = 9004;
+    private const int HotkeyFocusId = 9005;
 
     private IntPtr _hwnd;
+    private HwndSource? _hwndSource;
+    private bool _hotkeysRegistered;
+    private bool _isFullscreenSuppressed;
+    private bool _autoLyricsActive;
     private IslandView _view = IslandView.Idle;
     private IslandView _viewBeforePeek = IslandView.Idle;
     private IslandView _viewBeforeDrag = IslandView.Hub;
@@ -43,12 +57,22 @@ public partial class MainWindow : Window
     private bool _singleClickPending;
     private bool _suppressClickUp;
     private int _transition;
+    private IslandSpec _spec = new(198, 34, 12, 0);
+    private bool _browserForeground;
+    private bool _browserArmed;
+    private long _insideSince;
+    private const double CompactUiScale = 0.86;
+    private const int BrowserArmHoldMs = 140;
+    private const int BrowserHintDwellMs = 420;
 
     public MainWindow(MainViewModel viewModel)
     {
         _viewModel = viewModel;
         DataContext = viewModel;
         InitializeComponent();
+
+        _uiFont = TryFindResource("UiFont") as FontFamily ?? new FontFamily("Segoe UI");
+        _displayFont = TryFindResource("DisplayFont") as FontFamily ?? _uiFont;
 
         _collapseTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1150) };
         _collapseTimer.Tick += CollapseTimer_Tick;
@@ -66,9 +90,18 @@ public partial class MainWindow : Window
         _clickTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(260) };
         _clickTimer.Tick += ClickTimer_Tick;
 
+        _fullscreenTimer = new DispatcherTimer(DispatcherPriority.Background)
+        {
+            Interval = TimeSpan.FromMilliseconds(750)
+        };
+        _fullscreenTimer.Tick += FullscreenTimer_Tick;
+        _fullscreenTimer.Start();
+
         _viewModel.PeekRequested += OnPeekRequested;
         _viewModel.ViewRequested += OnViewRequested;
         _viewModel.PinRequested += OnPinRequested;
+        _viewModel.AutoLyricsRequested += OnAutoLyricsRequested;
+        _viewModel.PropertyChanged += OnViewModelPropertyChanged;
 
         IslandHost.SizeChanged += (_, _) => UpdateWindowRegion();
         DotsBar.SizeChanged += (_, _) => UpdateWindowRegion();
@@ -82,11 +115,23 @@ public partial class MainWindow : Window
         {
             _hoverTimer.Stop();
             _clickTimer.Stop();
+            _fullscreenTimer.Stop();
+            UnregisterHotkeys();
+            _hwndSource?.RemoveHook(HwndHook);
+            _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
         };
     }
 
     public void OpenView(IslandView view)
     {
+        if (_isFullscreenSuppressed)
+        {
+            _isFullscreenSuppressed = false;
+            Visibility = Visibility.Visible;
+            RepositionWindow();
+            UpdateWindowRegion();
+        }
+
         if (!IsVisible)
         {
             Show();
@@ -96,11 +141,261 @@ public partial class MainWindow : Window
         SwitchTo(view, force: true);
     }
 
+    public void ToggleIsland()
+    {
+        if (_isFullscreenSuppressed)
+        {
+            _isFullscreenSuppressed = false;
+            Visibility = Visibility.Visible;
+            RepositionWindow();
+            UpdateWindowRegion();
+        }
+
+        if (!IsVisible)
+        {
+            Show();
+        }
+
+        if (_view == IslandView.Idle)
+        {
+            _viewModel.IsPinned = true;
+            SwitchTo(_viewModel.IsPlaying && _viewModel.HasLyrics ? IslandView.Lyrics : IslandView.Hub, force: true);
+        }
+        else
+        {
+            _autoLyricsActive = false;
+            _viewModel.IsPinned = false;
+            SwitchTo(IslandView.Idle, force: true);
+        }
+    }
+
+    public void SetAutoLyricsEnabled(bool enabled)
+    {
+        if (!enabled && _autoLyricsActive)
+        {
+            _autoLyricsActive = false;
+            if (!_viewModel.IsPinned && !_hover)
+            {
+                SwitchTo(IslandView.Idle);
+            }
+        }
+        else if (enabled && _viewModel.IsPlaying && _viewModel.HasLyrics)
+        {
+            _autoLyricsActive = true;
+            SwitchTo(IslandView.Lyrics);
+        }
+    }
+
+    private void OnAutoLyricsRequested(bool playing)
+    {
+        if (!_viewModel.Settings.Current.AutoLyricsOnPlay || _isFullscreenSuppressed)
+        {
+            return;
+        }
+
+        if (playing)
+        {
+            if (_view is IslandView.Focus or IslandView.Shelf)
+            {
+                return;
+            }
+
+            if (!IsVisible)
+            {
+                Show();
+            }
+
+            _autoLyricsActive = true;
+            SwitchTo(IslandView.Lyrics);
+        }
+        else
+        {
+            if (_autoLyricsActive)
+            {
+                _autoLyricsActive = false;
+                if (!_viewModel.IsPinned && !_hover)
+                {
+                    SwitchTo(IslandView.Idle);
+                }
+            }
+        }
+    }
+
+    public void WakeIsland()
+    {
+        if (_isFullscreenSuppressed)
+        {
+            _isFullscreenSuppressed = false;
+            Visibility = Visibility.Visible;
+            RepositionWindow();
+            UpdateWindowRegion();
+        }
+
+        if (!IsVisible)
+        {
+            Show();
+        }
+
+        if (_view == IslandView.Idle)
+        {
+            SwitchTo(IslandView.Hub, force: true);
+        }
+        else
+        {
+            SwitchTo(_view, force: true);
+        }
+    }
+
+    public void SetFullscreenAutoHide(bool enabled)
+    {
+        if (!enabled && _isFullscreenSuppressed)
+        {
+            _isFullscreenSuppressed = false;
+            Visibility = Visibility.Visible;
+            RepositionWindow();
+            UpdateWindowRegion();
+        }
+    }
+
+    public void SetGlobalHotkeysEnabled(bool enabled)
+    {
+        if (enabled)
+        {
+            RegisterHotkeys();
+        }
+        else
+        {
+            UnregisterHotkeys();
+        }
+    }
+
+    private void FullscreenTimer_Tick(object? sender, EventArgs e)
+    {
+        if (!_isFullscreenSuppressed)
+        {
+            RefreshBrowserState();
+        }
+
+        if (!_viewModel.Settings.Current.FullscreenAutoHide || _hwnd == IntPtr.Zero)
+        {
+            if (_isFullscreenSuppressed)
+            {
+                _isFullscreenSuppressed = false;
+                Visibility = Visibility.Visible;
+                RepositionWindow();
+                UpdateWindowRegion();
+            }
+            return;
+        }
+
+        var isFullscreen = WindowStyler.IsForegroundFullscreen(_hwnd);
+        if (isFullscreen && !_isFullscreenSuppressed)
+        {
+            _isFullscreenSuppressed = true;
+            Visibility = Visibility.Hidden;
+        }
+        else if (!isFullscreen && _isFullscreenSuppressed)
+        {
+            _isFullscreenSuppressed = false;
+            Visibility = Visibility.Visible;
+            RepositionWindow();
+            UpdateWindowRegion();
+        }
+    }
+
+    private void RegisterHotkeys()
+    {
+        if (!_viewModel.Settings.Current.EnableGlobalHotkeys || _hwnd == IntPtr.Zero || _hotkeysRegistered)
+        {
+            return;
+        }
+
+        try
+        {
+            uint mod = NativeMethods.MOD_WIN | NativeMethods.MOD_ALT | NativeMethods.MOD_NOREPEAT;
+            NativeMethods.RegisterHotKey(_hwnd, HotkeyToggleId, mod, 0x4E); // Win + Alt + N
+            NativeMethods.RegisterHotKey(_hwnd, HotkeyPlayerId, mod, 0x50); // Win + Alt + P
+            NativeMethods.RegisterHotKey(_hwnd, HotkeyShelfId,  mod, 0x53); // Win + Alt + S
+            NativeMethods.RegisterHotKey(_hwnd, HotkeyLyricsId, mod, 0x4C); // Win + Alt + L
+            NativeMethods.RegisterHotKey(_hwnd, HotkeyFocusId,  mod, 0x46); // Win + Alt + F
+            _hotkeysRegistered = true;
+        }
+        catch (Exception ex)
+        {
+            Infrastructure.Log.Write("Failed to register global hotkeys.", ex);
+        }
+    }
+
+    private void UnregisterHotkeys()
+    {
+        if (!_hotkeysRegistered || _hwnd == IntPtr.Zero)
+        {
+            return;
+        }
+
+        try
+        {
+            NativeMethods.UnregisterHotKey(_hwnd, HotkeyToggleId);
+            NativeMethods.UnregisterHotKey(_hwnd, HotkeyPlayerId);
+            NativeMethods.UnregisterHotKey(_hwnd, HotkeyShelfId);
+            NativeMethods.UnregisterHotKey(_hwnd, HotkeyLyricsId);
+            NativeMethods.UnregisterHotKey(_hwnd, HotkeyFocusId);
+        }
+        catch (Exception ex)
+        {
+            Infrastructure.Log.Write("Failed to unregister global hotkeys.", ex);
+        }
+        finally
+        {
+            _hotkeysRegistered = false;
+        }
+    }
+
+    private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (msg == NativeMethods.WM_HOTKEY)
+        {
+            var id = wParam.ToInt32();
+            switch (id)
+            {
+                case HotkeyToggleId:
+                    ToggleIsland();
+                    handled = true;
+                    break;
+                case HotkeyPlayerId:
+                    OpenView(IslandView.Player);
+                    handled = true;
+                    break;
+                case HotkeyShelfId:
+                    OpenView(IslandView.Shelf);
+                    handled = true;
+                    break;
+                case HotkeyLyricsId:
+                    OpenView(IslandView.Lyrics);
+                    handled = true;
+                    break;
+                case HotkeyFocusId:
+                    OpenView(IslandView.Focus);
+                    handled = true;
+                    break;
+            }
+        }
+
+        return IntPtr.Zero;
+    }
+
     private void OnSourceInitialized(object? sender, EventArgs e)
     {
         _hwnd = new WindowInteropHelper(this).Handle;
         WindowStyler.MakeOverlay(_hwnd);
         RepositionWindow();
+
+        _hwndSource = HwndSource.FromHwnd(_hwnd);
+        _hwndSource?.AddHook(HwndHook);
+
+        _browserForeground = WindowStyler.IsForegroundBrowser(_hwnd) ?? false;
+        UpdateClickThrough();
+        RegisterHotkeys();
     }
 
     private void RepositionWindow()
@@ -121,7 +416,7 @@ public partial class MainWindow : Window
         Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(RepositionWindow));
         BuildDots();
         ContentHost.Content = GetView(IslandView.Idle);
-        SetImmediate(SpecFor(IslandView.Idle));
+        SetImmediate(ResolveSpec(IslandView.Idle));
         SetDotsVisible(false, fast: true);
 
         if (_viewModel.IsPinned)
@@ -150,7 +445,14 @@ public partial class MainWindow : Window
         _view = view;
         UpdateDots();
         SetDotsVisible(view is not (IslandView.Idle or IslandView.Peek), fast);
-        AnimateTo(SpecFor(view), fast);
+
+        if (_hwnd != IntPtr.Zero)
+        {
+            _browserForeground = WindowStyler.IsForegroundBrowser(_hwnd) ?? _browserForeground;
+        }
+
+        AnimateTo(ResolveSpec(view), fast);
+        UpdateClickThrough();
     }
 
     private void AnimateTo(IslandSpec spec, bool fast)
@@ -221,6 +523,8 @@ public partial class MainWindow : Window
             return;
         }
 
+        ApplyContentScale();
+
         var generation = _transition;
         var duration = TimeSpan.FromMilliseconds(fast ? 190 : 320);
         var ease = new QuinticEase { EasingMode = EasingMode.EaseOut };
@@ -239,6 +543,31 @@ public partial class MainWindow : Window
         IslandHost.BeginAnimation(HeightProperty, Animate(height, spec.Height, duration, ease, generation));
         Notch.BeginAnimation(Controls.NotchShape.CornerRadiusProperty, Animate(radius, spec.Radius, duration, ease, generation));
         Notch.BeginAnimation(Controls.NotchShape.EarRadiusProperty, Animate(ear, spec.Ear, duration, ease, generation));
+
+        _spec = spec;
+        ApplyActiveViewLayout(spec);
+    }
+
+    private void ApplyActiveViewLayout(IslandSpec spec)
+    {
+        if (ContentHost.Content is LyricsView lyrics)
+        {
+            lyrics.ApplyLayout(_browserForeground && _view == IslandView.Lyrics, spec.Width, spec.Height);
+        }
+        else if (ContentHost.Content is IdleView idle)
+        {
+            var scale = _browserForeground ? CompactUiScale : 1.0;
+            idle.Width = spec.Width / scale;
+            idle.Height = spec.Height / scale;
+        }
+    }
+
+    private void ApplyContentScale()
+    {
+        var scale = _view == IslandView.Lyrics || !_browserForeground ? 1.0 : CompactUiScale;
+        ContentHost.LayoutTransform = Math.Abs(scale - 1.0) < 0.001
+            ? Transform.Identity
+            : new ScaleTransform(scale, scale);
     }
 
     private void SetImmediate(IslandSpec spec)
@@ -248,10 +577,15 @@ public partial class MainWindow : Window
         Notch.BeginAnimation(Controls.NotchShape.CornerRadiusProperty, null);
         Notch.BeginAnimation(Controls.NotchShape.EarRadiusProperty, null);
 
+        ApplyContentScale();
+
         IslandHost.Width = spec.Width;
         IslandHost.Height = spec.Height;
         Notch.CornerRadius = spec.Radius;
         Notch.EarRadius = spec.Ear;
+
+        _spec = spec;
+        ApplyActiveViewLayout(spec);
     }
 
     private DoubleAnimation Animate(
@@ -297,11 +631,198 @@ public partial class MainWindow : Window
         return created;
     }
 
+    private IslandSpec ResolveSpec(IslandView view)
+    {
+        if (view == IslandView.Lyrics)
+        {
+            return BuildLyricsSpec(_browserForeground);
+        }
+
+        var spec = view == IslandView.Idle ? BuildIdleSpec() : SpecFor(view);
+        if (!_browserForeground)
+        {
+            return spec;
+        }
+
+        return new IslandSpec(
+            Math.Ceiling(spec.Width * CompactUiScale),
+            Math.Ceiling(spec.Height * CompactUiScale),
+            Math.Ceiling(spec.Radius * CompactUiScale),
+            spec.Ear);
+    }
+
+    private IslandSpec BuildIdleSpec()
+    {
+        var widest = MeasureTextWidth(_viewModel.IdleLine, _uiFont, 10.5, FontWeights.Normal);
+        var width = Math.Ceiling((widest + 88) / 12) * 12;
+        width = Math.Clamp(width, 198, 360);
+        return new IslandSpec(width, 34, 12, 0);
+    }
+
+    private IslandSpec BuildLyricsSpec(bool compact)
+    {        var widest = MeasureTextWidth(_viewModel.LyricCurrent, _displayFont, compact ? 13.5 : 15.5, FontWeights.SemiBold);
+
+        if (compact)
+        {
+            widest = Math.Max(widest, MeasureTextWidth(_viewModel.TrackArtist, _uiFont, 8.5, FontWeights.Normal));
+        }
+        else
+        {
+            widest = Math.Max(widest, MeasureTextWidth(_viewModel.LyricPrev, _uiFont, 11, FontWeights.Normal));
+            widest = Math.Max(widest, MeasureTextWidth(_viewModel.LyricNext, _uiFont, 11, FontWeights.Normal));
+            widest = Math.Max(widest, MeasureTextWidth(_viewModel.TrackTitle, _displayFont, 9.5, FontWeights.SemiBold));
+            widest = Math.Max(widest, MeasureTextWidth(_viewModel.TrackArtist, _uiFont, 8.5, FontWeights.Normal));
+        }
+
+        var fixedWidth = compact ? 97.0 : 121.0;
+        var min = compact ? 292.0 : 360.0;
+        var max = compact ? 430.0 : 560.0;
+        var width = Math.Ceiling((fixedWidth + widest + 10) / 24) * 24;
+        width = Math.Clamp(width, min, max);
+        var height = compact ? 76.0 : 108.0;
+        var radius = compact ? 16.0 : 20.0;
+
+        return new IslandSpec(width, height, radius, 0);
+    }
+
+    private double MeasureTextWidth(string? text, FontFamily font, double fontSize, FontWeight weight)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return 0;
+        }
+
+        var probe = new TextBlock
+        {
+            Text = text,
+            FontFamily = font,
+            FontSize = fontSize,
+            FontWeight = weight,
+            TextWrapping = TextWrapping.NoWrap,
+            TextTrimming = TextTrimming.None
+        };
+
+        probe.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        return probe.DesiredSize.Width;
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (_view == IslandView.Idle)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(MainViewModel.IdleLine):
+                case nameof(MainViewModel.TrackTitle):
+                case nameof(MainViewModel.HasMedia):
+                    UpdateIdleLayout();
+                    break;
+            }
+
+            return;
+        }
+
+        if (_view != IslandView.Lyrics)
+        {
+            return;
+        }
+
+        switch (e.PropertyName)
+        {
+            case nameof(MainViewModel.LyricCurrent):
+            case nameof(MainViewModel.LyricPrev):
+            case nameof(MainViewModel.LyricNext):
+            case nameof(MainViewModel.HasLyrics):
+            case nameof(MainViewModel.TrackTitle):
+            case nameof(MainViewModel.TrackArtist):
+                UpdateLyricsLayout();
+                break;
+        }
+    }
+
+    private void UpdateIdleLayout()
+    {
+        if (_view != IslandView.Idle || _hwnd == IntPtr.Zero || !IsVisible)
+        {
+            return;
+        }
+
+        var spec = ResolveSpec(IslandView.Idle);
+
+        if (Math.Abs(spec.Width - _spec.Width) < 0.5 &&
+            Math.Abs(spec.Height - _spec.Height) < 0.5)
+        {
+            return;
+        }
+
+        ApplySpec(spec, fast: false);
+    }
+
+    private void UpdateLyricsLayout()
+    {
+        if (_view != IslandView.Lyrics || _hwnd == IntPtr.Zero || !IsVisible)
+        {
+            return;
+        }
+
+        var compact = _browserForeground;
+        var spec = BuildLyricsSpec(compact);
+
+        if (Math.Abs(spec.Width - _spec.Width) < 0.5 &&
+            Math.Abs(spec.Height - _spec.Height) < 0.5)
+        {
+            return;
+        }
+
+        ApplySpec(spec, fast: false);
+    }
+
+    private void UpdateClickThrough()
+    {
+        if (_hwnd == IntPtr.Zero)
+        {
+            return;
+        }
+
+        var passThrough = IsVisible &&
+                          _browserForeground &&
+                          !_hover &&
+                          !_viewModel.IsPinned &&
+                          !_dragActive;
+
+        WindowStyler.SetClickThrough(_hwnd, passThrough);
+    }
+
+    private void RefreshBrowserState()
+    {
+        if (_hwnd == IntPtr.Zero)
+        {
+            return;
+        }
+
+        var browser = WindowStyler.IsForegroundBrowser(_hwnd);
+        if (browser is { } value && value != _browserForeground)
+        {
+            _browserForeground = value;
+
+            if (_view == IslandView.Lyrics)
+            {
+                UpdateLyricsLayout();
+            }
+            else
+            {
+                ApplySpec(ResolveSpec(_view), fast: false);
+            }
+        }
+
+        UpdateClickThrough();
+    }
+
     private static IslandSpec SpecFor(IslandView view) => view switch
     {
         IslandView.Idle => new IslandSpec(198, 34, 12, 0),
         IslandView.Hub => new IslandSpec(410, 88, 18, 0),
-        IslandView.Lyrics => new IslandSpec(602, 158, 22, 0),
+        IslandView.Lyrics => new IslandSpec(360, 108, 20, 0),
         IslandView.Peek => new IslandSpec(362, 68, 16, 0),
         _ => new IslandSpec(554, 158, 22, 0)
     };
@@ -428,18 +949,31 @@ public partial class MainWindow : Window
     private void HoverTimer_Tick(object? sender, EventArgs e)
     {
         var inside = IsCursorInside();
-        if (inside == _hover)
+
+        if (!inside)
+        {
+            _insideSince = 0;
+            if (_hover)
+            {
+                PointerLeave();
+            }
+            return;
+        }
+
+        if (_hover)
         {
             return;
         }
 
-        if (inside)
+        if (_insideSince == 0)
+        {
+            _insideSince = Environment.TickCount64;
+        }
+
+        var dwell = _browserForeground ? 220 : 0;
+        if (Environment.TickCount64 - _insideSince >= dwell)
         {
             PointerEnter();
-        }
-        else
-        {
-            PointerLeave();
         }
     }
 
@@ -485,6 +1019,7 @@ public partial class MainWindow : Window
         }
 
         _hover = true;
+        UpdateClickThrough();
 
         if (_peekActive)
         {
@@ -503,6 +1038,7 @@ public partial class MainWindow : Window
     private void PointerLeave()
     {
         _hover = false;
+        UpdateClickThrough();
         if (_viewModel.IsPinned || _dragActive)
         {
             return;
@@ -516,6 +1052,11 @@ public partial class MainWindow : Window
     {
         _collapseTimer.Stop();
         if (_hover || _viewModel.IsPinned)
+        {
+            return;
+        }
+
+        if (IsCursorInside())
         {
             return;
         }
@@ -570,11 +1111,19 @@ public partial class MainWindow : Window
 
         if (_view == IslandView.Hub)
         {
-            SwitchTo(IslandView.Player);
+            SwitchTo(_viewModel.IsPlaying && _viewModel.HasLyrics ? IslandView.Lyrics : IslandView.Player);
         }
         else if (_view == IslandView.Idle)
         {
-            SwitchTo(IslandView.Hub);
+            SwitchTo(_viewModel.IsPlaying && _viewModel.HasLyrics ? IslandView.Lyrics : IslandView.Hub);
+        }
+        else if (_view == IslandView.Lyrics)
+        {
+            SwitchTo(IslandView.Player);
+        }
+        else if (_view == IslandView.Player)
+        {
+            SwitchTo(_viewModel.HasLyrics ? IslandView.Lyrics : IslandView.Hub);
         }
     }
 

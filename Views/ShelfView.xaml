@@ -11,8 +11,8 @@
             <Setter Property="Cursor" Value="Hand" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#18FFD37A" />
-                    <Setter Property="BorderBrush" Value="#38FFD37A" />
+                    <Setter Property="Background" Value="#18CDB4FF" />
+                    <Setter Property="BorderBrush" Value="#38CDB4FF" />
                 </Trigger>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <BeginStoryboard>
@@ -71,19 +71,20 @@
 
         <DockPanel Margin="1,0,1,7">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Shelf" Style="{StaticResource TitleText}" FontSize="13.5" />
+                <TextBlock Text="Rak" Style="{StaticResource TitleText}" FontSize="13.5"
+                           Typography.Capitals="SmallCaps" />
                 <TextBlock Text="{Binding ShelfCountText}" Style="{StaticResource CaptionText}" FontSize="9.5"
                            Margin="8,0,0,0" />
             </StackPanel>
             <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Style="{StaticResource PillButton}"
-                    FontSize="9" Padding="9,3" Content="Bersihkan" Click="Clear_Click"
+                    FontSize="9" Padding="9,3" Content="Rapikan" Click="Clear_Click"
                     Visibility="{Binding HasShelfItems, Converter={StaticResource BoolVis}}" />
         </DockPanel>
 
         <Grid Grid.Row="1">
             <Grid Visibility="{Binding HasShelfItems, Converter={StaticResource InvBoolVis}}"
                   Cursor="Hand" MouseLeftButtonUp="Empty_Click" Background="Transparent">
-                <Rectangle x:Name="EmptyOutline" RadiusX="14" RadiusY="14" Stroke="#5CFFD37A" StrokeThickness="1.2"
+                <Rectangle x:Name="EmptyOutline" RadiusX="14" RadiusY="14" Stroke="#5CCDB4FF" StrokeThickness="1.2"
                            StrokeDashArray="4 4">
                     <Rectangle.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -104,7 +105,7 @@
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Path Data="{StaticResource IconUpload}" Style="{StaticResource CardIcon}" Width="22" Height="22"
                           HorizontalAlignment="Center" Stroke="{StaticResource AmberBrush}" />
-                    <TextBlock Text="Tarik file ke sini" Style="{StaticResource TitleText}" FontSize="11.5"
+                    <TextBlock Text="Letakkan file di sini" Style="{StaticResource TitleText}" FontSize="11.5"
                                HorizontalAlignment="Center" Margin="0,6,0,0" />
                     <TextBlock Text="atau klik untuk memilih file" Style="{StaticResource TinyText}" FontSize="9"
                                HorizontalAlignment="Center" Margin="0,3,0,0" />
@@ -138,8 +139,8 @@
                                     </Grid.RowDefinitions>
 
                                     <Grid Width="42" Height="42" HorizontalAlignment="Left">
-                                        <Border CornerRadius="10" Background="#10FFFFFF" />
-                                        <Border CornerRadius="10">
+                                        <Border CornerRadius="11,9,11,9" Background="#10FFFFFF" />
+                                        <Border CornerRadius="11,9,11,9">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding Thumbnail}" Stretch="UniformToFill" />
                                             </Border.Background>
@@ -154,7 +155,7 @@
                                                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                                 Margin="1,0,0,-2">
                                             <TextBlock Text="{Binding Badge}" FontSize="6.5" FontWeight="Bold"
-                                                       Foreground="White" />
+                                                       Foreground="#F7F2FF" />
                                         </Border>
                                     </Grid>
 
@@ -183,13 +184,13 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <Border Background="#26FFD37A" BorderBrush="{StaticResource AmberBrush}" BorderThickness="1.4"
+            <Border Background="#26CDB4FF" BorderBrush="{StaticResource AmberBrush}" BorderThickness="1.4"
                     CornerRadius="14" IsHitTestVisible="False"
                     Visibility="{Binding ShelfDropHover, Converter={StaticResource BoolVis}}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Path Data="{StaticResource IconUpload}" Style="{StaticResource CardIcon}" Width="17" Height="17"
                           Stroke="{StaticResource AmberBrush}" Margin="0,0,8,0" />
-                    <TextBlock Text="Lepaskan untuk menambahkan" Style="{StaticResource TitleText}" FontSize="11.5" />
+                    <TextBlock Text="Lepaskan, biar kami rapikan" Style="{StaticResource TitleText}" FontSize="11.5" />
                 </StackPanel>
             </Border>
         </Grid>

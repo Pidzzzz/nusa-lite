@@ -15,7 +15,7 @@
         <TextBlock x:Name="Line" Grid.Column="1" Margin="8,0,0,0"
                    FontFamily="{StaticResource UiFont}"
                    FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   Foreground="#E6FFFFFF" TextTrimming="CharacterEllipsis"
+                   Foreground="{StaticResource InkBrush}" TextTrimming="CharacterEllipsis"
                    VerticalAlignment="Center">
             <TextBlock.RenderTransform>
                 <TranslateTransform x:Name="LineSlide" />

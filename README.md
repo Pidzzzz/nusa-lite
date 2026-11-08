@@ -54,9 +54,12 @@ Dibangun native dengan **WPF + .NET 8**, NusaLite memakai media session Windows,
 | **Artwork cerdas** | Artwork dari media session, dengan fallback Deezer lalu iTunes untuk source browser. |
 | **Fokus** | Timer Pomodoro dengan sesi fokus, jeda, reset, dan skip. |
 | **Air** | Target minum harian, tambah 250 ml, reminder, dan grafik 7 hari terakhir. |
-| **Shelf** | Tarik file atau folder ke Shelf untuk akses cepat, maksimal 12 item per sesi. |
+| **Shelf** | Tarik file atau folder ke Shelf untuk akses cepat (tersimpan otomatis antar restart). |
 | **Peek** | Notifikasi ringkas untuk perubahan volume, status daya, dan media. |
-| **Tray menu** | Buka setiap view, sematkan di layar, aktifkan autostart, atau keluar. |
+| **Fullscreen Auto-Hide** | Otomatis sembunyi saat game atau video layar penuh (F11/VLC/YouTube) aktif. |
+| **Global Hotkeys** | Akses cepat dengan shortcut keyboard global (`Win + Alt + N/P/S/L/F`). |
+| **Single-Instance Wake** | Menjalankan ulang aplikasi langsung memanggil dan membuka island yang sudah aktif. |
+| **Tray menu** | Buka setiap view, toggle auto-hide, toggle shortcut, sematkan di layar, atau keluar. |
 | **Autostart** | Daftarkan NusaLite ke Windows Run key langsung dari tray menu. |
 
 ## Mulai cepat
@@ -131,7 +134,10 @@ Power / Pomodoro / Water / Shelf ─────► MainViewModel
 
 ## Roadmap
 
-- [ ] Persistensi item Shelf setelah restart.
+- [x] Persistensi item Shelf setelah restart.
+- [x] Auto-hide saat aplikasi / game fullscreen.
+- [x] Global keyboard shortcut untuk navigasi kilat.
+- [x] Single-instance wake signal.
 - [ ] Dukungan multi-monitor dan DPI campuran.
 - [ ] Pilihan tema dan aksen.
 - [ ] Pengaturan durasi Pomodoro dan target air dari UI.

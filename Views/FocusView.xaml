@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:NusaLite.Controls"
              Width="512" Height="158">
     <UserControl.Resources>
-        <DropShadowEffect x:Key="FocusGlow" Color="#FF5A6E" BlurRadius="18" ShadowDepth="0" Opacity="0.28" />
+        <DropShadowEffect x:Key="FocusGlow" Color="#B57BFF" BlurRadius="18" ShadowDepth="0" Opacity="0.28" />
         <DropShadowEffect x:Key="BreakGlow" Color="#6FE7D2" BlurRadius="18" ShadowDepth="0" Opacity="0.26" />
     </UserControl.Resources>
     <Grid Margin="16,14,16,20">
@@ -45,7 +45,8 @@
             </Grid.RowDefinitions>
 
             <DockPanel>
-                <TextBlock Text="Sesi fokus" Style="{StaticResource TitleText}" FontSize="16" />
+                <TextBlock Text="Sesi fokus" Style="{StaticResource TitleText}" FontSize="16"
+                           Typography.Capitals="SmallCaps" />
                 <TextBlock DockPanel.Dock="Right" Text="{Binding PomodoroSessions}" Style="{StaticResource TinyText}"
                            FontSize="9" HorizontalAlignment="Right" VerticalAlignment="Center" />
             </DockPanel>

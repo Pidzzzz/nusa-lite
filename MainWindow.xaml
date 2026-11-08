@@ -23,10 +23,11 @@
     <Grid x:Name="Root" Background="Transparent">
         <StackPanel x:Name="Stack" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0">
             <Grid x:Name="IslandHost" Width="198" Height="34" HorizontalAlignment="Center"
+                  ClipToBounds="True"
                   MouseLeftButtonDown="Island_MouseLeftButtonDown"
                   MouseLeftButtonUp="Island_MouseLeftButtonUp"
                   MouseWheel="Island_MouseWheel">
-                <controls:NotchShape x:Name="Notch" Fill="#FF000000" CornerRadius="12" EarRadius="0" />
+                <controls:NotchShape x:Name="Notch" Fill="#FF08060F" CornerRadius="12" EarRadius="0" />
                 <ContentControl x:Name="ContentHost" HorizontalAlignment="Center" VerticalAlignment="Center"
                                 Focusable="False" IsTabStop="False">
                     <ContentControl.RenderTransform>
@@ -35,7 +36,7 @@
                 </ContentControl>
             </Grid>
 
-            <Border x:Name="DotsBar" Margin="0,6,0,0" HorizontalAlignment="Center" Background="#99070A12"
+            <Border x:Name="DotsBar" Margin="0,6,0,0" HorizontalAlignment="Center" Background="#99120A22"
                     CornerRadius="8" Padding="7,4" Opacity="0" IsHitTestVisible="False">
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="DotsSlide" />

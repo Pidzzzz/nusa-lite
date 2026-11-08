@@ -13,6 +13,9 @@ public sealed class TrayService : IDisposable
     private readonly WinForms.NotifyIcon _notifyIcon;
     private readonly WinForms.ContextMenuStrip _menu;
     private readonly WinForms.ToolStripMenuItem _pinItem;
+    private readonly WinForms.ToolStripMenuItem _autoLyricsItem;
+    private readonly WinForms.ToolStripMenuItem _fullscreenItem;
+    private readonly WinForms.ToolStripMenuItem _hotkeyItem;
     private readonly WinForms.ToolStripMenuItem _startupItem;
     private Stream? _iconStream;
 
@@ -50,6 +53,18 @@ public sealed class TrayService : IDisposable
         _pinItem.CheckOnClick = false;
         _menu.Items.Add(_pinItem);
 
+        _autoLyricsItem = Item("Lirik otomatis saat memutar musik", (_, _) => ToggleAutoLyrics());
+        _autoLyricsItem.CheckOnClick = false;
+        _menu.Items.Add(_autoLyricsItem);
+
+        _fullscreenItem = Item("Sembunyikan saat layar penuh", (_, _) => ToggleFullscreenAutoHide());
+        _fullscreenItem.CheckOnClick = false;
+        _menu.Items.Add(_fullscreenItem);
+
+        _hotkeyItem = Item("Shortcut global (Win+Alt+N)", (_, _) => ToggleGlobalHotkeys());
+        _hotkeyItem.CheckOnClick = false;
+        _menu.Items.Add(_hotkeyItem);
+
         _startupItem = Item("Mulai bersama Windows", (_, _) => ToggleStartup());
         _startupItem.CheckOnClick = false;
         _menu.Items.Add(_startupItem);
@@ -60,6 +75,9 @@ public sealed class TrayService : IDisposable
         _menu.Opening += (_, _) =>
         {
             _pinItem.Checked = _isPinned();
+            _autoLyricsItem.Checked = _settings.Current.AutoLyricsOnPlay;
+            _fullscreenItem.Checked = _settings.Current.FullscreenAutoHide;
+            _hotkeyItem.Checked = _settings.Current.EnableGlobalHotkeys;
             _startupItem.Checked = Autostart.IsEnabled();
         };
 
@@ -82,6 +100,12 @@ public sealed class TrayService : IDisposable
 
     public event Action? PinToggleRequested;
 
+    public event Action<bool>? AutoLyricsToggled;
+
+    public event Action<bool>? FullscreenAutoHideToggled;
+
+    public event Action<bool>? GlobalHotkeysToggled;
+
     public event Action? ExitRequested;
 
     public void SetPinned(bool pinned)
@@ -95,6 +119,33 @@ public sealed class TrayService : IDisposable
         _notifyIcon.BalloonTipText = message;
         _notifyIcon.BalloonTipIcon = WinForms.ToolTipIcon.None;
         _notifyIcon.ShowBalloonTip(4000);
+    }
+
+    private void ToggleAutoLyrics()
+    {
+        var enabled = !_settings.Current.AutoLyricsOnPlay;
+        _settings.Current.AutoLyricsOnPlay = enabled;
+        _settings.Save();
+        _autoLyricsItem.Checked = enabled;
+        AutoLyricsToggled?.Invoke(enabled);
+    }
+
+    private void ToggleFullscreenAutoHide()
+    {
+        var enabled = !_settings.Current.FullscreenAutoHide;
+        _settings.Current.FullscreenAutoHide = enabled;
+        _settings.Save();
+        _fullscreenItem.Checked = enabled;
+        FullscreenAutoHideToggled?.Invoke(enabled);
+    }
+
+    private void ToggleGlobalHotkeys()
+    {
+        var enabled = !_settings.Current.EnableGlobalHotkeys;
+        _settings.Current.EnableGlobalHotkeys = enabled;
+        _settings.Save();
+        _hotkeyItem.Checked = enabled;
+        GlobalHotkeysToggled?.Invoke(enabled);
     }
 
     private void ToggleStartup()
@@ -123,60 +174,69 @@ public sealed class TrayService : IDisposable
         _notifyIcon.Dispose();
         _menu.Dispose();
         _iconStream?.Dispose();
-        _iconStream = null;
-    }
-
-    private sealed class DarkColorTable : WinForms.ProfessionalColorTable
-    {
-        public override Drawing.Color ToolStripDropDownBackground => Drawing.Color.FromArgb(16, 18, 26);
-
-        public override Drawing.Color ImageMarginGradientBegin => Drawing.Color.FromArgb(16, 18, 26);
-
-        public override Drawing.Color ImageMarginGradientMiddle => Drawing.Color.FromArgb(16, 18, 26);
-
-        public override Drawing.Color ImageMarginGradientEnd => Drawing.Color.FromArgb(16, 18, 26);
-
-        public override Drawing.Color MenuBorder => Drawing.Color.FromArgb(42, 46, 60);
-
-        public override Drawing.Color MenuItemBorder => Drawing.Color.FromArgb(45, 91, 255);
-
-        public override Drawing.Color MenuItemSelected => Drawing.Color.FromArgb(38, 44, 62);
-
-        public override Drawing.Color MenuItemSelectedGradientBegin => Drawing.Color.FromArgb(38, 44, 62);
-
-        public override Drawing.Color MenuItemSelectedGradientEnd => Drawing.Color.FromArgb(38, 44, 62);
-
-        public override Drawing.Color SeparatorDark => Drawing.Color.FromArgb(40, 44, 58);
-
-        public override Drawing.Color SeparatorLight => Drawing.Color.FromArgb(40, 44, 58);
     }
 }
 
 internal static class Autostart
 {
     private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string ValueName = "NusaLite";
+    private const string AppName = "NusaLite";
 
     public static bool IsEnabled()
     {
-        using var key = Registry.CurrentUser.OpenSubKey(RunKey);
-        return key?.GetValue(ValueName) is string value && value.Length > 0;
+        try
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RunKey, false);
+            var value = key?.GetValue(AppName) as string;
+            return !string.IsNullOrEmpty(value);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
-    public static void SetEnabled(bool enabled)
+    public static void SetEnabled(bool enable)
     {
-        using var key = Registry.CurrentUser.CreateSubKey(RunKey);
-        if (enabled)
+        try
         {
-            var path = Environment.ProcessPath;
-            if (!string.IsNullOrWhiteSpace(path))
+            using var key = Registry.CurrentUser.OpenSubKey(RunKey, true);
+            if (key is null)
             {
-                key.SetValue(ValueName, $"\"{path}\" --background");
+                return;
+            }
+
+            if (enable)
+            {
+                var exe = Environment.ProcessPath ?? System.Reflection.Assembly.GetExecutingAssembly().Location;
+                key.SetValue(AppName, $"\"{exe}\"");
+            }
+            else
+            {
+                key.DeleteValue(AppName, false);
             }
         }
-        else
+        catch (Exception ex)
         {
-            key.DeleteValue(ValueName, throwOnMissingValue: false);
+            Infrastructure.Log.Write("Autostart setting could not be updated.", ex);
         }
     }
+}
+
+internal sealed class DarkColorTable : WinForms.ProfessionalColorTable
+{
+    public override Drawing.Color MenuBorder => Drawing.Color.FromArgb(40, 44, 58);
+    public override Drawing.Color MenuItemBorder => Drawing.Color.Transparent;
+    public override Drawing.Color MenuItemSelected => Drawing.Color.FromArgb(34, 38, 52);
+    public override Drawing.Color MenuItemSelectedGradientBegin => Drawing.Color.FromArgb(34, 38, 52);
+    public override Drawing.Color MenuItemSelectedGradientEnd => Drawing.Color.FromArgb(34, 38, 52);
+    public override Drawing.Color MenuStripGradientBegin => Drawing.Color.FromArgb(16, 18, 26);
+    public override Drawing.Color MenuStripGradientEnd => Drawing.Color.FromArgb(16, 18, 26);
+    public override Drawing.Color ToolStripDropDownBackground => Drawing.Color.FromArgb(16, 18, 26);
+    public override Drawing.Color SeparatorDark => Drawing.Color.FromArgb(36, 40, 52);
+    public override Drawing.Color SeparatorLight => Drawing.Color.FromArgb(36, 40, 52);
+    public override Drawing.Color CheckBackground => Drawing.Color.FromArgb(50, 60, 85);
+    public override Drawing.Color CheckSelectedBackground => Drawing.Color.FromArgb(60, 72, 100);
+    public override Drawing.Color ImageMarginGradientBegin => Drawing.Color.FromArgb(16, 18, 26);
+    public override Drawing.Color ImageMarginGradientEnd => Drawing.Color.FromArgb(16, 18, 26);
 }

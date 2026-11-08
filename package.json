@@ -1,0 +1,44 @@
+{
+  "name": "nusa-lite",
+  "version": "1.0.0",
+  "description": "Dynamic island dan living notch untuk Windows (WPF + .NET 8)",
+  "main": "bin/Debug/net8.0-windows10.0.19041.0/NusaLite.exe",
+  "scripts": {
+    "start": "dotnet run",
+    "start:release": "dotnet run -c Release",
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/dev-watch.ps1",
+    "dev:release": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/dev-watch.ps1 -Configuration Release",
+    "build": "dotnet build",
+    "build:release": "dotnet build -c Release",
+    "clean": "dotnet clean",
+    "rebuild": "npm run kill & dotnet build -c Release",
+    "publish": "dotnet publish NusaLite.csproj -c Release -r win-x64 --self-contained false",
+    "publish:standalone": "dotnet publish NusaLite.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true",
+    "icon": "powershell -ExecutionPolicy Bypass -File tools/make-icon.ps1",
+    "kill": "taskkill /F /IM NusaLite.exe 2>nul || exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pidzzzz/nusa-lite.git"
+  },
+  "keywords": [
+    "dynamic-island",
+    "notch",
+    "living-notch",
+    "windows",
+    "wpf",
+    "dotnet",
+    "csharp",
+    "media-session",
+    "smtc",
+    "lyrics",
+    "pomodoro",
+    "shelf"
+  ],
+  "author": "Pidzzzz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pidzzzz/nusa-lite/issues"
+  },
+  "homepage": "https://github.com/Pidzzzz/nusa-lite#readme"
+}

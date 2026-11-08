@@ -43,6 +43,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     private int _volumeValue = 50;
     private bool _isMuted;
     private bool _pinned;
+    private bool _isLyricLocked;
     private string _peekTitle = string.Empty;
     private string _peekSubtitle = string.Empty;
     private string _peekValue = string.Empty;
@@ -125,11 +126,17 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     public event Action<bool>? PinRequested;
 
+    public event Action<bool>? LyricLockRequested;
+
     public event Action<string, string>? NotifyRequested;
+
+    public event Action<bool>? AutoLyricsRequested;
 
     public ObservableCollection<ShelfItem> ShelfItems => _shelf.Items;
 
     public MediaService Media => _media;
+
+    public SettingsStore Settings => _settings;
 
     public async Task InitializeAsync()
     {
@@ -139,9 +146,9 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     // ----- Media ---------------------------------------------------------
 
-    public string TrackTitle => string.IsNullOrWhiteSpace(_track.Title) ? "Tidak ada media" : _track.Title;
+    public string TrackTitle => string.IsNullOrWhiteSpace(_track.Title) ? "Belum ada lagu" : _track.Title;
 
-    public string TrackArtist => _track.HasTrack ? _track.ArtistAlbum : "Putar musik untuk memulai";
+    public string TrackArtist => _track.HasTrack ? _track.ArtistAlbum : "Putar lagu favoritmu untuk memulai";
 
     public string TrackSource => _track.HasTrack ? _track.SourceName : "NusaLite";
 
@@ -205,6 +212,11 @@ public sealed class MainViewModel : ObservableObject, IDisposable
             {
                 PeekRequested?.Invoke(PeekKind.Media);
             }
+
+            if (track.HasTrack && track.IsPlaying)
+            {
+                AutoLyricsRequested?.Invoke(true);
+            }
         }
         else
         {
@@ -234,6 +246,11 @@ public sealed class MainViewModel : ObservableObject, IDisposable
             {
                 PeekRequested?.Invoke(PeekKind.Media);
             }
+
+            if (oldPlaying != track.IsPlaying)
+            {
+                AutoLyricsRequested?.Invoke(track.IsPlaying);
+            }
         }
     }
 
@@ -250,6 +267,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(DurationText));
         OnPropertyChanged(nameof(TrackProgress));
         OnPropertyChanged(nameof(PlayGlyph));
+        OnPropertyChanged(nameof(IdleLine));
     }
 
     // ----- Lyrics --------------------------------------------------------
@@ -261,6 +279,19 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     public string LyricCurrent => _lyricCurrent;
 
     public string LyricNext => _lyricNext;
+
+    public string IdleLine
+    {
+        get
+        {
+            if (!_track.HasTrack)
+            {
+                return "Siap menemanimu";
+            }
+
+            return string.IsNullOrWhiteSpace(_lyricCurrent) ? TrackTitle : _lyricCurrent;
+        }
+    }
 
     public string LyricsMessage => _lyricsResult.Message;
 
@@ -313,6 +344,11 @@ public sealed class MainViewModel : ObservableObject, IDisposable
             _lastLyricKey = string.Empty;
             UpdateLyricIndex();
             RaiseLyrics();
+
+            if (_track.IsPlaying && HasLyrics)
+            {
+                AutoLyricsRequested?.Invoke(true);
+            }
         }
         catch (OperationCanceledException)
         {
@@ -360,6 +396,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(LyricPrev));
         OnPropertyChanged(nameof(LyricCurrent));
         OnPropertyChanged(nameof(LyricNext));
+        OnPropertyChanged(nameof(IdleLine));
     }
 
     private void RaiseLyrics()
@@ -368,6 +405,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(LyricPrev));
         OnPropertyChanged(nameof(LyricCurrent));
         OnPropertyChanged(nameof(LyricNext));
+        OnPropertyChanged(nameof(IdleLine));
         OnPropertyChanged(nameof(LyricsMessage));
         OnPropertyChanged(nameof(ShowLyricsMessage));
         OnPropertyChanged(nameof(LyricOffsetText));
@@ -400,7 +438,28 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     {
         var now = DateTime.Now;
         ClockText = now.ToString("HH:mm");
-        DateText = now.ToString("ddd, d MMM", CultureInfo.CurrentCulture);
+        DateText = $"{GreetingFor(now)} · {now.ToString("ddd, d MMM", CultureInfo.CurrentCulture)}";
+    }
+
+    private static string GreetingFor(DateTime now)
+    {
+        var hour = now.Hour;
+        if (hour >= 5 && hour < 11)
+        {
+            return "Selamat pagi";
+        }
+
+        if (hour >= 11 && hour < 15)
+        {
+            return "Selamat siang";
+        }
+
+        if (hour >= 15 && hour < 19)
+        {
+            return "Selamat sore";
+        }
+
+        return "Selamat malam";
     }
 
     // ----- Volume & power ------------------------------------------------
@@ -630,7 +689,12 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         get
         {
             var count = _shelf.Items.Count;
-            return count == 0 ? "Kosong" : $"{count} item";
+            return count switch
+            {
+                0 => "Masih kosong",
+                1 => "1 berkas",
+                _ => $"{count} berkas"
+            };
         }
     }
 
@@ -763,7 +827,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         {
             case PeekKind.Volume:
                 PeekTitle = _isMuted ? "Bisu" : "Volume";
-                PeekSubtitle = _isMuted ? "Suara dimatikan" : $"Level suara {_volumeValue}%";
+                PeekSubtitle = _isMuted ? "Suara sedang dimatikan" : $"Level suara {_volumeValue}%";
                 PeekValue = _isMuted ? "0%" : $"{_volumeValue}%";
                 PeekProgress = _isMuted ? 0 : _volumeValue / 100.0;
                 PeekArtwork = null;

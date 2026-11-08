@@ -30,7 +30,8 @@
         </Grid>
 
         <StackPanel Grid.Column="1" Margin="20,0,16,0" VerticalAlignment="Top">
-            <TextBlock Text="Air hari ini" Style="{StaticResource TitleText}" FontSize="15" />
+            <TextBlock Text="Air hari ini" Style="{StaticResource TitleText}" FontSize="15"
+                       Typography.Capitals="SmallCaps" />
             <TextBlock Text="{Binding WaterAmount}" Style="{StaticResource BigText}" FontSize="19" Margin="0,2,0,0" />
             <TextBlock Text="{Binding WaterRemaining}" Style="{StaticResource CaptionText}" FontSize="10"
                        Margin="0,1,0,0" />
@@ -41,12 +42,12 @@
                         Click="Add_Click">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="{StaticResource IconPlus}" Style="{StaticResource StrokeIcon}" Width="10" Height="10"
-                              Stroke="#05060C" Margin="0,0,5,0" />
+                              Stroke="#120B20" Margin="0,0,5,0" />
                         <TextBlock Text="250 ml" FontSize="10.5" FontWeight="Bold" />
                     </StackPanel>
                 </Button>
                 <Button Style="{StaticResource PillButton}" Height="26" Padding="10,0" FontSize="10"
-                        Margin="7,0,0,0" Click="Reset_Click" Content="Reset" />
+                        Margin="7,0,0,0" Click="Reset_Click" Content="Ulangi" />
             </StackPanel>
             <TextBlock Text="{Binding WaterReminderText}" Style="{StaticResource TinyText}" FontSize="8.5"
                        Margin="1,5,0,0" />
@@ -54,6 +55,7 @@
 
         <StackPanel Grid.Column="2" VerticalAlignment="Top" Margin="0,4,0,0">
             <TextBlock Text="7 hari terakhir" Style="{StaticResource TinyText}" FontSize="9"
+                       Typography.Capitals="SmallCaps"
                        HorizontalAlignment="Right" Margin="0,0,2,7" />
             <ItemsControl ItemsSource="{Binding WaterDays}" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>

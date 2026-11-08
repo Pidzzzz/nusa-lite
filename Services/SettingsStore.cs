@@ -24,6 +24,16 @@ public sealed class AppSettings
     public int WaterTodayMl { get; set; }
 
     public Dictionary<string, int> WaterHistory { get; set; } = new();
+
+    public List<string> ShelfPaths { get; set; } = new();
+
+    public bool FullscreenAutoHide { get; set; } = true;
+
+    public bool EnableGlobalHotkeys { get; set; } = true;
+
+    public bool AutoLyricsOnPlay { get; set; } = true;
+
+    public bool LyricLocked { get; set; }
 }
 
 public sealed class SettingsStore
