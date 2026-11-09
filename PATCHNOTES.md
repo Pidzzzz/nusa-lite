@@ -1,5 +1,28 @@
 # Patch Notes
 
+## v1.3.0 — 9 November 2026
+
+Jendela **Pengaturan** baru untuk mengatur NusaLite tanpa harus mengedit `settings.json`.
+
+> **Catatan pemasangan** — File `.exe` belum ditandatangani secara digital. Saat pertama dijalankan, Windows SmartScreen mungkin menampilkan peringatan; klik **More info** lalu **Run anyway** untuk melanjutkan.
+
+### Fitur baru
+
+- **Jendela Pengaturan** — Buka dari tray menu ("Pengaturan..."), dengan sidebar empat bagian:
+  - **Umum** — Mulai bersama Windows, shortcut global, sembunyikan saat layar penuh, lirik otomatis, dan offset lirik (`-2000..2000` ms).
+  - **Notch & Guard** — Click Guard, Auto Click Guard, jeda hover (`0..1000` ms, langkah 50), dan opasitas Guard Ghost (`15..100%`).
+  - **Fokus & Air** — Durasi fokus (`1..180` menit), durasi jeda (`1..60` menit), target air harian (`500..5000` ml, kelipatan 50), dan jeda pengingat air (`5..240` menit).
+  - **Tentang** — Versi aplikasi, tombol buka `settings.json`, tautan halaman rilis, dan tombol **Kembalikan ke bawaan** (dengan konfirmasi).
+- **Penerapan langsung** — Perubahan toggle langsung berlaku seperti lewat tray menu; nilai slider dan kolom angka tersimpan otomatis saat valid.
+
+### Catatan perilaku
+
+- **Durasi fokus/jeda Pomodoro** — Nilai baru berlaku pada sesi berikutnya (setelah Reset/Skip atau ganti fase); sesi yang sedang berjalan tidak berubah.
+- **Target air dan pengingat** — Langsung dipakai setelah diubah.
+- **Reset ke bawaan** — Mengembalikan semua pengaturan ke nilai awal, termasuk mematikan autostart bila sebelumnya aktif.
+
+---
+
 ## v1.2.0 — 9 November 2026
 
 Kontrol hover dan klik yang lebih tenang, plus pembaruan tampilan dan font.
