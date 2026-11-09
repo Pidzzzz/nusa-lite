@@ -12,7 +12,7 @@
     <ApplicationIcon>Assets\nusa.ico</ApplicationIcon>
     <AssemblyName>NusaLite</AssemblyName>
     <RootNamespace>NusaLite</RootNamespace>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Authors>NusaLite</Authors>
     <Product>NusaLite</Product>
     <Description>A lightweight living notch for Windows.</Description>

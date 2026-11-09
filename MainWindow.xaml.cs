@@ -286,6 +286,17 @@ public partial class MainWindow : Window
         ApplyGuardGhost();
     }
 
+    public void RefreshGuardGhost()
+    {
+        if (_clickGuard && _ghostFaded)
+        {
+            AnimateWindowOpacity(ClampedGuardOpacity());
+            return;
+        }
+
+        ApplyGuardGhost();
+    }
+
     private double ClampedGuardOpacity()
     {
         var value = _viewModel.Settings.Current.GuardOpacity;

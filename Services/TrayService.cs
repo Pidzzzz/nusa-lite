@@ -75,6 +75,9 @@ public sealed class TrayService : IDisposable
         _menu.Items.Add(_startupItem);
 
         _menu.Items.Add(new WinForms.ToolStripSeparator());
+        _menu.Items.Add(Item("Pengaturan...", (_, _) => SettingsRequested?.Invoke()));
+
+        _menu.Items.Add(new WinForms.ToolStripSeparator());
         _menu.Items.Add(Item("Keluar", (_, _) => ExitRequested?.Invoke()));
 
         _menu.Opening += (_, _) =>
@@ -115,6 +118,8 @@ public sealed class TrayService : IDisposable
     public event Action<bool>? GlobalHotkeysToggled;
 
     public event Action? ExitRequested;
+
+    public event Action? SettingsRequested;
 
     public void SetPinned(bool pinned)
     {

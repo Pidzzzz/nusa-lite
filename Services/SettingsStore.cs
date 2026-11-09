@@ -98,4 +98,10 @@ public sealed class SettingsStore
             Log.Write("Settings could not be saved.", ex);
         }
     }
+
+    public void ResetToDefaults()
+    {
+        Current = new AppSettings();
+        Save();
+    }
 }

@@ -1,0 +1,390 @@
+<Window x:Class="NusaLite.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pengaturan NusaLite"
+        Width="640" Height="460"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource VoidBrush}"
+        FontFamily="{StaticResource UiFont}"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <Style x:Key="SettingCheck" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Margin" Value="0,0,0,11" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <Border x:Name="Box" Width="16" Height="16" CornerRadius="4"
+                                    Background="#14FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1"
+                                    VerticalAlignment="Center">
+                                <Path x:Name="Check" Data="M 3,8 L 6.5,11.5 L 13,4.5"
+                                      Stroke="{StaticResource InkBrush}" StrokeThickness="1.8"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                      Visibility="Collapsed" />
+                            </Border>
+                            <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Box" Property="Background" Value="#33CDB4FF" />
+                                <Setter TargetName="Box" Property="BorderBrush" Value="#7FCDB4FF" />
+                                <Setter TargetName="Check" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Box" Property="BorderBrush" Value="#66CDB4FF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SettingSlider" TargetType="Slider">
+            <Setter Property="Height" Value="22" />
+            <Setter Property="IsMoveToPointEnabled" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid VerticalAlignment="Center" Background="Transparent">
+                            <Border Height="4" CornerRadius="2" Background="#26FFFFFF"
+                                    VerticalAlignment="Center" />
+                            <Track x:Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge" Focusable="False">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border Background="Transparent" />
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge" Focusable="False">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border Background="Transparent" />
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Width="15" Height="15" Cursor="Hand">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Ellipse Width="15" Height="15"
+                                                         Fill="{StaticResource InkBrush}" />
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SettingText" TargetType="TextBox">
+            <Setter Property="Background" Value="#14FFFFFF" />
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="CaretBrush" Value="{StaticResource InkBrush}" />
+            <Setter Property="BorderBrush" Value="#26FFFFFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="Width" Value="86" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        </Style>
+
+        <Style x:Key="SectionNote" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10.5" />
+            <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style x:Key="RowLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="RowValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="190" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#0AFFFFFF" BorderBrush="{StaticResource LineBrush}"
+                BorderThickness="0,0,1,0">
+            <StackPanel Margin="14,18,14,18">
+                <TextBlock Text="Pengaturan" FontFamily="{StaticResource DisplayFont}"
+                           FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}"
+                           Margin="8,0,0,14" />
+
+                <ListBox x:Name="SectionList" Background="Transparent" BorderThickness="0"
+                         SelectionChanged="SectionList_SelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+                            <Setter Property="FontSize" Value="12.5" />
+                            <Setter Property="Padding" Value="10,8" />
+                            <Setter Property="Margin" Value="0,1" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="Bg" Background="Transparent" CornerRadius="9,8,9,8"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bg" Property="Background" Value="#14FFFFFF" />
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Bg" Property="Background" Value="#26CDB4FF" />
+                                                <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+                                                <Setter Property="FontWeight" Value="SemiBold" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBoxItem Content="Umum" />
+                    <ListBoxItem Content="Notch &amp; Guard" />
+                    <ListBoxItem Content="Fokus &amp; Air" />
+                    <ListBoxItem Content="Tentang" />
+                </ListBox>
+
+                <TextBlock Text="Perubahan langsung tersimpan."
+                           FontSize="10" Foreground="{StaticResource MistBrush}"
+                           TextWrapping="Wrap" Margin="8,16,0,0" Opacity="0.8" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Column="1" Margin="26,22,26,22">
+            <StackPanel x:Name="PanelUmum">
+                <TextBlock Text="Umum" Style="{StaticResource SectionTitle}" />
+                <TextBlock Text="Perilaku dasar NusaLite." Style="{StaticResource SectionNote}"
+                           Margin="0,5,0,16" />
+
+                <CheckBox x:Name="StartWithWindowsCheck" Content="Mulai bersama Windows"
+                          Style="{StaticResource SettingCheck}"
+                          Checked="StartWithWindows_Toggled" Unchecked="StartWithWindows_Toggled" />
+
+                <CheckBox x:Name="HotkeysCheck" Content="Aktifkan shortcut global (Win+Alt+N/P/S/L/F/G)"
+                          Style="{StaticResource SettingCheck}"
+                          Checked="Hotkeys_Toggled" Unchecked="Hotkeys_Toggled" />
+
+                <CheckBox x:Name="FullscreenCheck" Content="Sembunyikan saat layar penuh"
+                          Style="{StaticResource SettingCheck}"
+                          Checked="Fullscreen_Toggled" Unchecked="Fullscreen_Toggled" />
+
+                <CheckBox x:Name="AutoLyricsCheck" Content="Lirik otomatis saat memutar musik"
+                          Style="{StaticResource SettingCheck}"
+                          Checked="AutoLyrics_Toggled" Unchecked="AutoLyrics_Toggled" />
+
+                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,4,0,16" />
+
+                <TextBlock Text="Offset lirik" Style="{StaticResource RowLabel}" Margin="0,0,0,8" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="LyricOffsetBox" Style="{StaticResource SettingText}"
+                             TextChanged="LyricOffset_TextChanged"
+                             LostFocus="LyricOffset_LostFocus"
+                             KeyDown="LyricOffset_KeyDown" />
+                    <TextBlock Text="ms" Style="{StaticResource RowLabel}" Margin="8,0,0,0"
+                               Foreground="{StaticResource MistBrush}" />
+                </StackPanel>
+                <TextBlock Text="Rentang -2000..2000 ms. Nilai positif mempercepat tampilnya lirik."
+                           Style="{StaticResource SectionNote}" Margin="0,6,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="PanelNotch" Visibility="Collapsed">
+                <TextBlock Text="Notch &amp; Guard" Style="{StaticResource SectionTitle}" />
+                <TextBlock Text="Kendali island saat kursor lewat atau tembus klik."
+                           Style="{StaticResource SectionNote}" Margin="0,5,0,16" />
+
+                <CheckBox x:Name="ClickGuardCheck" Content="Click Guard (island tembus klik)"
+                          Style="{StaticResource SettingCheck}"
+                          Checked="ClickGuard_Toggled" Unchecked="ClickGuard_Toggled" />
+
+                <CheckBox x:Name="AutoClickGuardCheck"
+                          Content="Auto Click Guard (aktif saat aplikasi lain maximized)"
+                          Style="{StaticResource SettingCheck}"
+                          Checked="AutoClickGuard_Toggled" Unchecked="AutoClickGuard_Toggled" />
+
+                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,4,0,16" />
+
+                <StackPanel Margin="0,0,0,18">
+                    <Grid Margin="0,0,0,8">
+                        <TextBlock Text="Jeda hover" Style="{StaticResource RowLabel}" />
+                        <TextBlock x:Name="HoverDelayValue" Text="400 ms" Style="{StaticResource RowValue}" />
+                    </Grid>
+                    <Slider x:Name="HoverDelaySlider" Style="{StaticResource SettingSlider}"
+                            Minimum="0" Maximum="1000" TickFrequency="50"
+                            IsSnapToTickEnabled="True" ValueChanged="HoverDelay_Changed" />
+                </StackPanel>
+
+                <StackPanel>
+                    <Grid Margin="0,0,0,8">
+                        <TextBlock Text="Opasitas Guard Ghost" Style="{StaticResource RowLabel}" />
+                        <TextBlock x:Name="GuardOpacityValue" Text="50 %" Style="{StaticResource RowValue}" />
+                    </Grid>
+                    <Slider x:Name="GuardOpacitySlider" Style="{StaticResource SettingSlider}"
+                            Minimum="15" Maximum="100" TickFrequency="5"
+                            IsSnapToTickEnabled="True" ValueChanged="GuardOpacity_Changed" />
+                    <TextBlock Text="Semakin tinggi, island semakin terlihat saat Click Guard aktif."
+                               Style="{StaticResource SectionNote}" Margin="0,8,0,0" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Name="PanelFokusAir" Visibility="Collapsed">
+                <TextBlock Text="Fokus &amp; Air" Style="{StaticResource SectionTitle}" />
+                <TextBlock Text="Durasi timer dan target minum harian."
+                           Style="{StaticResource SectionNote}" Margin="0,5,0,16" />
+
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Durasi fokus" Style="{StaticResource RowLabel}" />
+                        <TextBlock Text="1–180 menit" Style="{StaticResource SectionNote}" Margin="0,2,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBox x:Name="FocusMinutesBox" Style="{StaticResource SettingText}" Width="70"
+                                 TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
+                                 KeyDown="Number_KeyDown" />
+                        <TextBlock Text="menit" Style="{StaticResource RowLabel}"
+                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Durasi jeda" Style="{StaticResource RowLabel}" />
+                        <TextBlock Text="1–60 menit" Style="{StaticResource SectionNote}" Margin="0,2,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBox x:Name="BreakMinutesBox" Style="{StaticResource SettingText}" Width="70"
+                                 TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
+                                 KeyDown="Number_KeyDown" />
+                        <TextBlock Text="menit" Style="{StaticResource RowLabel}"
+                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,4,0,16" />
+
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Target air harian" Style="{StaticResource RowLabel}" />
+                        <TextBlock Text="500–5000 ml, kelipatan 50" Style="{StaticResource SectionNote}"
+                                   Margin="0,2,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBox x:Name="WaterGoalBox" Style="{StaticResource SettingText}" Width="70"
+                                 TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
+                                 KeyDown="Number_KeyDown" />
+                        <TextBlock Text="ml" Style="{StaticResource RowLabel}"
+                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Jeda pengingat air" Style="{StaticResource RowLabel}" />
+                        <TextBlock Text="5–240 menit" Style="{StaticResource SectionNote}" Margin="0,2,0,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBox x:Name="ReminderBox" Style="{StaticResource SettingText}" Width="70"
+                                 TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
+                                 KeyDown="Number_KeyDown" />
+                        <TextBlock Text="menit" Style="{StaticResource RowLabel}"
+                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Durasi fokus/jeda baru berlaku pada sesi berikutnya; target air dan pengingat langsung dipakai."
+                           Style="{StaticResource SectionNote}" Margin="0,18,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="PanelTentang" Visibility="Collapsed">
+                <TextBlock Text="Tentang" Style="{StaticResource SectionTitle}" />
+                <TextBlock x:Name="VersionText" Text="NusaLite v1.3.0"
+                           Style="{StaticResource RowLabel}" Margin="0,8,0,0" />
+                <TextBlock Text="Pengaturan disimpan lokal di %APPDATA%\NusaLite\settings.json."
+                           Style="{StaticResource SectionNote}" Margin="0,6,0,0" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+                    <Button Content="Buka settings.json" Style="{StaticResource PillButton}"
+                            Click="OpenSettingsFile_Click" />
+                    <TextBlock VerticalAlignment="Center" Margin="18,0,0,0">
+                        <Hyperlink Foreground="{StaticResource CyanBrush}"
+                                   TextDecorations="Underline"
+                                   NavigateUri="https://github.com/Pidzzzz/nusa-lite/releases"
+                                   RequestNavigate="ReleaseLink_RequestNavigate">
+                            Lihat rilis terbaru
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+
+                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,20,0,18" />
+
+                <Button Content="Kembalikan ke bawaan" Style="{StaticResource PillButton}"
+                        HorizontalAlignment="Left" Click="ResetDefaults_Click" />
+                <TextBlock Text="Semua pengaturan dikembalikan ke nilai awal setelah konfirmasi."
+                           Style="{StaticResource SectionNote}" Margin="0,8,0,0" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

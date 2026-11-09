@@ -56,6 +56,7 @@ Dibangun native dengan **WPF + .NET 8**, NusaLite memakai media session Windows,
 | **Artwork cerdas** | Artwork dari media session, dengan fallback Deezer lalu iTunes untuk source browser. |
 | **Fokus** | Timer Pomodoro dengan sesi fokus, jeda, reset, dan skip. |
 | **Air** | Target minum harian, tambah 250 ml, reminder, dan grafik 7 hari terakhir. |
+| **Pengaturan** | Jendela pengaturan untuk perilaku umum, Notch & Guard, Fokus & Air, info versi, buka `settings.json`, dan reset ke bawaan. |
 | **Shelf** | Tarik file atau folder ke Shelf untuk akses cepat (tersimpan otomatis antar restart). |
 | **Peek** | Notifikasi ringkas untuk perubahan volume, status daya, dan media. |
 | **Fullscreen Auto-Hide** | Otomatis sembunyi saat game atau video layar penuh (F11/VLC/YouTube) aktif. |

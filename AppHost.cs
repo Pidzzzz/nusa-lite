@@ -1,6 +1,7 @@
 using System.Windows;
 using NusaLite.Services;
 using NusaLite.ViewModels;
+using NusaLite.Views;
 
 namespace NusaLite;
 
@@ -17,6 +18,7 @@ public sealed class AppHost : IDisposable
     private TrayService? _tray;
     private MainViewModel? _viewModel;
     private MainWindow? _window;
+    private SettingsWindow? _settingsWindow;
 
     public void Start()
     {
@@ -41,6 +43,7 @@ public sealed class AppHost : IDisposable
             _tray.ClickGuardToggled += enabled => _window?.SetClickGuard(enabled);
             _tray.GlobalHotkeysToggled += enabled => _window?.SetGlobalHotkeysEnabled(enabled);
             _tray.ExitRequested += () => Application.Current.Shutdown();
+            _tray.SettingsRequested += ShowSettings;
 
             _viewModel.NotifyRequested += (title, message) => _tray?.ShowNotification(title, message);
             _viewModel.PinRequested += pinned => _tray?.SetPinned(pinned);
@@ -57,6 +60,31 @@ public sealed class AppHost : IDisposable
             MessageBox.Show(ex.Message, "NusaLite", MessageBoxButton.OK, MessageBoxImage.Error);
             Application.Current.Shutdown();
         }
+    }
+
+    private void ShowSettings()
+    {
+        if (_settingsWindow is not null)
+        {
+            if (_settingsWindow.WindowState == WindowState.Minimized)
+            {
+                _settingsWindow.WindowState = WindowState.Normal;
+            }
+
+            _settingsWindow.Activate();
+            return;
+        }
+
+        _settingsWindow = new SettingsWindow(
+            _settings!,
+            clickGuardChanged: enabled => _window?.SetClickGuard(enabled),
+            autoLyricsChanged: enabled => _window?.SetAutoLyricsEnabled(enabled),
+            fullscreenChanged: enabled => _window?.SetFullscreenAutoHide(enabled),
+            hotkeysChanged: enabled => _window?.SetGlobalHotkeysEnabled(enabled),
+            guardGhostRefresh: () => _window?.RefreshGuardGhost());
+        _settingsWindow.Closed += (_, _) => _settingsWindow = null;
+        _settingsWindow.Show();
+        _settingsWindow.Activate();
     }
 
     public void Wake()
