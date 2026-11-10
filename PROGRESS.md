@@ -5,9 +5,9 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Pecah MainWindow.xaml.cs menjadi partial class per tanggung jawab — Hotkeys & Fullscreen selesai; sisa: Guard, DragDrop, Peek, Dots, Pointer, Animation.
-- Terakhir selesai: MainWindow.Fullscreen.cs — SetFullscreenAutoHide, FullscreenTimer_Tick, IsForegroundMaximizedApp, RefreshBrowserState dipindah persis; field bersama & timer tetap di file utama; build Release 0 error (10 Nov 2026).
-- Langkah berikutnya persis: Pecah Guard (termasuk properti IsEffectiveGuard), lalu DragDrop, Peek, Dots, Pointer, Animation.
+- Sedang dikerjakan: Pecah MainWindow.xaml.cs menjadi partial class per tanggung jawab — Hotkeys, Fullscreen & DragDrop selesai; sisa: Guard, Peek, Dots, Pointer, Animation.
+- Terakhir selesai: MainWindow.DragDrop.cs — Window_DragEnter, Window_DragOver, Window_DragLeave, Window_Drop dipindah persis; handler di MainWindow.xaml tetap; build Release 0 error (10 Nov 2026).
+- Langkah berikutnya persis: Pecah Guard (termasuk properti IsEffectiveGuard), lalu Peek, Dots, Pointer, Animation.
 - Blocker / keputusan penting: Tidak ada blocker.
 
 ## Roadmap (dari README)
@@ -24,7 +24,7 @@
 - Lirik Idle diperbesar ke 13.5: ticker Height 19, pill tinggi 40, radius 20, pengukuran BuildIdleSpec ikut 13.5.
 - Uji visual lolos (Spotify/YouTube Music/YouTube/browser/file lokal, ganti aplikasi, pause, restart). Tidak ada pola AUMID tambahan yang perlu dipetakan.
 - Build Release 0 error; commit & push ke branch feat/ikon-sumber-media.
-- Pecah MainWindow: MainWindow.Hotkeys.cs lalu MainWindow.Fullscreen.cs (hotkey, fullscreen, browser-state), build Release 0 error; sisa: Guard, DragDrop, Peek, Dots, Pointer, Animation.
+- Pecah MainWindow: Hotkeys, Fullscreen, lalu DragDrop (hotkey, fullscreen/browser-state, drag-drop Shelf), build Release 0 error; sisa: Guard, Peek, Dots, Pointer, Animation.
 
 ### 2026-11-09
 - Push update UI, tray, lyrics, shelf, dan window styling, plus patch notes v1.1.0.
