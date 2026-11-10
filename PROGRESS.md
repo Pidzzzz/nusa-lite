@@ -5,9 +5,9 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Pecah MainWindow.xaml.cs menjadi partial class per tanggung jawab — Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, Pointer selesai; sisa: Animation.
-- Terakhir selesai: MainWindow.Pointer.cs — HoverTimer_Tick, IsCursorInside/IsCursorNearIsland/IsCursorWithinRect/IsInside, PointerEnter, CreateDwellTimer, DwellTimer_Tick, ExpandFromHover, PointerLeave, CollapseTimer_Tick, handler klik/wheel dipindah persis; field bersama tetap; build Release 0 error (10 Nov 2026).
-- Langkah berikutnya persis: Pecah Animation.
+- Sedang dikerjakan: Selesai — semua pecahan MainWindow tuntas (Hotkeys, Fullscreen, DragDrop, Peek, Dots, Guard, Pointer, Animation); MainWindow.xaml.cs kini hanya inti.
+- Terakhir selesai: MainWindow.Animation.cs — AnimateTo, ApplySpec, ApplyActiveViewLayout, ApplyContentScale, SetImmediate, Animate, ResolveSpec, BuildIdleSpec, BuildLyricsSpec, MeasureTextWidth, UpdateIdleLayout, UpdateLyricsLayout, SpecFor + record IslandSpec dipindah persis; build Release 0 error (10 Nov 2026).
+- Langkah berikutnya persis: Tidak ada; refactor pecah MainWindow selesai, siap review/merge branch.
 - Blocker / keputusan penting: Tidak ada blocker.
 
 ## Roadmap (dari README)
@@ -24,7 +24,7 @@
 - Lirik Idle diperbesar ke 13.5: ticker Height 19, pill tinggi 40, radius 20, pengukuran BuildIdleSpec ikut 13.5.
 - Uji visual lolos (Spotify/YouTube Music/YouTube/browser/file lokal, ganti aplikasi, pause, restart). Tidak ada pola AUMID tambahan yang perlu dipetakan.
 - Build Release 0 error; commit & push ke branch feat/ikon-sumber-media.
-- Pecah MainWindow: Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, Pointer, build Release 0 error; sisa: Animation.
+- Pecah MainWindow tuntas: Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, Pointer, Animation; MainWindow.xaml.cs tinggal inti (~481 baris), build Release 0 error.
 
 ### 2026-11-09
 - Push update UI, tray, lyrics, shelf, dan window styling, plus patch notes v1.1.0.
