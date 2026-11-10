@@ -17,11 +17,11 @@
             <controls:ArcRing Percent="{Binding PomodoroProgress}" Thickness="9" TrackBrush="#20FFFFFF">
                 <controls:ArcRing.Style>
                     <Style TargetType="controls:ArcRing">
-                        <Setter Property="Stroke" Value="{StaticResource EmberBrush}" />
+                        <Setter Property="Stroke" Value="{DynamicResource EmberBrush}" />
                         <Setter Property="Effect" Value="{StaticResource FocusGlow}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
-                                <Setter Property="Stroke" Value="{StaticResource MintBrush}" />
+                                <Setter Property="Stroke" Value="{DynamicResource MintBrush}" />
                                 <Setter Property="Effect" Value="{StaticResource BreakGlow}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -68,7 +68,7 @@
                     <Path Data="{StaticResource IconSkip}" Style="{StaticResource FillIcon}" Width="14" Height="14" />
                 </Button>
 
-                <Rectangle Width="1" Height="16" Fill="{StaticResource LineBrush}" Margin="12,0" />
+                <Rectangle Width="1" Height="16" Fill="{DynamicResource LineBrush}" Margin="12,0" />
 
                 <TextBlock Text="Tetap fokus, satu sesi demi satu sesi." Style="{StaticResource TinyText}"
                            FontSize="9" VerticalAlignment="Center" />

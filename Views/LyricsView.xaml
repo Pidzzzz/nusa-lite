@@ -14,7 +14,7 @@
                 <Grid.Effect>
                     <DropShadowEffect Color="#8B5CF6" BlurRadius="20" ShadowDepth="0" Opacity="0.28" />
                 </Grid.Effect>
-                <Border x:Name="ArtPlaceholder" CornerRadius="16" Background="{StaticResource AccentDiagonalBrush}"
+                <Border x:Name="ArtPlaceholder" CornerRadius="16" Background="{DynamicResource AccentDiagonalBrush}"
                         Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
                     <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="22" Height="22" Stretch="Uniform" Opacity="0.92" />
                 </Border>
@@ -31,7 +31,7 @@
                        Margin="0,2,0,0" MaxWidth="66" TextTrimming="CharacterEllipsis" />
         </StackPanel>
 
-        <Border x:Name="Divider" Grid.Column="1" Width="1" Background="{StaticResource AmberBrush}" Opacity="0.4"
+        <Border x:Name="Divider" Grid.Column="1" Width="1" Background="{DynamicResource AmberBrush}" Opacity="0.4"
                 Margin="0,2,12,2" />
 
         <Grid x:Name="LyricHost" Grid.Column="2" Margin="14,0,0,0">
@@ -56,7 +56,7 @@
                     <Path Data="{StaticResource IconMinus}" Style="{StaticResource StrokeIcon}" Width="9" Height="9" />
                 </Button>
                 <TextBlock Text="{Binding LyricOffsetText}" Style="{StaticResource TinyText}" FontSize="8.5"
-                           Foreground="{StaticResource AmberBrush}" FontWeight="SemiBold"
+                           Foreground="{DynamicResource AmberBrush}" FontWeight="SemiBold"
                            VerticalAlignment="Center" Margin="1,0" />
                 <Button Style="{StaticResource IconButton}" Width="18" Height="16" Click="OffsetPlus_Click"
                         ToolTip="Lirik lebih lambat">

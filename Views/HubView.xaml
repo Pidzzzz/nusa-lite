@@ -16,7 +16,7 @@
             <TextBlock Text="{Binding DateText}" Style="{StaticResource CaptionText}" Margin="1,3,0,0" />
         </StackPanel>
 
-        <Border Grid.Column="1" Width="1" Background="{StaticResource LineBrush}" Margin="12,2,16,2" />
+        <Border Grid.Column="1" Width="1" Background="{DynamicResource LineBrush}" Margin="12,2,16,2" />
 
         <Grid Grid.Column="2" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
                 <Grid.Effect>
                     <DropShadowEffect Color="#8B5CF6" BlurRadius="20" ShadowDepth="0" Opacity="0.3" />
                 </Grid.Effect>
-                <Border CornerRadius="14,12,14,12" Background="{StaticResource AccentDiagonalBrush}"
+                <Border CornerRadius="14,12,14,12" Background="{DynamicResource AccentDiagonalBrush}"
                         Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
                     <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="20" Height="20" Stretch="Uniform" Opacity="0.95" />
                 </Border>
@@ -63,17 +63,17 @@
                 <controls:ArcRing Percent="{Binding BatteryProgress}" Thickness="3.2" TrackBrush="#22FFFFFF">
                     <controls:ArcRing.Style>
                         <Style TargetType="controls:ArcRing">
-                            <Setter Property="Stroke" Value="{StaticResource AccentBrush}" />
+                            <Setter Property="Stroke" Value="{DynamicResource AccentBrush}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsCharging}" Value="True">
-                                    <Setter Property="Stroke" Value="{StaticResource MintBrush}" />
+                                    <Setter Property="Stroke" Value="{DynamicResource MintBrush}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </controls:ArcRing.Style>
                 </controls:ArcRing>
                 <TextBlock Text="{Binding BatteryText}" FontSize="9.5" FontWeight="SemiBold"
-                           Foreground="{StaticResource InkBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                           Foreground="{DynamicResource InkBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
             <TextBlock Text="{Binding BatteryStateText}" HorizontalAlignment="Center" Margin="0,3,0,0">
                 <TextBlock.Style>
@@ -81,7 +81,7 @@
                         <Setter Property="FontSize" Value="8.5" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsCharging}" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource MintBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MintBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

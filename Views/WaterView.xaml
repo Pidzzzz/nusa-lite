@@ -16,13 +16,13 @@
 
         <Grid Width="96" Height="96" VerticalAlignment="Top">
             <controls:ArcRing Percent="{Binding WaterProgress}" Thickness="8" TrackBrush="#20FFFFFF"
-                              Stroke="{StaticResource AquaBrush}">
+                              Stroke="{DynamicResource AquaBrush}">
                 <controls:ArcRing.Effect>
                     <DropShadowEffect Color="#38D6E8" BlurRadius="18" ShadowDepth="0" Opacity="0.3" />
                 </controls:ArcRing.Effect>
             </controls:ArcRing>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Path Data="{StaticResource IconDrop}" Fill="{StaticResource MintBrush}" Width="17" Height="17" Stretch="Uniform"
+                <Path Data="{StaticResource IconDrop}" Fill="{DynamicResource MintBrush}" Width="17" Height="17" Stretch="Uniform"
                       HorizontalAlignment="Center" />
                 <TextBlock Text="{Binding WaterPercent}" Style="{StaticResource BigText}" FontSize="19"
                            HorizontalAlignment="Center" Margin="0,2,0,0" />
@@ -35,7 +35,7 @@
             <TextBlock Text="{Binding WaterAmount}" Style="{StaticResource BigText}" FontSize="19" Margin="0,2,0,0" />
             <TextBlock Text="{Binding WaterRemaining}" Style="{StaticResource CaptionText}" FontSize="10"
                        Margin="0,1,0,0" />
-            <ProgressBar Style="{StaticResource SlimProgress}" Height="4" Foreground="{StaticResource AquaBrush}"
+            <ProgressBar Style="{StaticResource SlimProgress}" Height="4" Foreground="{DynamicResource AquaBrush}"
                          Value="{Binding WaterProgress, Mode=OneWay}" Margin="0,6,0,0" />
             <StackPanel Orientation="Horizontal" Margin="0,7,0,0">
                 <Button Style="{StaticResource PrimaryButton}" Height="26" Padding="12,0" FontSize="10.5"
@@ -69,7 +69,7 @@
                             <Grid Height="30" VerticalAlignment="Bottom">
                                 <Border Background="#12FFFFFF" CornerRadius="3" />
                                 <Border VerticalAlignment="Bottom" CornerRadius="3"
-                                        Background="{StaticResource AquaBrush}"
+                                        Background="{DynamicResource AquaBrush}"
                                         Height="{Binding Ratio, Converter={StaticResource WaterBarHeight}, ConverterParameter=3}"
                                         RenderTransformOrigin="0.5,1">
                                     <Border.RenderTransform>
@@ -99,7 +99,7 @@
                                         <Setter Property="Foreground" Value="#66FFFFFF" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsToday}" Value="True">
-                                                <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
                                                 <Setter Property="FontWeight" Value="SemiBold" />
                                             </DataTrigger>
                                         </Style.Triggers>

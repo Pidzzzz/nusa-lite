@@ -2,83 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:infra="clr-namespace:NusaLite.Infrastructure">
 
-    <Color x:Key="VoidColor">#06030F</Color>
-    <Color x:Key="InkColor">#F3EEFF</Color>
-    <Color x:Key="MistColor">#9D94BC</Color>
-    <Color x:Key="CyanColor">#64D2FF</Color>
-    <Color x:Key="IndigoColor">#6A5AE0</Color>
-    <Color x:Key="VioletColor">#6D4AFF</Color>
-    <Color x:Key="AmberColor">#CDB4FF</Color>
-    <Color x:Key="RoseColor">#F0A6FF</Color>
-    <Color x:Key="CoralColor">#B57BFF</Color>
-    <Color x:Key="MintColor">#6FE7D2</Color>
-    <Color x:Key="AquaColor">#38D6E8</Color>
-    <Color x:Key="LimeColor">#C7F36B</Color>
-    <Color x:Key="OrchidColor">#7C5CFF</Color>
-
-    <SolidColorBrush x:Key="VoidBrush" Color="{StaticResource VoidColor}" />
-    <SolidColorBrush x:Key="InkBrush" Color="{StaticResource InkColor}" />
-    <SolidColorBrush x:Key="MistBrush" Color="{StaticResource MistColor}" />
-    <SolidColorBrush x:Key="CyanBrush" Color="{StaticResource CyanColor}" />
-    <SolidColorBrush x:Key="IndigoBrush" Color="{StaticResource IndigoColor}" />
-    <SolidColorBrush x:Key="VioletBrush" Color="{StaticResource VioletColor}" />
-    <SolidColorBrush x:Key="AmberBrush" Color="{StaticResource AmberColor}" />
-    <SolidColorBrush x:Key="RoseBrush" Color="{StaticResource RoseColor}" />
-    <SolidColorBrush x:Key="CoralBrush" Color="{StaticResource CoralColor}" />
-    <SolidColorBrush x:Key="MintBrush" Color="{StaticResource MintColor}" />
-    <SolidColorBrush x:Key="AquaBrushSolid" Color="{StaticResource AquaColor}" />
-    <SolidColorBrush x:Key="LimeBrushSolid" Color="{StaticResource LimeColor}" />
-    <SolidColorBrush x:Key="OrchidBrush" Color="{StaticResource OrchidColor}" />
-    <SolidColorBrush x:Key="SoftFillBrush" Color="#14FFFFFF" />
-    <SolidColorBrush x:Key="SofterFillBrush" Color="#0AFFFFFF" />
-    <SolidColorBrush x:Key="LineBrush" Color="#1AFFFFFF" />
-
-    <LinearGradientBrush x:Key="AccentBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="0.52" Color="{StaticResource RoseColor}" />
-        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="AccentDiagonalBrush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="0.52" Color="{StaticResource RoseColor}" />
-        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="AquaBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="{StaticResource MintColor}" />
-        <GradientStop Offset="0.52" Color="{StaticResource AquaColor}" />
-        <GradientStop Offset="1" Color="#8F7BFF" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="EmberBrush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Offset="0" Color="{StaticResource CoralColor}" />
-        <GradientStop Offset="0.55" Color="#D96BFF" />
-        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="GoldBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="1" Color="#B79CFF" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="LimeBrush" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Offset="0" Color="{StaticResource LimeColor}" />
-        <GradientStop Offset="1" Color="{StaticResource AmberColor}" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="EqBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="0.5" Color="{StaticResource RoseColor}" />
-        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
-    </LinearGradientBrush>
-
     <FontFamily x:Key="DisplayFont">./Fonts/#Inter, SF Pro Display, Segoe UI Variable Display, Segoe UI, Segoe UI Symbol</FontFamily>
     <FontFamily x:Key="UiFont">./Fonts/#Inter, SF Pro Text, SF Pro Display, Segoe UI Variable Text, Segoe UI, Segoe UI Symbol</FontFamily>
 
     <Style x:Key="BaseText" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
-        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
         <Setter Property="FontSize" Value="12.5" />
         <Setter Property="LineHeight" Value="16.5" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -102,18 +31,18 @@
     <Style x:Key="CaptionText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="FontSize" Value="11" />
         <Setter Property="LineHeight" Value="15" />
-        <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource MistBrush}" />
     </Style>
 
     <Style x:Key="TinyText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="LineHeight" Value="13" />
-        <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource MistBrush}" />
     </Style>
 
     <Style x:Key="IconButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Cursor" Value="Hand" />
@@ -178,7 +107,7 @@
     </Style>
 
     <Style x:Key="PillButton" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
         <Setter Property="FontSize" Value="11.5" />
         <Setter Property="FontWeight" Value="SemiBold" />
@@ -355,7 +284,7 @@
     <Geometry x:Key="IconUnlock">M7,11 V7 A5,5 0 0 1 17,7 M5,11 H19 V21 H5 Z M12,14.5 V17.5</Geometry>
 
     <Style x:Key="StrokeIcon" TargetType="Path">
-        <Setter Property="Stroke" Value="{StaticResource InkBrush}" />
+        <Setter Property="Stroke" Value="{DynamicResource InkBrush}" />
         <Setter Property="StrokeThickness" Value="1.7" />
         <Setter Property="StrokeStartLineCap" Value="Round" />
         <Setter Property="StrokeEndLineCap" Value="Round" />
@@ -367,7 +296,7 @@
     </Style>
 
     <Style x:Key="FillIcon" TargetType="Path">
-        <Setter Property="Fill" Value="{StaticResource InkBrush}" />
+        <Setter Property="Fill" Value="{DynamicResource InkBrush}" />
         <Setter Property="Stretch" Value="Uniform" />
         <Setter Property="Width" Value="16" />
         <Setter Property="Height" Value="16" />
@@ -375,7 +304,7 @@
 
     <Style x:Key="SlimProgress" TargetType="ProgressBar">
         <Setter Property="Height" Value="3" />
-        <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
         <Setter Property="Background" Value="#2EE9DEFF" />
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />

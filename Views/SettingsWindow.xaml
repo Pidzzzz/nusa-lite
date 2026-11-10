@@ -5,13 +5,13 @@
         Width="640" Height="460"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource VoidBrush}"
+        Background="{DynamicResource VoidBrush}"
         FontFamily="{StaticResource UiFont}"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True">
     <Window.Resources>
         <Style x:Key="SettingCheck" TargetType="CheckBox">
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
             <Setter Property="FontSize" Value="12.5" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Margin" Value="0,0,0,11" />
@@ -23,7 +23,7 @@
                                     Background="#14FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1"
                                     VerticalAlignment="Center">
                                 <Path x:Name="Check" Data="M 3,8 L 6.5,11.5 L 13,4.5"
-                                      Stroke="{StaticResource InkBrush}" StrokeThickness="1.8"
+                                      Stroke="{DynamicResource InkBrush}" StrokeThickness="1.8"
                                       StrokeStartLineCap="Round" StrokeEndLineCap="Round"
                                       Visibility="Collapsed" />
                             </Border>
@@ -77,7 +77,7 @@
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
                                                 <Ellipse Width="15" Height="15"
-                                                         Fill="{StaticResource InkBrush}" />
+                                                         Fill="{DynamicResource InkBrush}" />
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>
@@ -91,8 +91,8 @@
 
         <Style x:Key="SettingText" TargetType="TextBox">
             <Setter Property="Background" Value="#14FFFFFF" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
-            <Setter Property="CaretBrush" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+            <Setter Property="CaretBrush" Value="{DynamicResource InkBrush}" />
             <Setter Property="BorderBrush" Value="#26FFFFFF" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
@@ -118,25 +118,25 @@
             <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
             <Setter Property="FontSize" Value="20" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
         </Style>
 
         <Style x:Key="SectionNote" TargetType="TextBlock">
             <Setter Property="FontSize" Value="10.5" />
-            <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource MistBrush}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
         <Style x:Key="RowLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="RowValue" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource MistBrush}" />
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -148,18 +148,18 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" Background="#0AFFFFFF" BorderBrush="{StaticResource LineBrush}"
+        <Border Grid.Column="0" Background="#0AFFFFFF" BorderBrush="{DynamicResource LineBrush}"
                 BorderThickness="0,0,1,0">
             <StackPanel Margin="14,18,14,18">
                 <TextBlock Text="Pengaturan" FontFamily="{StaticResource DisplayFont}"
-                           FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}"
+                           FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource InkBrush}"
                            Margin="8,0,0,14" />
 
                 <ListBox x:Name="SectionList" Background="Transparent" BorderThickness="0"
                          SelectionChanged="SectionList_SelectionChanged">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
-                            <Setter Property="Foreground" Value="{StaticResource MistBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource MistBrush}" />
                             <Setter Property="FontSize" Value="12.5" />
                             <Setter Property="Padding" Value="10,8" />
                             <Setter Property="Margin" Value="0,1" />
@@ -177,7 +177,7 @@
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
                                                 <Setter TargetName="Bg" Property="Background" Value="#26CDB4FF" />
-                                                <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
                                                 <Setter Property="FontWeight" Value="SemiBold" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
@@ -193,7 +193,7 @@
                 </ListBox>
 
                 <TextBlock Text="Perubahan langsung tersimpan."
-                           FontSize="10" Foreground="{StaticResource MistBrush}"
+                           FontSize="10" Foreground="{DynamicResource MistBrush}"
                            TextWrapping="Wrap" Margin="8,16,0,0" Opacity="0.8" />
             </StackPanel>
         </Border>
@@ -220,7 +220,7 @@
                           Style="{StaticResource SettingCheck}"
                           Checked="AutoLyrics_Toggled" Unchecked="AutoLyrics_Toggled" />
 
-                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,4,0,16" />
+                <Border Height="1" Background="{DynamicResource LineBrush}" Margin="0,4,0,16" />
 
                 <TextBlock Text="Offset lirik" Style="{StaticResource RowLabel}" Margin="0,0,0,8" />
                 <StackPanel Orientation="Horizontal">
@@ -229,7 +229,7 @@
                              LostFocus="LyricOffset_LostFocus"
                              KeyDown="LyricOffset_KeyDown" />
                     <TextBlock Text="ms" Style="{StaticResource RowLabel}" Margin="8,0,0,0"
-                               Foreground="{StaticResource MistBrush}" />
+                               Foreground="{DynamicResource MistBrush}" />
                 </StackPanel>
                 <TextBlock Text="Rentang -2000..2000 ms. Nilai positif mempercepat tampilnya lirik."
                            Style="{StaticResource SectionNote}" Margin="0,6,0,0" />
@@ -249,7 +249,7 @@
                           Style="{StaticResource SettingCheck}"
                           Checked="AutoClickGuard_Toggled" Unchecked="AutoClickGuard_Toggled" />
 
-                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,4,0,16" />
+                <Border Height="1" Background="{DynamicResource LineBrush}" Margin="0,4,0,16" />
 
                 <StackPanel Margin="0,0,0,18">
                     <Grid Margin="0,0,0,8">
@@ -293,7 +293,7 @@
                                  TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
                                  KeyDown="Number_KeyDown" />
                         <TextBlock Text="menit" Style="{StaticResource RowLabel}"
-                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                                   Foreground="{DynamicResource MistBrush}" Margin="8,0,0,0" />
                     </StackPanel>
                 </Grid>
 
@@ -311,11 +311,11 @@
                                  TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
                                  KeyDown="Number_KeyDown" />
                         <TextBlock Text="menit" Style="{StaticResource RowLabel}"
-                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                                   Foreground="{DynamicResource MistBrush}" Margin="8,0,0,0" />
                     </StackPanel>
                 </Grid>
 
-                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,4,0,16" />
+                <Border Height="1" Background="{DynamicResource LineBrush}" Margin="0,4,0,16" />
 
                 <Grid Margin="0,0,0,16">
                     <Grid.ColumnDefinitions>
@@ -332,7 +332,7 @@
                                  TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
                                  KeyDown="Number_KeyDown" />
                         <TextBlock Text="ml" Style="{StaticResource RowLabel}"
-                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                                   Foreground="{DynamicResource MistBrush}" Margin="8,0,0,0" />
                     </StackPanel>
                 </Grid>
 
@@ -350,7 +350,7 @@
                                  TextChanged="Number_TextChanged" LostFocus="Number_LostFocus"
                                  KeyDown="Number_KeyDown" />
                         <TextBlock Text="menit" Style="{StaticResource RowLabel}"
-                                   Foreground="{StaticResource MistBrush}" Margin="8,0,0,0" />
+                                   Foreground="{DynamicResource MistBrush}" Margin="8,0,0,0" />
                     </StackPanel>
                 </Grid>
 
@@ -369,7 +369,7 @@
                     <Button Content="Buka settings.json" Style="{StaticResource PillButton}"
                             Click="OpenSettingsFile_Click" />
                     <TextBlock VerticalAlignment="Center" Margin="18,0,0,0">
-                        <Hyperlink Foreground="{StaticResource CyanBrush}"
+                        <Hyperlink Foreground="{DynamicResource CyanBrush}"
                                    TextDecorations="Underline"
                                    NavigateUri="https://github.com/Pidzzzz/nusa-lite/releases"
                                    RequestNavigate="ReleaseLink_RequestNavigate">
@@ -378,7 +378,7 @@
                     </TextBlock>
                 </StackPanel>
 
-                <Border Height="1" Background="{StaticResource LineBrush}" Margin="0,20,0,18" />
+                <Border Height="1" Background="{DynamicResource LineBrush}" Margin="0,20,0,18" />
 
                 <Button Content="Kembalikan ke bawaan" Style="{StaticResource PillButton}"
                         HorizontalAlignment="Left" Click="ResetDefaults_Click" />

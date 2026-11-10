@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:NusaLite.Controls"
              IsHitTestVisible="False">
     <Grid Margin="12,0,12,0">
-        <Path Data="{StaticResource IconBolt}" Fill="{StaticResource MintBrush}" Width="9" Height="9" Stretch="Uniform"
+        <Path Data="{StaticResource IconBolt}" Fill="{DynamicResource MintBrush}" Width="9" Height="9" Stretch="Uniform"
               HorizontalAlignment="Left" VerticalAlignment="Center"
               Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
 
@@ -27,7 +27,7 @@
                 <Path.Style>
                     <Style TargetType="Path">
                         <Setter Property="Data" Value="{StaticResource IconMusicNote}" />
-                        <Setter Property="Fill" Value="{StaticResource MistBrush}" />
+                        <Setter Property="Fill" Value="{DynamicResource MistBrush}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SourceIconKey}" Value="Spotify">
                                 <Setter Property="Data" Value="{StaticResource IconSpotify}" />
@@ -47,7 +47,7 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SourceIconKey}" Value="Media">
                                 <Setter Property="Data" Value="{StaticResource IconMusicNote}" />
-                                <Setter Property="Fill" Value="{StaticResource MistBrush}" />
+                                <Setter Property="Fill" Value="{DynamicResource MistBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -55,27 +55,27 @@
             </Path>
 
             <controls:LyricTicker Current="{Binding IdleLine}" FontSize="13.5" Height="19"
-                                  FontWeight="Medium" Foreground="{StaticResource InkBrush}"
+                                  FontWeight="Medium" Foreground="{DynamicResource InkBrush}"
                                   MaxWidth="320" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding ShowAltHint, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolVis}}">
             <TextBlock Text="Tahan" FontFamily="{StaticResource UiFont}" FontSize="10"
-                       Foreground="{StaticResource MistBrush}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                       Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="0,0,5,0" />
             <Border Background="#26CDB4FF" BorderBrush="#40CDB4FF" BorderThickness="1"
                     CornerRadius="4,3,4,3" Padding="4,0" VerticalAlignment="Center">
                 <TextBlock Text="Alt" FontFamily="{StaticResource UiFont}" FontSize="8.5"
-                           Foreground="{StaticResource InkBrush}" />
+                           Foreground="{DynamicResource InkBrush}" />
             </Border>
             <TextBlock Text="untuk membuka" FontFamily="{StaticResource UiFont}" FontSize="10"
-                       Foreground="{StaticResource MistBrush}" VerticalAlignment="Center" Margin="6,0,0,0" />
+                       Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="6,0,0,0" />
         </StackPanel>
 
         <controls:EqBars Width="17" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center"
                          Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
 
-        <Ellipse Width="4.5" Height="4.5" Fill="{StaticResource RoseBrush}" HorizontalAlignment="Right"
+        <Ellipse Width="4.5" Height="4.5" Fill="{DynamicResource RoseBrush}" HorizontalAlignment="Right"
                  VerticalAlignment="Center">
             <Ellipse.Style>
                 <Style TargetType="Ellipse">

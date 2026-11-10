@@ -17,7 +17,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Border Width="36" Height="36" CornerRadius="12" Background="{StaticResource AccentDiagonalBrush}">
+                <Border Width="36" Height="36" CornerRadius="12" Background="{DynamicResource AccentDiagonalBrush}">
                     <Grid>
                         <Path Data="{StaticResource IconVolume}" Style="{StaticResource StrokeIcon}" Width="17" Height="17"
                               Visibility="{Binding IsMuted, Converter={StaticResource InvBoolVis}}" />
@@ -30,7 +30,7 @@
                     <TextBlock Text="{Binding PeekSubtitle}" Style="{StaticResource CaptionText}" Margin="0,2,0,0" />
                 </StackPanel>
                 <TextBlock Grid.Column="2" Text="{Binding PeekValue}" Style="{StaticResource TitleText}" FontSize="15"
-                           Foreground="{StaticResource AmberBrush}" VerticalAlignment="Center" />
+                           Foreground="{DynamicResource AmberBrush}" VerticalAlignment="Center" />
             </Grid>
             <ProgressBar Grid.Row="1" Style="{StaticResource SlimProgress}" Value="{Binding PeekProgress, Mode=OneWay}"
                          Margin="49,0,0,0" />
@@ -61,8 +61,8 @@
                     </Border.Style>
                     <Grid>
                         <Path Data="{StaticResource IconBattery}" Style="{StaticResource StrokeIcon}" Width="18" Height="18"
-                              Stroke="{StaticResource MintBrush}" Visibility="{Binding IsCharging, Converter={StaticResource InvBoolVis}}" />
-                        <Path Data="{StaticResource IconBolt}" Fill="{StaticResource MintBrush}" Width="16" Height="16" Stretch="Uniform"
+                              Stroke="{DynamicResource MintBrush}" Visibility="{Binding IsCharging, Converter={StaticResource InvBoolVis}}" />
+                        <Path Data="{StaticResource IconBolt}" Fill="{DynamicResource MintBrush}" Width="16" Height="16" Stretch="Uniform"
                               Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
                     </Grid>
                 </Border>
@@ -71,9 +71,9 @@
                     <TextBlock Text="{Binding PeekSubtitle}" Style="{StaticResource CaptionText}" Margin="0,2,0,0" />
                 </StackPanel>
                 <TextBlock Grid.Column="2" Text="{Binding PeekValue}" Style="{StaticResource TitleText}" FontSize="15"
-                           Foreground="{StaticResource MintBrush}" VerticalAlignment="Center" />
+                           Foreground="{DynamicResource MintBrush}" VerticalAlignment="Center" />
             </Grid>
-            <ProgressBar Grid.Row="1" Style="{StaticResource SlimProgress}" Foreground="{StaticResource MintBrush}"
+            <ProgressBar Grid.Row="1" Style="{StaticResource SlimProgress}" Foreground="{DynamicResource MintBrush}"
                          Value="{Binding PeekProgress, Mode=OneWay}" Margin="49,0,0,0" />
         </Grid>
 
@@ -90,7 +90,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid Width="40" Height="40">
-                    <Border CornerRadius="11" Background="{StaticResource AccentDiagonalBrush}"
+                    <Border CornerRadius="11" Background="{DynamicResource AccentDiagonalBrush}"
                             Visibility="{Binding PeekHasArtwork, Converter={StaticResource InvBoolVis}}">
                         <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="17" Height="17" Stretch="Uniform" />
                     </Border>
@@ -109,7 +109,7 @@
                     <controls:EqBars Width="16" Height="11" HorizontalAlignment="Right"
                                      Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
                     <TextBlock Text="{Binding PeekValue}" Style="{StaticResource TinyText}" FontSize="9"
-                               Foreground="{StaticResource RoseBrush}" HorizontalAlignment="Right" Margin="0,4,0,0" />
+                               Foreground="{DynamicResource RoseBrush}" HorizontalAlignment="Right" Margin="0,4,0,0" />
                 </StackPanel>
             </Grid>
             <ProgressBar Grid.Row="1" Style="{StaticResource SlimProgress}" Value="{Binding PeekProgress, Mode=OneWay}"

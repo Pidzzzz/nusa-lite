@@ -25,6 +25,7 @@ public sealed class AppHost : IDisposable
         try
         {
             _settings = new SettingsStore();
+            ThemeService.Apply(_settings.Current.Theme);
             _media = new MediaService();
             _lyrics = new LyricsService();
             _audio = new Interop.CoreAudio.AudioService();

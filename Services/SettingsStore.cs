@@ -42,6 +42,8 @@ public sealed class AppSettings
     public bool AutoLyricsOnPlay { get; set; } = true;
 
     public bool LyricLocked { get; set; }
+
+    public string Theme { get; set; } = "Graphite";
 }
 
 public sealed class SettingsStore

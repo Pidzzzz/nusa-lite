@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Selesai — semua pecahan MainWindow tuntas (Hotkeys, Fullscreen, DragDrop, Peek, Dots, Guard, Pointer, Animation); MainWindow.xaml.cs kini hanya inti.
-- Terakhir selesai: MainWindow.Animation.cs — AnimateTo, ApplySpec, ApplyActiveViewLayout, ApplyContentScale, SetImmediate, Animate, ResolveSpec, BuildIdleSpec, BuildLyricsSpec, MeasureTextWidth, UpdateIdleLayout, UpdateLyricsLayout, SpecFor + record IslandSpec dipindah persis; build Release 0 error (10 Nov 2026).
-- Langkah berikutnya persis: Tidak ada; refactor pecah MainWindow selesai, siap review/merge branch.
-- Blocker / keputusan penting: Tidak ada blocker.
+- Sedang dikerjakan: Fondasi sistem tema — palet Graphite selesai; menunggu palet Void & Terang.
+- Terakhir selesai: Themes/Theme.Graphite.xaml (seluruh Color/Brush dipindah, nilai sama), Services/ThemeService.cs (Apply/Current, tukar dictionary ber-Source "Theme."), AppSettings.Theme (default Graphite) + apply di AppHost; brush di Views/Styles jadi DynamicResource; build Release 0 error, tampilan identik (10 Nov 2026).
+- Langkah berikutnya persis: Tambah Themes/Theme.Void.xaml & Theme.Light.xaml dengan kunci identik + token permukaan, lalu sapu hex.
+- Blocker / keputusan penting: Controls/*.xaml (LyricTicker, EqBars) masih StaticResource (di luar scope sesi ini) — perlu sesi lanjutan agar ikut tema.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -20,11 +20,9 @@
 
 ## Log harian
 ### 2026-11-10
-- Selesai ikon sumber media di Idle: ikon brand di samping lirik (Spotify, YouTube Music, YouTube, browser, pemutar lain) dari SourceIconKey + HasSourceIcon; geometri siluet berlubang EvenOdd.
-- Lirik Idle diperbesar ke 13.5: ticker Height 19, pill tinggi 40, radius 20, pengukuran BuildIdleSpec ikut 13.5.
-- Uji visual lolos (Spotify/YouTube Music/YouTube/browser/file lokal, ganti aplikasi, pause, restart). Tidak ada pola AUMID tambahan yang perlu dipetakan.
-- Build Release 0 error; commit & push ke branch feat/ikon-sumber-media.
+- Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.
 - Pecah MainWindow tuntas: Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, Pointer, Animation; MainWindow.xaml.cs tinggal inti (~481 baris), build Release 0 error.
+- Fondasi tema: Colors/Brush dipindah ke Themes/Theme.Graphite.xaml (nilai sama), ThemeService + AppSettings.Theme (default Graphite), App.xaml merge tema dulu; brush di Views/Styles jadi DynamicResource; build 0 error, tampilan identik.
 
 ### 2026-11-09
 - Push update UI, tray, lyrics, shelf, dan window styling, plus patch notes v1.1.0.

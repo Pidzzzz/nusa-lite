@@ -53,7 +53,7 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="CardIcon" TargetType="Path">
-            <Setter Property="Stroke" Value="{StaticResource MistBrush}" />
+            <Setter Property="Stroke" Value="{DynamicResource MistBrush}" />
             <Setter Property="StrokeThickness" Value="1.6" />
             <Setter Property="StrokeStartLineCap" Value="Round" />
             <Setter Property="StrokeEndLineCap" Value="Round" />
@@ -104,7 +104,7 @@
                 </Rectangle>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Path Data="{StaticResource IconUpload}" Style="{StaticResource CardIcon}" Width="22" Height="22"
-                          HorizontalAlignment="Center" Stroke="{StaticResource AmberBrush}" />
+                          HorizontalAlignment="Center" Stroke="{DynamicResource AmberBrush}" />
                     <TextBlock Text="Letakkan file di sini" Style="{StaticResource TitleText}" FontSize="11.5"
                                HorizontalAlignment="Center" Margin="0,6,0,0" />
                     <TextBlock Text="atau klik untuk memilih file" Style="{StaticResource TinyText}" FontSize="9"
@@ -184,12 +184,12 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <Border Background="#26CDB4FF" BorderBrush="{StaticResource AmberBrush}" BorderThickness="1.4"
+            <Border Background="#26CDB4FF" BorderBrush="{DynamicResource AmberBrush}" BorderThickness="1.4"
                     CornerRadius="14" IsHitTestVisible="False"
                     Visibility="{Binding ShelfDropHover, Converter={StaticResource BoolVis}}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Path Data="{StaticResource IconUpload}" Style="{StaticResource CardIcon}" Width="17" Height="17"
-                          Stroke="{StaticResource AmberBrush}" Margin="0,0,8,0" />
+                          Stroke="{DynamicResource AmberBrush}" Margin="0,0,8,0" />
                     <TextBlock Text="Lepaskan, biar kami rapikan" Style="{StaticResource TitleText}" FontSize="11.5" />
                 </StackPanel>
             </Border>
