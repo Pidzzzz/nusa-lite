@@ -1,0 +1,70 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="VoidColor">#F3F1F8</Color>
+    <Color x:Key="InkColor">#1B1726</Color>
+    <Color x:Key="MistColor">#6B6478</Color>
+    <Color x:Key="CyanColor">#0A6E92</Color>
+    <Color x:Key="IndigoColor">#4738C0</Color>
+    <Color x:Key="VioletColor">#5A37C9</Color>
+    <Color x:Key="AmberColor">#6A43C4</Color>
+    <Color x:Key="RoseColor">#A03BB8</Color>
+    <Color x:Key="CoralColor">#7A38C4</Color>
+    <Color x:Key="MintColor">#0B7C6B</Color>
+    <Color x:Key="AquaColor">#0B6E7E</Color>
+    <Color x:Key="LimeColor">#667D1C</Color>
+    <Color x:Key="OrchidColor">#4F35C8</Color>
+
+    <SolidColorBrush x:Key="VoidBrush" Color="{StaticResource VoidColor}" />
+    <SolidColorBrush x:Key="InkBrush" Color="{StaticResource InkColor}" />
+    <SolidColorBrush x:Key="MistBrush" Color="{StaticResource MistColor}" />
+    <SolidColorBrush x:Key="CyanBrush" Color="{StaticResource CyanColor}" />
+    <SolidColorBrush x:Key="IndigoBrush" Color="{StaticResource IndigoColor}" />
+    <SolidColorBrush x:Key="VioletBrush" Color="{StaticResource VioletColor}" />
+    <SolidColorBrush x:Key="AmberBrush" Color="{StaticResource AmberColor}" />
+    <SolidColorBrush x:Key="RoseBrush" Color="{StaticResource RoseColor}" />
+    <SolidColorBrush x:Key="CoralBrush" Color="{StaticResource CoralColor}" />
+    <SolidColorBrush x:Key="MintBrush" Color="{StaticResource MintColor}" />
+    <SolidColorBrush x:Key="AquaBrushSolid" Color="{StaticResource AquaColor}" />
+    <SolidColorBrush x:Key="LimeBrushSolid" Color="{StaticResource LimeColor}" />
+    <SolidColorBrush x:Key="OrchidBrush" Color="{StaticResource OrchidColor}" />
+    <SolidColorBrush x:Key="SoftFillBrush" Color="#12000000" />
+    <SolidColorBrush x:Key="SofterFillBrush" Color="#0A000000" />
+    <SolidColorBrush x:Key="LineBrush" Color="#24000000" />
+
+    <LinearGradientBrush x:Key="AccentBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
+        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AccentDiagonalBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
+        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AquaBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="{StaticResource MintColor}" />
+        <GradientStop Offset="1" Color="{StaticResource AquaColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="EmberBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="{StaticResource CoralColor}" />
+        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GoldBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
+        <GradientStop Offset="1" Color="{StaticResource RoseColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="LimeBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="{StaticResource LimeColor}" />
+        <GradientStop Offset="1" Color="{StaticResource AmberColor}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="EqBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
+        <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
+    </LinearGradientBrush>
+
+</ResourceDictionary>

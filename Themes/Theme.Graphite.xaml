@@ -1,9 +1,9 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Color x:Key="VoidColor">#06030F</Color>
-    <Color x:Key="InkColor">#F3EEFF</Color>
-    <Color x:Key="MistColor">#9D94BC</Color>
+    <Color x:Key="VoidColor">#0E0F12</Color>
+    <Color x:Key="InkColor">#F4F5F7</Color>
+    <Color x:Key="MistColor">#9AA0AA</Color>
     <Color x:Key="CyanColor">#64D2FF</Color>
     <Color x:Key="IndigoColor">#6A5AE0</Color>
     <Color x:Key="VioletColor">#6D4AFF</Color>
@@ -12,7 +12,7 @@
     <Color x:Key="CoralColor">#B57BFF</Color>
     <Color x:Key="MintColor">#6FE7D2</Color>
     <Color x:Key="AquaColor">#38D6E8</Color>
-    <Color x:Key="LimeColor">#C7F36B</Color>
+    <Color x:Key="LimeColor">#6FE7D2</Color>
     <Color x:Key="OrchidColor">#7C5CFF</Color>
 
     <SolidColorBrush x:Key="VoidBrush" Color="{StaticResource VoidColor}" />
@@ -34,31 +34,27 @@
 
     <LinearGradientBrush x:Key="AccentBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="0.52" Color="{StaticResource RoseColor}" />
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="AccentDiagonalBrush" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="0.52" Color="{StaticResource RoseColor}" />
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="AquaBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="{StaticResource MintColor}" />
-        <GradientStop Offset="0.52" Color="{StaticResource AquaColor}" />
-        <GradientStop Offset="1" Color="#8F7BFF" />
+        <GradientStop Offset="1" Color="{StaticResource AquaColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="EmberBrush" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Offset="0" Color="{StaticResource CoralColor}" />
-        <GradientStop Offset="0.55" Color="#D96BFF" />
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="GoldBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="1" Color="#B79CFF" />
+        <GradientStop Offset="1" Color="{StaticResource RoseColor}" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="LimeBrush" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -68,7 +64,6 @@
 
     <LinearGradientBrush x:Key="EqBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{StaticResource AmberColor}" />
-        <GradientStop Offset="0.5" Color="{StaticResource RoseColor}" />
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 

@@ -8,7 +8,9 @@ public static class ThemeService
 
     private static readonly Dictionary<string, string> Sources = new(StringComparer.OrdinalIgnoreCase)
     {
-        [DefaultTheme] = "/NusaLite;component/Themes/Theme.Graphite.xaml"
+        ["Void"] = "/NusaLite;component/Themes/Theme.Void.xaml",
+        [DefaultTheme] = "/NusaLite;component/Themes/Theme.Graphite.xaml",
+        ["Light"] = "/NusaLite;component/Themes/Theme.Light.xaml"
     };
 
     public static string Current { get; private set; } = DefaultTheme;

@@ -27,7 +27,7 @@
                   MouseLeftButtonDown="Island_MouseLeftButtonDown"
                   MouseLeftButtonUp="Island_MouseLeftButtonUp"
                   MouseWheel="Island_MouseWheel">
-                <controls:NotchShape x:Name="Notch" Fill="#FF08060F" CornerRadius="12" EarRadius="0" />
+                <controls:NotchShape x:Name="Notch" Fill="{DynamicResource VoidBrush}" CornerRadius="12" EarRadius="0" />
                 <ContentControl x:Name="ContentHost" HorizontalAlignment="Center" VerticalAlignment="Center"
                                 Focusable="False" IsTabStop="False">
                     <ContentControl.RenderTransform>

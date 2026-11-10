@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Fondasi sistem tema — palet Graphite selesai; menunggu palet Void & Terang.
-- Terakhir selesai: Themes/Theme.Graphite.xaml (seluruh Color/Brush dipindah, nilai sama), Services/ThemeService.cs (Apply/Current, tukar dictionary ber-Source "Theme."), AppSettings.Theme (default Graphite) + apply di AppHost; brush di Views/Styles jadi DynamicResource; build Release 0 error, tampilan identik (10 Nov 2026).
-- Langkah berikutnya persis: Tambah Themes/Theme.Void.xaml & Theme.Light.xaml dengan kunci identik + token permukaan, lalu sapu hex.
-- Blocker / keputusan penting: Controls/*.xaml (LyricTicker, EqBars) masih StaticResource (di luar scope sesi ini) — perlu sesi lanjutan agar ikut tema.
+- Sedang dikerjakan: Sistem tema 3 palet (Void/Graphite/Light) selesai; siap sapu hex permukaan.
+- Terakhir selesai: Theme.Void.xaml (palet lama), Theme.Graphite.xaml (netral #0E0F12, Lime→Mint, gradien 2 titik), Theme.Light.xaml (surface terang #F3F1F8, teks gelap, aksen digelapkan); ThemeService map Void/Graphite/Light; Notch Fill → DynamicResource VoidBrush (1 baris, disetujui); build Release 0 error; Light diuji: island terang + teks gelap terbaca (10 Nov 2026).
+- Langkah berikutnya persis: Sapu hex permukaan di Views/MainWindow (DotsBar #99120A22, tint #26CDB4FF dll.) → token tema, lalu Settings UI pemilih tema.
+- Blocker / keputusan penting: Controls/*.xaml (LyricTicker, EqBars) masih StaticResource; hex permukaan di Views belum ikut tema (dijadwalkan sesi sapu hex).
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -23,6 +23,7 @@
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.
 - Pecah MainWindow tuntas: Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, Pointer, Animation; MainWindow.xaml.cs tinggal inti (~481 baris), build Release 0 error.
 - Fondasi tema: Colors/Brush dipindah ke Themes/Theme.Graphite.xaml (nilai sama), ThemeService + AppSettings.Theme (default Graphite), App.xaml merge tema dulu; brush di Views/Styles jadi DynamicResource; build 0 error, tampilan identik.
+- Palet tema: Void (lama), Graphite (netral, tanpa Lime, gradien 2 titik), Light (surface terang/teks gelap); ThemeService Void/Graphite/Light; Notch Fill ikut VoidBrush (1 baris, disetujui); build 0 error; cek Light island terbaca, settings.json dikembalikan ke Graphite.
 
 ### 2026-11-09
 - Push update UI, tray, lyrics, shelf, dan window styling, plus patch notes v1.1.0.
