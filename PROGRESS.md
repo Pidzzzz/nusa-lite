@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: —
-- Terakhir selesai: Ikon aplikasi sumber media di tampilan Idle — SourceIconKey/HasSourceIcon di TrackInfo & MainViewModel, ikon brand berwarna (Spotify hijau, YouTube/YouTube Music merah, browser biru, pemutar lain Mist) dengan lubang negatif EvenOdd, lirik Idle diperbesar ke 13.5 (pill tinggi 40, radius 20, ticker Height 19), lebar notch menyesuaikan. Build Release 0 error; commit & push ke branch feat/ikon-sumber-media (10 Nov 2026)
-- Langkah berikutnya persis: Uji visual sudah lolos; merge branch feat/ikon-sumber-media ke main, lalu siapkan nomor versi/tag rilis berikutnya bila diperlukan
-- Blocker / keputusan penting: Pemetaan AUMID contains-based berurutan (spotify → youtube music/variasi → youtube → browser → Media); file lokal tanpa AUMID dikenal jatuh ke Media. Tidak ada blocker.
+- Sedang dikerjakan: Pecah MainWindow.xaml.cs menjadi partial class per tanggung jawab — Hotkeys selesai; sisa: Fullscreen, Guard, DragDrop, Peek, Dots, Pointer, Animation.
+- Terakhir selesai: MainWindow.Hotkeys.cs — SetGlobalHotkeysEnabled, RegisterHotkeys, UnregisterHotkeys, HwndHook, dan konstanta Hotkey*Id 9001–9006 dipindah persis; field bersama tetap di file utama; build Release 0 error (10 Nov 2026).
+- Langkah berikutnya persis: Pecah grup berikutnya (usul Fullscreen + RefreshBrowserState), lalu Guard, DragDrop, Peek, Dots, Pointer, Animation.
+- Blocker / keputusan penting: RefreshBrowserState diusulkan ke Fullscreen (hanya dipanggil FullscreenTimer_Tick); properti IsEffectiveGuard diusulkan ke Guard. Tidak ada blocker.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -24,6 +24,7 @@
 - Lirik Idle diperbesar ke 13.5: ticker Height 19, pill tinggi 40, radius 20, pengukuran BuildIdleSpec ikut 13.5.
 - Uji visual lolos (Spotify/YouTube Music/YouTube/browser/file lokal, ganti aplikasi, pause, restart). Tidak ada pola AUMID tambahan yang perlu dipetakan.
 - Build Release 0 error; commit & push ke branch feat/ikon-sumber-media.
+- Pecah MainWindow: MainWindow.Hotkeys.cs (method hotkey + konstanta 9001–9006), build Release 0 error; sisa: Fullscreen, Guard, DragDrop, Peek, Dots, Pointer, Animation.
 
 ### 2026-11-09
 - Push update UI, tray, lyrics, shelf, dan window styling, plus patch notes v1.1.0.
