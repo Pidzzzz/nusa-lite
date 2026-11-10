@@ -1,5 +1,17 @@
 # Patch Notes
 
+## v1.4.0 — 10 November 2026
+
+Penanda aplikasi sumber media di tampilan Idle.
+
+> **Catatan pemasangan** — File `.exe` belum ditandatangani secara digital. Saat pertama dijalankan, Windows SmartScreen mungkin menampilkan peringatan; klik **More info** lalu **Run anyway** untuk melanjutkan.
+
+### Fitur baru
+
+- **Ikon aplikasi sumber di tampilan Idle** — ikon kecil di samping lirik menunjukkan aplikasi yang sedang memutar media (Spotify, YouTube Music, YouTube, browser, atau pemutar lain) dengan warna khas masing-masing; lebar notch menyesuaikan otomatis.
+
+---
+
 ## v1.3.0 — 9 November 2026
 
 Jendela **Pengaturan** baru untuk mengatur NusaLite tanpa harus mengedit `settings.json`.

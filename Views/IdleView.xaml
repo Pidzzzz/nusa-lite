@@ -8,11 +8,9 @@
               HorizontalAlignment="Left" VerticalAlignment="Center"
               Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
 
-        <controls:LyricTicker Current="{Binding IdleLine}" FontSize="12" Height="17"
-                              FontWeight="Medium" Foreground="{StaticResource InkBrush}"
-                              MaxWidth="320" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <controls:LyricTicker.Style>
-                <Style TargetType="controls:LyricTicker">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ShowAltHint, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -21,8 +19,45 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </controls:LyricTicker.Style>
-        </controls:LyricTicker>
+            </StackPanel.Style>
+
+            <Path Width="14" Height="14" Stretch="Uniform"
+                  Margin="0,0,7,0" VerticalAlignment="Center"
+                  Visibility="{Binding HasSourceIcon, Converter={StaticResource BoolVis}}">
+                <Path.Style>
+                    <Style TargetType="Path">
+                        <Setter Property="Data" Value="{StaticResource IconMusicNote}" />
+                        <Setter Property="Fill" Value="{StaticResource MistBrush}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SourceIconKey}" Value="Spotify">
+                                <Setter Property="Data" Value="{StaticResource IconSpotify}" />
+                                <Setter Property="Fill" Value="#1DB954" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SourceIconKey}" Value="YouTubeMusic">
+                                <Setter Property="Data" Value="{StaticResource IconYouTubeMusic}" />
+                                <Setter Property="Fill" Value="#FF0000" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SourceIconKey}" Value="YouTube">
+                                <Setter Property="Data" Value="{StaticResource IconYouTube}" />
+                                <Setter Property="Fill" Value="#FF0000" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SourceIconKey}" Value="Browser">
+                                <Setter Property="Data" Value="{StaticResource IconGlobe}" />
+                                <Setter Property="Fill" Value="#4C8DFF" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SourceIconKey}" Value="Media">
+                                <Setter Property="Data" Value="{StaticResource IconMusicNote}" />
+                                <Setter Property="Fill" Value="{StaticResource MistBrush}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Path.Style>
+            </Path>
+
+            <controls:LyricTicker Current="{Binding IdleLine}" FontSize="13.5" Height="19"
+                                  FontWeight="Medium" Foreground="{StaticResource InkBrush}"
+                                  MaxWidth="320" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding ShowAltHint, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolVis}}">

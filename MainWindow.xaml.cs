@@ -806,10 +806,10 @@ public partial class MainWindow : Window
 
     private IslandSpec BuildIdleSpec()
     {
-        var widest = MeasureTextWidth(_viewModel.IdleLine, _uiFont, 12, FontWeights.Medium);
-        var width = Math.Ceiling((widest + 88) / 12) * 12;
+        var widest = MeasureTextWidth(_viewModel.IdleLine, _uiFont, 13.5, FontWeights.Medium);
+        var width = Math.Ceiling((widest + 88 + (_viewModel.HasSourceIcon ? 24 : 0)) / 12) * 12;
         width = Math.Clamp(width, 216, 400);
-        return new IslandSpec(width, 38, 19.3, 0);
+        return new IslandSpec(width, 40, 20, 0);
     }
 
     private IslandSpec BuildLyricsSpec(bool compact)

@@ -152,6 +152,10 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     public string TrackSource => _track.HasTrack ? _track.SourceName : "NusaLite";
 
+    public string SourceIconKey => _track.HasTrack ? _track.SourceIconKey : "None";
+
+    public bool HasSourceIcon => HasMedia && SourceIconKey != "None";
+
     public bool HasMedia => _track.HasTrack;
 
     public bool IsPlaying => _track.IsPlaying;
@@ -259,6 +263,8 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(TrackTitle));
         OnPropertyChanged(nameof(TrackArtist));
         OnPropertyChanged(nameof(TrackSource));
+        OnPropertyChanged(nameof(SourceIconKey));
+        OnPropertyChanged(nameof(HasSourceIcon));
         OnPropertyChanged(nameof(HasMedia));
         OnPropertyChanged(nameof(IsPlaying));
         OnPropertyChanged(nameof(Artwork));

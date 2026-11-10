@@ -94,4 +94,32 @@ public sealed record TrackInfo
             }
         }
     }
+
+    public string SourceIconKey
+    {
+        get
+        {
+            var id = SourceApp;
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "None";
+            }
+
+            if (id.Contains("spotify", StringComparison.OrdinalIgnoreCase)) return "Spotify";
+            if (id.Contains("youtube music", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("youtubemusic", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("music.youtube", StringComparison.OrdinalIgnoreCase)) return "YouTubeMusic";
+            if (id.Contains("youtube", StringComparison.OrdinalIgnoreCase)) return "YouTube";
+            if (id.Contains("chrome", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("chromium", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("msedge", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("edge", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("firefox", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("brave", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("opera", StringComparison.OrdinalIgnoreCase) ||
+                id.Contains("vivaldi", StringComparison.OrdinalIgnoreCase)) return "Browser";
+
+            return "Media";
+        }
+    }
 }
