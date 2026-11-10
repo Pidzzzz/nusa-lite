@@ -5,9 +5,9 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Pecah MainWindow.xaml.cs menjadi partial class per tanggung jawab — Hotkeys, Fullscreen, DragDrop, Peek & Dots selesai; sisa: Guard, Pointer, Animation.
-- Terakhir selesai: MainWindow.Peek.cs & MainWindow.Dots.cs — OnPeekRequested/PeekTimer_Tick dan BuildDots/UpdateDots/AccentFor/SetDotsVisible/LabelFor dipindah persis; field bersama tetap; build Release 0 error (10 Nov 2026).
-- Langkah berikutnya persis: Pecah Guard (termasuk properti IsEffectiveGuard), lalu Pointer, Animation.
+- Sedang dikerjakan: Pecah MainWindow.xaml.cs menjadi partial class per tanggung jawab — Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard selesai; sisa: Pointer, Animation.
+- Terakhir selesai: MainWindow.Guard.cs — IsEffectiveGuard + SetClickGuard, RefreshGuardGhost, ClampedGuardOpacity, ApplyGuardGhost, BumpGhost, UpdateGhostByCursor, GhostTimer_Tick, AnimateWindowOpacity, CancelDwellIfGuarded, ToggleClickGuard, UpdateClickThrough dipindah persis; field bersama tetap; build Release 0 error (10 Nov 2026).
+- Langkah berikutnya persis: Pecah Pointer, lalu Animation.
 - Blocker / keputusan penting: Tidak ada blocker.
 
 ## Roadmap (dari README)
@@ -24,7 +24,7 @@
 - Lirik Idle diperbesar ke 13.5: ticker Height 19, pill tinggi 40, radius 20, pengukuran BuildIdleSpec ikut 13.5.
 - Uji visual lolos (Spotify/YouTube Music/YouTube/browser/file lokal, ganti aplikasi, pause, restart). Tidak ada pola AUMID tambahan yang perlu dipetakan.
 - Build Release 0 error; commit & push ke branch feat/ikon-sumber-media.
-- Pecah MainWindow: Hotkeys, Fullscreen, DragDrop, Peek & Dots, build Release 0 error; sisa: Guard, Pointer, Animation.
+- Pecah MainWindow: Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, build Release 0 error; sisa: Pointer, Animation.
 
 ### 2026-11-09
 - Push update UI, tray, lyrics, shelf, dan window styling, plus patch notes v1.1.0.
