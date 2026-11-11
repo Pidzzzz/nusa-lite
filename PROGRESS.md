@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 6 selesai; dot idle refresh via ThemeChanged dan token DotIdle; ContextMenu Shelf memakai token tema saat dibuka; build Release 0 error.
-- Terakhir selesai: ThemeService punya event ThemeChanged; dot idle resolve ulang + UpdateDots; menu Shelf Panel/Line/Ink/FillMedium; token DotIdle ditambahkan ke tiga tema.
-- Langkah berikutnya persis: Verifikasi visual pergantian tema (dot dan menu Shelf) oleh pengguna; commit Sesi 6.
-- Blocker / keputusan penting: Menu Shelf dibuat segar tiap klik kanan; PanelBrush translusen sehingga hasil visual perlu dicek; tidak ada konsumen brush C# lain ditemukan di file yang diperiksa.
+- Sedang dikerjakan: Sesi 7 selesai; warna dot Terang dibalik; header lirik dipindah ke kolom lebar; tinggi normal 108->142; build Release 0 error.
+- Terakhir selesai: Theme.Light DotsBar/DotIdle; LyricsView artwork-only + header Title/Artist full width; compact 76 tetap; spec/XAML disesuaikan.
+- Langkah berikutnya persis: Verifikasi visual tema Terang dan header Lirik (normal + mini/guard) oleh pengguna; commit Sesi 7.
+- Blocker / keputusan penting: Tinggi normal 142 dipilih agar area baris lirik lama tetap 72 setelah header; compact/guard tetap 76.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -20,11 +20,11 @@
 
 ## Log harian
 ### 2026-11-11
-- Sesi 3: tambah token semantik di Theme.Graphite/Light/Void (Graphite/Void = hex lama persis, Light = alpha hitam/semantik) + sapu hex XAML ke DynamicResource; build Release 0 error.
-- Sesi 3b: token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; sisa hex XAML dipetakan; build Release 0 error. AccentBrush Graphite/Light sudah punya gradient stop sendiri; Theme.Void tidak diubah; brand/ShelfService tetap; verifikasi visual dilakukan pengguna.
+- Sesi 3/3b: token semantik + sapu hex XAML ke DynamicResource; token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; AccentBrush Graphite/Light gradient sendiri; build 0 error.
 - Sesi 4/Hotfix: pemilih tema segmented Graphite/Void/Terang di Umum; klik langsung ThemeService.Apply + simpan AppSettings.Theme; reset ke bawaan menerapkan Graphite; LyricTicker internal TextBlock Foreground StaticResource -> DynamicResource InkBrush; build Release 0 error (aplikasi ditutup sementara).
 - Sesi 5: shadow island ShadowColor 18/3/0.35 + stroke LineBrush 1 + TextFormattingMode Display; ShelfCard 13->16, drop overlay 14->16; EqBars AccentBrush; audit warna static XAML beres; build Release 0 error; shadow berpotensi terpotong region window.
 - Sesi 6: ThemeService.ThemeChanged + dot idle resolve ulang/UpdateDots; token DotIdleColor/Brush di tiga tema; ContextMenu Shelf pakai Panel/Line/Ink/FillMedium saat dibuat; build Release 0 error.
+- Sesi 7: Theme.Light DotsBar #99FFFFFF + DotIdle #8C000000; LyricsView header Title/Artist pindah ke kolom lebar, artwork-only 56; tinggi normal 108->142, compact 76 tetap; build Release 0 error.
 
 ### 2026-11-10
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.

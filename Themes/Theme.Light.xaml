@@ -69,8 +69,8 @@
 
     <!-- Token semantik permukaan/teks (Sesi 2a/3) -->
     <Color x:Key="IslandColor">#F3F1F8</Color>
-    <Color x:Key="DotsBarColor">#99000000</Color>
-    <Color x:Key="DotIdleColor">#8CFFFFFF</Color>
+    <Color x:Key="DotsBarColor">#99FFFFFF</Color>
+    <Color x:Key="DotIdleColor">#8C000000</Color>
     <Color x:Key="PanelColor">#14000000</Color>
     <Color x:Key="CardColor">#0E000000</Color>
     <Color x:Key="FillSubtleColor">#0A000000</Color>

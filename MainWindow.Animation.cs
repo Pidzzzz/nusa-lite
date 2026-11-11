@@ -210,7 +210,7 @@ public partial class MainWindow
         var max = compact ? 430.0 : 560.0;
         var width = Math.Ceiling((fixedWidth + widest + 10) / 24) * 24;
         width = Math.Clamp(width, min, max);
-        var height = compact ? 76.0 : 108.0;
+        var height = compact ? 76.0 : 142.0;
         var radius = compact ? 16.0 : 20.0;
 
         return new IslandSpec(width, height, radius, 0);
@@ -278,7 +278,7 @@ public partial class MainWindow
     {
         IslandView.Idle => new IslandSpec(198, 34, 12, 0),
         IslandView.Hub => new IslandSpec(410, 88, 18, 0),
-        IslandView.Lyrics => new IslandSpec(360, 108, 20, 0),
+        IslandView.Lyrics => new IslandSpec(360, 142, 20, 0),
         IslandView.Peek => new IslandSpec(362, 68, 16, 0),
         _ => new IslandSpec(554, 158, 22, 0)
     };
