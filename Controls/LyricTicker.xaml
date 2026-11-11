@@ -10,7 +10,7 @@
         </Grid.ColumnDefinitions>
 
         <Border x:Name="AccentBar" Width="2" Height="10" CornerRadius="1"
-                Background="{StaticResource GoldBrush}" VerticalAlignment="Center" Opacity="0.8" />
+                Background="{DynamicResource GoldBrush}" VerticalAlignment="Center" Opacity="0.8" />
 
         <TextBlock x:Name="Line" Grid.Column="1" Margin="8,0,0,0"
                    FontFamily="{StaticResource UiFont}"

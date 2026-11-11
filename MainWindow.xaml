@@ -14,6 +14,7 @@
         Topmost="True"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display"
         AllowDrop="True"
         Loaded="Window_Loaded"
         DragEnter="Window_DragEnter"
@@ -22,18 +23,26 @@
         Drop="Window_Drop">
     <Grid x:Name="Root" Background="Transparent">
         <StackPanel x:Name="Stack" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0">
-            <Grid x:Name="IslandHost" Width="198" Height="34" HorizontalAlignment="Center"
-                  ClipToBounds="True"
-                  MouseLeftButtonDown="Island_MouseLeftButtonDown"
-                  MouseLeftButtonUp="Island_MouseLeftButtonUp"
-                  MouseWheel="Island_MouseWheel">
-                <controls:NotchShape x:Name="Notch" Fill="{DynamicResource VoidBrush}" CornerRadius="12" EarRadius="0" />
-                <ContentControl x:Name="ContentHost" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                Focusable="False" IsTabStop="False">
-                    <ContentControl.RenderTransform>
-                        <TranslateTransform x:Name="ContentSlide" />
-                    </ContentControl.RenderTransform>
-                </ContentControl>
+            <Grid x:Name="IslandShadow">
+                <Grid.Effect>
+                    <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="18"
+                                      ShadowDepth="3" Opacity="0.35" />
+                </Grid.Effect>
+                <Grid x:Name="IslandHost" Width="198" Height="34" HorizontalAlignment="Center"
+                      ClipToBounds="True"
+                      MouseLeftButtonDown="Island_MouseLeftButtonDown"
+                      MouseLeftButtonUp="Island_MouseLeftButtonUp"
+                      MouseWheel="Island_MouseWheel">
+                    <controls:NotchShape x:Name="Notch" Fill="{DynamicResource VoidBrush}"
+                                         Stroke="{DynamicResource LineBrush}" StrokeThickness="1"
+                                         CornerRadius="12" EarRadius="0" />
+                    <ContentControl x:Name="ContentHost" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Focusable="False" IsTabStop="False">
+                        <ContentControl.RenderTransform>
+                            <TranslateTransform x:Name="ContentSlide" />
+                        </ContentControl.RenderTransform>
+                    </ContentControl>
+                </Grid>
             </Grid>
 
             <Border x:Name="DotsBar" Margin="0,6,0,0" HorizontalAlignment="Center" Background="{DynamicResource DotsBarBrush}"

@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Hotfix warna LyricTicker selesai; Foreground TextBlock internal menjadi DynamicResource InkBrush; build Release 0 error.
-- Terakhir selesai: Teks LyricTicker ikut tema Graphite/Void/Terang tanpa mengubah animasi; NusaLite ditutup sementara saat build karena exe terkunci.
-- Langkah berikutnya persis: Verifikasi visual teks ticker di tiga tema oleh pengguna; commit hotfix.
-- Blocker / keputusan penting: LyricTicker memakai TextBlock, bukan OnRender/FormattedText; akar masalah StaticResource InkBrush; tidak perlu ThemeChanged/manual redraw.
+- Sedang dikerjakan: Sesi 5 polish visual selesai; shadow island, stroke LineBrush, TextFormattingMode Display, radius ShelfCard 16, EqBars AccentBrush; build Release 0 error.
+- Terakhir selesai: Audit StaticResource warna XAML: LyricTicker GoldBrush dan EqBars kini DynamicResource; tidak ada sisa warna static di Views/MainWindow/Styles.
+- Langkah berikutnya persis: Verifikasi visual tiga tema oleh pengguna; cek shadow terpotong region/window; commit Sesi 5.
+- Blocker / keputusan penting: DropShadowEffect berada di luar region window (SetWindowRgn hanya island) sehingga bayangan kemungkinan terpotong; ukuran jendela/region tidak diubah sesuai instruksi.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -21,10 +21,10 @@
 ## Log harian
 ### 2026-11-11
 - Sesi 3: tambah token semantik di Theme.Graphite/Light/Void (Graphite/Void = hex lama persis, Light = alpha hitam/semantik) + sapu hex XAML ke DynamicResource; build Release 0 error.
-- Sesi 3b: token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; sisa hex XAML dipetakan; build Release 0 error.
-- AccentBrush Graphite/Light sudah punya gradient stop sendiri; Theme.Void tidak diubah; brand/ShelfService tetap; verifikasi visual dilakukan pengguna.
+- Sesi 3b: token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; sisa hex XAML dipetakan; build Release 0 error. AccentBrush Graphite/Light sudah punya gradient stop sendiri; Theme.Void tidak diubah; brand/ShelfService tetap; verifikasi visual dilakukan pengguna.
 - Sesi 4: pemilih tema segmented Graphite/Void/Terang di Umum; klik langsung ThemeService.Apply + simpan AppSettings.Theme; reset ke bawaan menerapkan Graphite; build Release (output sementara) 0 error.
 - Hotfix: LyricTicker internal TextBlock Foreground StaticResource -> DynamicResource InkBrush; teks ticker ikut tema; build Release 0 error (aplikasi ditutup sementara).
+- Sesi 5: shadow island ShadowColor 18/3/0.35 + stroke LineBrush 1 + TextFormattingMode Display; ShelfCard 13->16, drop overlay 14->16; EqBars AccentBrush; audit warna static XAML beres; build Release 0 error; shadow berpotensi terpotong region window.
 
 ### 2026-11-10
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.

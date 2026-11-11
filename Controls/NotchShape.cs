@@ -17,6 +17,14 @@ public sealed class NotchShape : FrameworkElement
         nameof(EarRadius), typeof(double), typeof(NotchShape),
         new FrameworkPropertyMetadata(11.0, FrameworkPropertyMetadataOptions.AffectsRender));
 
+    public static readonly DependencyProperty StrokeProperty = DependencyProperty.Register(
+        nameof(Stroke), typeof(Brush), typeof(NotchShape),
+        new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register(
+        nameof(StrokeThickness), typeof(double), typeof(NotchShape),
+        new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsRender));
+
     public Brush Fill
     {
         get => (Brush)GetValue(FillProperty);
@@ -33,6 +41,18 @@ public sealed class NotchShape : FrameworkElement
     {
         get => (double)GetValue(EarRadiusProperty);
         set => SetValue(EarRadiusProperty, value);
+    }
+
+    public Brush? Stroke
+    {
+        get => (Brush?)GetValue(StrokeProperty);
+        set => SetValue(StrokeProperty, value);
+    }
+
+    public double StrokeThickness
+    {
+        get => (double)GetValue(StrokeThicknessProperty);
+        set => SetValue(StrokeThicknessProperty, value);
     }
 
     protected override void OnRender(DrawingContext drawingContext)
@@ -72,6 +92,14 @@ public sealed class NotchShape : FrameworkElement
         }
 
         geometry.Freeze();
-        drawingContext.DrawGeometry(Fill, null, geometry);
+
+        Pen? pen = null;
+        if (Stroke is not null && StrokeThickness > 0)
+        {
+            pen = new Pen(Stroke, StrokeThickness);
+            pen.Freeze();
+        }
+
+        drawingContext.DrawGeometry(Fill, pen, geometry);
     }
 }

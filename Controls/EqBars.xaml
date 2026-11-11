@@ -55,35 +55,35 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Rectangle x:Name="Bar1" Grid.Column="0" Width="2.2" Height="12" VerticalAlignment="Bottom"
-                   RadiusX="1.1" RadiusY="1.1" Fill="{StaticResource EqBrush}" Opacity="0.94"
+                   RadiusX="1.1" RadiusY="1.1" Fill="{DynamicResource AccentBrush}" Opacity="0.94"
                    RenderTransformOrigin="0.5,1">
             <Rectangle.RenderTransform>
                 <ScaleTransform ScaleY="0.5" />
             </Rectangle.RenderTransform>
         </Rectangle>
         <Rectangle x:Name="Bar2" Grid.Column="1" Width="2.2" Height="12" VerticalAlignment="Bottom"
-                   RadiusX="1.1" RadiusY="1.1" Fill="{StaticResource EqBrush}" Opacity="0.94"
+                   RadiusX="1.1" RadiusY="1.1" Fill="{DynamicResource AccentBrush}" Opacity="0.94"
                    RenderTransformOrigin="0.5,1">
             <Rectangle.RenderTransform>
                 <ScaleTransform ScaleY="0.8" />
             </Rectangle.RenderTransform>
         </Rectangle>
         <Rectangle x:Name="Bar3" Grid.Column="2" Width="2.2" Height="12" VerticalAlignment="Bottom"
-                   RadiusX="1.1" RadiusY="1.1" Fill="{StaticResource EqBrush}" Opacity="0.94"
+                   RadiusX="1.1" RadiusY="1.1" Fill="{DynamicResource AccentBrush}" Opacity="0.94"
                    RenderTransformOrigin="0.5,1">
             <Rectangle.RenderTransform>
                 <ScaleTransform ScaleY="0.6" />
             </Rectangle.RenderTransform>
         </Rectangle>
         <Rectangle x:Name="Bar4" Grid.Column="3" Width="2.2" Height="12" VerticalAlignment="Bottom"
-                   RadiusX="1.1" RadiusY="1.1" Fill="{StaticResource EqBrush}" Opacity="0.94"
+                   RadiusX="1.1" RadiusY="1.1" Fill="{DynamicResource AccentBrush}" Opacity="0.94"
                    RenderTransformOrigin="0.5,1">
             <Rectangle.RenderTransform>
                 <ScaleTransform ScaleY="0.4" />
             </Rectangle.RenderTransform>
         </Rectangle>
         <Rectangle x:Name="Bar5" Grid.Column="4" Width="2.2" Height="12" VerticalAlignment="Bottom"
-                   RadiusX="1.1" RadiusY="1.1" Fill="{StaticResource EqBrush}" Opacity="0.94"
+                   RadiusX="1.1" RadiusY="1.1" Fill="{DynamicResource AccentBrush}" Opacity="0.94"
                    RenderTransformOrigin="0.5,1">
             <Rectangle.RenderTransform>
                 <ScaleTransform ScaleY="0.7" />
