@@ -114,6 +114,36 @@
             </Setter>
         </Style>
 
+        <Style x:Key="ThemeSegment" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="{DynamicResource MistBrush}" />
+            <Setter Property="FontSize" Value="11.5" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="MinWidth" Value="62" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Bg" Background="Transparent" CornerRadius="7,6,7,6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTint18Brush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTintBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="SectionTitle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
             <Setter Property="FontSize" Value="20" />
@@ -203,6 +233,37 @@
                 <TextBlock Text="Umum" Style="{StaticResource SectionTitle}" />
                 <TextBlock Text="Perilaku dasar NusaLite." Style="{StaticResource SectionNote}"
                            Margin="0,5,0,16" />
+
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Tema" Style="{StaticResource RowLabel}" />
+                        <TextBlock Text="Warna island dan jendela pengaturan."
+                                   Style="{StaticResource SectionNote}" Margin="0,2,0,0" />
+                    </StackPanel>
+                    <Border Grid.Column="1" VerticalAlignment="Center"
+                            Background="{DynamicResource FillMediumBrush}"
+                            BorderBrush="{DynamicResource LineStrongBrush}"
+                            BorderThickness="1" CornerRadius="10,9,10,9" Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="ThemeGraphiteOption" Content="Graphite"
+                                         GroupName="ThemeChoice" Tag="Graphite"
+                                         Style="{StaticResource ThemeSegment}"
+                                         Checked="Theme_Checked" />
+                            <RadioButton x:Name="ThemeVoidOption" Content="Void"
+                                         GroupName="ThemeChoice" Tag="Void"
+                                         Style="{StaticResource ThemeSegment}"
+                                         Checked="Theme_Checked" />
+                            <RadioButton x:Name="ThemeLightOption" Content="Terang"
+                                         GroupName="ThemeChoice" Tag="Light"
+                                         Style="{StaticResource ThemeSegment}"
+                                         Checked="Theme_Checked" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
                 <CheckBox x:Name="StartWithWindowsCheck" Content="Mulai bersama Windows"
                           Style="{StaticResource SettingCheck}"

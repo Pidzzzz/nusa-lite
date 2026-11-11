@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 3b selesai; seluruh hex penggunaan XAML sudah menjadi token; build Release 0 error; verifikasi visual diserahkan ke pengguna.
-- Terakhir selesai: Token tambahan FillGhost10, FillFaint12, LineSoft1F, TrackSoft20, TextGhost59, TextMuted66, AccentTint12/18/1E/2E/30/38/40, AccentLine5C, AccentFill7F, MintTint1F/33, DangerSurface di Theme.Graphite/Light/Void; sisa hex XAML dipetakan ke DynamicResource (11 Nov 2026).
-- Langkah berikutnya persis: Verifikasi visual Graphite/Void/Light oleh pengguna; lanjut Settings UI pemilih tema.
-- Blocker / keputusan penting: daftar sisa hex kosong; brand, gradient stop palet Void, dan ShelfService.cs tetap tidak disentuh sesuai instruksi.
+- Sedang dikerjakan: Sesi 4 selesai; pemilih tema Graphite/Void/Terang di SettingsWindow (Umum) langsung apply + simpan; build Release tervalidasi 0 error.
+- Terakhir selesai: Segmented tema di Umum, handler Theme_Checked, reset ke bawaan ikut menerapkan Graphite; startup loader sudah ada di AppHost (tidak diubah).
+- Langkah berikutnya persis: Verifikasi visual tiga tema oleh pengguna; tutup NusaLite lalu build Release normal; commit Sesi 4.
+- Blocker / keputusan penting: Build normal gagal copy exe karena NusaLite PID 5272 sedang berjalan; build Release ke output sementara sukses 0 warning/0 error; tray tetap gelap.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -23,6 +23,7 @@
 - Sesi 3: tambah token semantik di Theme.Graphite/Light/Void (Graphite/Void = hex lama persis, Light = alpha hitam/semantik) + sapu hex XAML ke DynamicResource; build Release 0 error.
 - Sesi 3b: token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; sisa hex XAML dipetakan; build Release 0 error.
 - AccentBrush Graphite/Light sudah punya gradient stop sendiri; Theme.Void tidak diubah; brand/ShelfService tetap; verifikasi visual dilakukan pengguna.
+- Sesi 4: pemilih tema segmented Graphite/Void/Terang di Umum; klik langsung ThemeService.Apply + simpan AppSettings.Theme; reset ke bawaan menerapkan Graphite; build Release (output sementara) 0 error.
 
 ### 2026-11-10
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.

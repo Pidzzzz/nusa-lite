@@ -79,6 +79,17 @@ public partial class SettingsWindow : Window
         BreakMinutesBox.Text = s.BreakMinutes.ToString();
         WaterGoalBox.Text = s.WaterGoalMl.ToString();
         ReminderBox.Text = s.WaterReminderMinutes.ToString();
+
+        ThemeGraphiteOption.IsChecked = string.Equals(s.Theme, "Graphite", StringComparison.OrdinalIgnoreCase);
+        ThemeVoidOption.IsChecked = string.Equals(s.Theme, "Void", StringComparison.OrdinalIgnoreCase);
+        ThemeLightOption.IsChecked = string.Equals(s.Theme, "Light", StringComparison.OrdinalIgnoreCase);
+
+        if (ThemeGraphiteOption.IsChecked != true
+            && ThemeVoidOption.IsChecked != true
+            && ThemeLightOption.IsChecked != true)
+        {
+            ThemeGraphiteOption.IsChecked = true;
+        }
     }
 
     private void SectionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -146,6 +157,18 @@ public partial class SettingsWindow : Window
         _settings.Current.AutoLyricsOnPlay = enabled;
         _settings.Save();
         _autoLyricsChanged?.Invoke(enabled);
+    }
+
+    private void Theme_Checked(object sender, RoutedEventArgs e)
+    {
+        if (_loading || sender is not RadioButton option || option.Tag is not string theme)
+        {
+            return;
+        }
+
+        ThemeService.Apply(theme);
+        _settings.Current.Theme = ThemeService.Current;
+        _settings.Save();
     }
 
     private void ClickGuard_Toggled(object sender, RoutedEventArgs e)
@@ -438,6 +461,8 @@ public partial class SettingsWindow : Window
         {
             _loading = false;
         }
+
+        ThemeService.Apply(_settings.Current.Theme);
 
         _clickGuardChanged?.Invoke(_settings.Current.ClickGuardEnabled);
         _autoLyricsChanged?.Invoke(_settings.Current.AutoLyricsOnPlay);
