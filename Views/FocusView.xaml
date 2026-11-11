@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Width="112" Height="112" VerticalAlignment="Top">
-            <controls:ArcRing Percent="{Binding PomodoroProgress}" Thickness="9" TrackBrush="#20FFFFFF">
+            <controls:ArcRing Percent="{Binding PomodoroProgress}" Thickness="9" TrackBrush="{DynamicResource TrackSoft20Brush}">
                 <controls:ArcRing.Style>
                     <Style TargetType="controls:ArcRing">
                         <Setter Property="Stroke" Value="{DynamicResource EmberBrush}" />

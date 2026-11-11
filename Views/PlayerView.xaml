@@ -22,7 +22,7 @@
                     <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
                 </Border.Background>
             </Border>
-            <Border CornerRadius="22,18,22,18" BorderThickness="1" BorderBrush="#1FFFFFFF" />
+            <Border CornerRadius="22,18,22,18" BorderThickness="1" BorderBrush="{DynamicResource LineSoft1FBrush}" />
         </Grid>
 
         <Grid Grid.Column="1" Margin="17,1,0,0">
@@ -99,8 +99,8 @@
                             Minimum="0" Maximum="100" Value="{Binding VolumeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
-                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#12CDB4FF"
-                        BorderBrush="#2ECDB4FF" BorderThickness="1" CornerRadius="9" Padding="8,3">
+                <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="{DynamicResource AccentTint12Brush}"
+                        BorderBrush="{DynamicResource AccentTint2EBrush}" BorderThickness="1" CornerRadius="9" Padding="8,3">
                     <TextBlock Text="{Binding TrackSource}" Style="{StaticResource TinyText}" FontSize="9.5"
                                Foreground="{DynamicResource AmberBrush}" />
                 </Border>

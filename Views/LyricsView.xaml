@@ -23,7 +23,7 @@
                         <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
                     </Border.Background>
                 </Border>
-                <Border x:Name="ArtOutline" CornerRadius="16" BorderThickness="1" BorderBrush="#1FFFFFFF" />
+                <Border x:Name="ArtOutline" CornerRadius="16" BorderThickness="1" BorderBrush="{DynamicResource LineSoft1FBrush}" />
             </Grid>
             <TextBlock x:Name="TitleLine" Text="{Binding TrackTitle}" Style="{StaticResource TitleText}" FontSize="10.5"
                        Margin="0,6,0,0" MaxWidth="66" TextTrimming="CharacterEllipsis" />
@@ -42,12 +42,12 @@
 
             <StackPanel Grid.Row="0" VerticalAlignment="Top">
                 <TextBlock x:Name="PrevLine" Text="{Binding LyricPrev}" Style="{StaticResource BaseText}" FontSize="11"
-                           Foreground="#59FFFFFF" TextTrimming="CharacterEllipsis" />
+                           Foreground="{DynamicResource TextGhost59Brush}" TextTrimming="CharacterEllipsis" />
                 <TextBlock x:Name="CurrentLine" Text="{Binding LyricCurrent}" Style="{StaticResource TitleText}"
                            FontSize="15.5" FontWeight="SemiBold" TextWrapping="Wrap" LineHeight="19"
                            MaxHeight="38" Margin="0,3,0,3" />
                 <TextBlock x:Name="NextLine" Text="{Binding LyricNext}" Style="{StaticResource BaseText}" FontSize="11"
-                           Foreground="#59FFFFFF" TextTrimming="CharacterEllipsis" />
+                           Foreground="{DynamicResource TextGhost59Brush}" TextTrimming="CharacterEllipsis" />
             </StackPanel>
 
             <StackPanel x:Name="OffsetPanel" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">

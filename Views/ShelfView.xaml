@@ -5,14 +5,14 @@
     <UserControl.Resources>
         <Style x:Key="ShelfCard" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBrush}" />
-            <Setter Property="BorderBrush" Value="#12FFFFFF" />
+            <Setter Property="BorderBrush" Value="{DynamicResource FillFaint12Brush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="13" />
             <Setter Property="Cursor" Value="Hand" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#18CDB4FF" />
-                    <Setter Property="BorderBrush" Value="#38CDB4FF" />
+                    <Setter Property="Background" Value="{DynamicResource AccentTint18Brush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource AccentTint38Brush}" />
                 </Trigger>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <BeginStoryboard>
@@ -84,7 +84,7 @@
         <Grid Grid.Row="1">
             <Grid Visibility="{Binding HasShelfItems, Converter={StaticResource InvBoolVis}}"
                   Cursor="Hand" MouseLeftButtonUp="Empty_Click" Background="Transparent">
-                <Rectangle x:Name="EmptyOutline" RadiusX="14" RadiusY="14" Stroke="#5CCDB4FF" StrokeThickness="1.2"
+                <Rectangle x:Name="EmptyOutline" RadiusX="14" RadiusY="14" Stroke="{DynamicResource AccentLine5CBrush}" StrokeThickness="1.2"
                            StrokeDashArray="4 4">
                     <Rectangle.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -139,7 +139,7 @@
                                     </Grid.RowDefinitions>
 
                                     <Grid Width="42" Height="42" HorizontalAlignment="Left">
-                                        <Border CornerRadius="11,9,11,9" Background="#10FFFFFF" />
+                                        <Border CornerRadius="11,9,11,9" Background="{DynamicResource FillGhost10Brush}" />
                                         <Border CornerRadius="11,9,11,9">
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding Thumbnail}" Stretch="UniformToFill" />
@@ -166,7 +166,7 @@
                                                FontSize="8" />
 
                                     <Button Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                            Margin="0,-4,-4,0" Background="#D905060C" Click="Remove_Click"
+                                            Margin="0,-4,-4,0" Background="{DynamicResource DangerSurfaceBrush}" Click="Remove_Click"
                                             ToolTip="Hapus dari shelf">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">

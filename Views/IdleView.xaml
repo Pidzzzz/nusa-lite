@@ -63,7 +63,7 @@
                     Visibility="{Binding ShowAltHint, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolVis}}">
             <TextBlock Text="Tahan" FontFamily="{StaticResource UiFont}" FontSize="10"
                        Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="0,0,5,0" />
-            <Border Background="{DynamicResource AccentTintBrush}" BorderBrush="#40CDB4FF" BorderThickness="1"
+            <Border Background="{DynamicResource AccentTintBrush}" BorderBrush="{DynamicResource AccentTint40Brush}" BorderThickness="1"
                     CornerRadius="4,3,4,3" Padding="4,0" VerticalAlignment="Center">
                 <TextBlock Text="Alt" FontFamily="{StaticResource UiFont}" FontSize="8.5"
                            Foreground="{DynamicResource InkBrush}" />

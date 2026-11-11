@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sapu hex permukaan/teks/garis XAML ke token tema (Sesi 3) selesai; verifikasi visual diserahkan ke pengguna.
-- Terakhir selesai: Token semantik (Island, DotsBar, Panel, Card, FillSubtle, FillMedium, LineStrong, AccentTint, AccentHover, AccentBorder, Track, TextFaint, OnPrimary, Primary, PrimaryHover, PrimaryPressed, Shadow, Glow, Overlay) ditambahkan di Theme.Graphite/Light/Void; hex di MainWindow, Settings, Shelf, Player, Hub, Lyrics, Peek, Water, Focus, Idle, Styles dipetakan ke DynamicResource; build Release 0 error (11 Nov 2026).
+- Sedang dikerjakan: Sesi 3b selesai; seluruh hex penggunaan XAML sudah menjadi token; build Release 0 error; verifikasi visual diserahkan ke pengguna.
+- Terakhir selesai: Token tambahan FillGhost10, FillFaint12, LineSoft1F, TrackSoft20, TextGhost59, TextMuted66, AccentTint12/18/1E/2E/30/38/40, AccentLine5C, AccentFill7F, MintTint1F/33, DangerSurface di Theme.Graphite/Light/Void; sisa hex XAML dipetakan ke DynamicResource (11 Nov 2026).
 - Langkah berikutnya persis: Verifikasi visual Graphite/Void/Light oleh pengguna; lanjut Settings UI pemilih tema.
-- Blocker / keputusan penting: hex tanpa token persis (track #20/#22, aksen #12/#18/#1E/#2E/#30/#38/#40/#5C/#7F, garis #1F, teks samar #59/#66, hapus #D905060C, peek tint, progress #2EE9DEFF, thumb #F3EEFF, gradient stop #8F7BFF/#D96BFF/#B79CFF) masih hardcoded; perlu keputusan token tambahan.
+- Blocker / keputusan penting: daftar sisa hex kosong; brand, gradient stop palet Void, dan ShelfService.cs tetap tidak disentuh sesuai instruksi.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -21,7 +21,8 @@
 ## Log harian
 ### 2026-11-11
 - Sesi 3: tambah token semantik di Theme.Graphite/Light/Void (Graphite/Void = hex lama persis, Light = alpha hitam/semantik) + sapu hex XAML ke DynamicResource; build Release 0 error.
-- Sisa hex tanpa padanan token persis dilaporkan untuk keputusan lanjutan; verifikasi visual dilakukan pengguna.
+- Sesi 3b: token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; sisa hex XAML dipetakan; build Release 0 error.
+- AccentBrush Graphite/Light sudah punya gradient stop sendiri; Theme.Void tidak diubah; brand/ShelfService tetap; verifikasi visual dilakukan pengguna.
 
 ### 2026-11-10
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.

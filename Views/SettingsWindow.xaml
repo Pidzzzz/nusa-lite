@@ -32,7 +32,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Box" Property="Background" Value="{DynamicResource AccentHoverBrush}" />
-                                <Setter TargetName="Box" Property="BorderBrush" Value="#7FCDB4FF" />
+                                <Setter TargetName="Box" Property="BorderBrush" Value="{DynamicResource AccentFill7FBrush}" />
                                 <Setter TargetName="Check" Property="Visibility" Value="Visible" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">

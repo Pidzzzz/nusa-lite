@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Width="96" Height="96" VerticalAlignment="Top">
-            <controls:ArcRing Percent="{Binding WaterProgress}" Thickness="8" TrackBrush="#20FFFFFF"
+            <controls:ArcRing Percent="{Binding WaterProgress}" Thickness="8" TrackBrush="{DynamicResource TrackSoft20Brush}"
                               Stroke="{DynamicResource AquaBrush}">
                 <controls:ArcRing.Effect>
                     <DropShadowEffect Color="{DynamicResource GlowColor}" BlurRadius="18" ShadowDepth="0" Opacity="0.3" />
@@ -67,7 +67,7 @@
                     <DataTemplate>
                         <StackPanel Width="16" Margin="4,0,0,0">
                             <Grid Height="30" VerticalAlignment="Bottom">
-                                <Border Background="#12FFFFFF" CornerRadius="3" />
+                                <Border Background="{DynamicResource FillFaint12Brush}" CornerRadius="3" />
                                 <Border VerticalAlignment="Bottom" CornerRadius="3"
                                         Background="{DynamicResource AquaBrush}"
                                         Height="{Binding Ratio, Converter={StaticResource WaterBarHeight}, ConverterParameter=3}"
@@ -96,7 +96,7 @@
                                        Margin="0,5,0,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#66FFFFFF" />
+                                        <Setter Property="Foreground" Value="{DynamicResource TextMuted66Brush}" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsToday}" Value="True">
                                                 <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />

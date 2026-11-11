@@ -95,10 +95,10 @@
                             </BeginStoryboard>
                         </EventTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#1ECDB4FF" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTint1EBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#30CDB4FF" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTint30Brush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -166,7 +166,7 @@
                             <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTintBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="#38CDB4FF" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTint38Brush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -305,7 +305,7 @@
     <Style x:Key="SlimProgress" TargetType="ProgressBar">
         <Setter Property="Height" Value="3" />
         <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
-        <Setter Property="Background" Value="#2EE9DEFF" />
+        <Setter Property="Background" Value="{DynamicResource AccentTint2EBrush}" />
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />
         <Setter Property="Template">
@@ -395,7 +395,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
                     <Grid>
-                        <Border Height="3" VerticalAlignment="Center" CornerRadius="2" Background="#2EE9DEFF" />
+                        <Border Height="3" VerticalAlignment="Center" CornerRadius="2" Background="{DynamicResource AccentTint2EBrush}" />
                         <Track x:Name="PART_Track">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton Command="Slider.DecreaseLarge" Focusable="False">
@@ -410,7 +410,7 @@
                                 <Thumb Width="10" Height="10">
                                     <Thumb.Template>
                                         <ControlTemplate TargetType="Thumb">
-                                            <Ellipse Fill="#F3EEFF" />
+                                            <Ellipse Fill="{DynamicResource InkBrush}" />
                                         </ControlTemplate>
                                     </Thumb.Template>
                                 </Thumb>

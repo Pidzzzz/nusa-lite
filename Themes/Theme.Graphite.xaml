@@ -106,4 +106,42 @@
     <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{StaticResource PrimaryPressedColor}" />
     <SolidColorBrush x:Key="OverlayBrush" Color="{StaticResource OverlayColor}" />
 
+    <Color x:Key="FillGhost10Color">#10FFFFFF</Color>
+    <Color x:Key="FillFaint12Color">#12FFFFFF</Color>
+    <Color x:Key="LineSoft1FColor">#1FFFFFFF</Color>
+    <Color x:Key="TrackSoft20Color">#20FFFFFF</Color>
+    <Color x:Key="TextGhost59Color">#59FFFFFF</Color>
+    <Color x:Key="TextMuted66Color">#66FFFFFF</Color>
+    <Color x:Key="AccentTint12Color">#12CDB4FF</Color>
+    <Color x:Key="AccentTint18Color">#18CDB4FF</Color>
+    <Color x:Key="AccentTint1EColor">#1ECDB4FF</Color>
+    <Color x:Key="AccentTint2EColor">#2EE9DEFF</Color>
+    <Color x:Key="AccentTint30Color">#30CDB4FF</Color>
+    <Color x:Key="AccentTint38Color">#38CDB4FF</Color>
+    <Color x:Key="AccentTint40Color">#40CDB4FF</Color>
+    <Color x:Key="AccentLine5CColor">#5CCDB4FF</Color>
+    <Color x:Key="AccentFill7FColor">#7FCDB4FF</Color>
+    <Color x:Key="MintTint1FColor">#1F6FE7D2</Color>
+    <Color x:Key="MintTint33Color">#336FE7D2</Color>
+    <Color x:Key="DangerSurfaceColor">#D905060C</Color>
+
+    <SolidColorBrush x:Key="FillGhost10Brush" Color="{StaticResource FillGhost10Color}" />
+    <SolidColorBrush x:Key="FillFaint12Brush" Color="{StaticResource FillFaint12Color}" />
+    <SolidColorBrush x:Key="LineSoft1FBrush" Color="{StaticResource LineSoft1FColor}" />
+    <SolidColorBrush x:Key="TrackSoft20Brush" Color="{StaticResource TrackSoft20Color}" />
+    <SolidColorBrush x:Key="TextGhost59Brush" Color="{StaticResource TextGhost59Color}" />
+    <SolidColorBrush x:Key="TextMuted66Brush" Color="{StaticResource TextMuted66Color}" />
+    <SolidColorBrush x:Key="AccentTint12Brush" Color="{StaticResource AccentTint12Color}" />
+    <SolidColorBrush x:Key="AccentTint18Brush" Color="{StaticResource AccentTint18Color}" />
+    <SolidColorBrush x:Key="AccentTint1EBrush" Color="{StaticResource AccentTint1EColor}" />
+    <SolidColorBrush x:Key="AccentTint2EBrush" Color="{StaticResource AccentTint2EColor}" />
+    <SolidColorBrush x:Key="AccentTint30Brush" Color="{StaticResource AccentTint30Color}" />
+    <SolidColorBrush x:Key="AccentTint38Brush" Color="{StaticResource AccentTint38Color}" />
+    <SolidColorBrush x:Key="AccentTint40Brush" Color="{StaticResource AccentTint40Color}" />
+    <SolidColorBrush x:Key="AccentLine5CBrush" Color="{StaticResource AccentLine5CColor}" />
+    <SolidColorBrush x:Key="AccentFill7FBrush" Color="{StaticResource AccentFill7FColor}" />
+    <SolidColorBrush x:Key="MintTint1FBrush" Color="{StaticResource MintTint1FColor}" />
+    <SolidColorBrush x:Key="MintTint33Brush" Color="{StaticResource MintTint33Color}" />
+    <SolidColorBrush x:Key="DangerSurfaceBrush" Color="{StaticResource DangerSurfaceColor}" />
+
 </ResourceDictionary>
