@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Microsoft.Win32;
 using NusaLite.Models;
 using NusaLite.ViewModels;
@@ -32,25 +33,54 @@ public partial class ShelfView : UserControl
             return;
         }
 
+        var panel = TryFindResource("PanelBrush") as Brush;
+        var line = TryFindResource("LineBrush") as Brush;
+        var ink = TryFindResource("InkBrush") as Brush;
+        var hover = TryFindResource("FillMediumBrush") as Brush;
+
+        var itemStyle = new Style(typeof(MenuItem));
+        itemStyle.Setters.Add(new Setter(Control.BackgroundProperty, Brushes.Transparent));
+        if (ink is not null)
+        {
+            itemStyle.Setters.Add(new Setter(Control.ForegroundProperty, ink));
+        }
+        if (hover is not null)
+        {
+            var highlighted = new Trigger
+            {
+                Property = MenuItem.IsHighlightedProperty,
+                Value = true
+            };
+            highlighted.Setters.Add(new Setter(Control.BackgroundProperty, hover));
+            itemStyle.Triggers.Add(highlighted);
+        }
+
+        var separatorStyle = new Style(typeof(Separator));
+        if (line is not null)
+        {
+            separatorStyle.Setters.Add(new Setter(Control.BackgroundProperty, line));
+            separatorStyle.Setters.Add(new Setter(Control.BorderBrushProperty, line));
+        }
+
         var menu = new ContextMenu
         {
-            Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(18, 20, 28)),
-            Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(236, 239, 247)),
-            BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(40, 255, 255, 255))
+            Background = panel,
+            Foreground = ink,
+            BorderBrush = line
         };
 
-        var open = new MenuItem { Header = "Buka" };
+        var open = new MenuItem { Header = "Buka", Style = itemStyle };
         open.Click += (_, _) => Vm.OpenShelfItem(item);
 
-        var reveal = new MenuItem { Header = "Tampilkan di Explorer" };
+        var reveal = new MenuItem { Header = "Tampilkan di Explorer", Style = itemStyle };
         reveal.Click += (_, _) => Vm.RevealShelfItem(item);
 
-        var remove = new MenuItem { Header = "Hapus dari shelf" };
+        var remove = new MenuItem { Header = "Hapus dari shelf", Style = itemStyle };
         remove.Click += (_, _) => Vm.RemoveShelfItem(item);
 
         menu.Items.Add(open);
         menu.Items.Add(reveal);
-        menu.Items.Add(new Separator());
+        menu.Items.Add(new Separator { Style = separatorStyle });
         menu.Items.Add(remove);
 
         menu.PlacementTarget = element;

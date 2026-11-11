@@ -15,6 +15,8 @@ public static class ThemeService
 
     public static string Current { get; private set; } = DefaultTheme;
 
+    public static event EventHandler? ThemeChanged;
+
     public static void Apply(string themeName)
     {
         var key = Resolve(themeName) ?? DefaultTheme;
@@ -27,6 +29,7 @@ public static class ThemeService
         }
 
         Current = key;
+        ThemeChanged?.Invoke(null, EventArgs.Empty);
     }
 
     private static string? Resolve(string? name)

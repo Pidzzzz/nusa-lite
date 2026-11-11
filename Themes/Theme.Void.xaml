@@ -75,6 +75,7 @@
     <!-- Token semantik permukaan/teks (Sesi 2a/3) -->
     <Color x:Key="IslandColor">#06030F</Color>
     <Color x:Key="DotsBarColor">#99120A22</Color>
+    <Color x:Key="DotIdleColor">#8CFFFFFF</Color>
     <Color x:Key="PanelColor">#14FFFFFF</Color>
     <Color x:Key="CardColor">#0EFFFFFF</Color>
     <Color x:Key="FillSubtleColor">#0AFFFFFF</Color>
@@ -95,6 +96,7 @@
 
     <SolidColorBrush x:Key="IslandBrush" Color="{StaticResource IslandColor}" />
     <SolidColorBrush x:Key="DotsBarBrush" Color="{StaticResource DotsBarColor}" />
+    <SolidColorBrush x:Key="DotIdleBrush" Color="{StaticResource DotIdleColor}" />
     <SolidColorBrush x:Key="PanelBrush" Color="{StaticResource PanelColor}" />
     <SolidColorBrush x:Key="CardBrush" Color="{StaticResource CardColor}" />
     <SolidColorBrush x:Key="FillSubtleBrush" Color="{StaticResource FillSubtleColor}" />

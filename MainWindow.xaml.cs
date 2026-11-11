@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using NusaLite.Interop;
 using NusaLite.Models;
+using NusaLite.Services;
 using NusaLite.ViewModels;
 using NusaLite.Views;
 
@@ -34,7 +35,7 @@ public partial class MainWindow : Window
     private readonly DispatcherTimer _ghostTimer;
     private readonly Dictionary<IslandView, UserControl> _viewCache = new();
     private readonly List<Border> _dots = new();
-    private readonly SolidColorBrush _dotIdleBrush = new(Color.FromArgb(140, 255, 255, 255));
+    private Brush _dotIdleBrush;
     private readonly FontFamily _uiFont;
     private readonly FontFamily _displayFont;
 
@@ -73,8 +74,12 @@ public partial class MainWindow : Window
         DataContext = viewModel;
         InitializeComponent();
 
+        _dotIdleBrush = TryFindResource("DotIdleBrush") as Brush
+            ?? new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
         _uiFont = TryFindResource("UiFont") as FontFamily ?? new FontFamily("Segoe UI");
         _displayFont = TryFindResource("DisplayFont") as FontFamily ?? _uiFont;
+
+        ThemeService.ThemeChanged += OnThemeChanged;
 
         _collapseTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1150) };
         _collapseTimer.Tick += CollapseTimer_Tick;
@@ -126,6 +131,7 @@ public partial class MainWindow : Window
             UnregisterHotkeys();
             _hwndSource?.RemoveHook(HwndHook);
             _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            ThemeService.ThemeChanged -= OnThemeChanged;
         };
     }
 

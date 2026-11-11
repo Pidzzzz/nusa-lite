@@ -39,6 +39,12 @@ public partial class MainWindow
         }
     }
 
+    private void OnThemeChanged(object? sender, EventArgs e)
+    {
+        _dotIdleBrush = TryFindResource("DotIdleBrush") as Brush ?? _dotIdleBrush;
+        UpdateDots();
+    }
+
     private void UpdateDots()
     {
         foreach (var dot in _dots)
