@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 4 selesai; pemilih tema Graphite/Void/Terang di SettingsWindow (Umum) langsung apply + simpan; build Release tervalidasi 0 error.
-- Terakhir selesai: Segmented tema di Umum, handler Theme_Checked, reset ke bawaan ikut menerapkan Graphite; startup loader sudah ada di AppHost (tidak diubah).
-- Langkah berikutnya persis: Verifikasi visual tiga tema oleh pengguna; tutup NusaLite lalu build Release normal; commit Sesi 4.
-- Blocker / keputusan penting: Build normal gagal copy exe karena NusaLite PID 5272 sedang berjalan; build Release ke output sementara sukses 0 warning/0 error; tray tetap gelap.
+- Sedang dikerjakan: Hotfix warna LyricTicker selesai; Foreground TextBlock internal menjadi DynamicResource InkBrush; build Release 0 error.
+- Terakhir selesai: Teks LyricTicker ikut tema Graphite/Void/Terang tanpa mengubah animasi; NusaLite ditutup sementara saat build karena exe terkunci.
+- Langkah berikutnya persis: Verifikasi visual teks ticker di tiga tema oleh pengguna; commit hotfix.
+- Blocker / keputusan penting: LyricTicker memakai TextBlock, bukan OnRender/FormattedText; akar masalah StaticResource InkBrush; tidak perlu ThemeChanged/manual redraw.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -24,6 +24,7 @@
 - Sesi 3b: token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; sisa hex XAML dipetakan; build Release 0 error.
 - AccentBrush Graphite/Light sudah punya gradient stop sendiri; Theme.Void tidak diubah; brand/ShelfService tetap; verifikasi visual dilakukan pengguna.
 - Sesi 4: pemilih tema segmented Graphite/Void/Terang di Umum; klik langsung ThemeService.Apply + simpan AppSettings.Theme; reset ke bawaan menerapkan Graphite; build Release (output sementara) 0 error.
+- Hotfix: LyricTicker internal TextBlock Foreground StaticResource -> DynamicResource InkBrush; teks ticker ikut tema; build Release 0 error (aplikasi ditutup sementara).
 
 ### 2026-11-10
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.
