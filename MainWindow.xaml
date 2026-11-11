@@ -36,7 +36,7 @@
                 </ContentControl>
             </Grid>
 
-            <Border x:Name="DotsBar" Margin="0,6,0,0" HorizontalAlignment="Center" Background="#99120A22"
+            <Border x:Name="DotsBar" Margin="0,6,0,0" HorizontalAlignment="Center" Background="{DynamicResource DotsBarBrush}"
                     CornerRadius="8" Padding="7,4" Opacity="0" IsHitTestVisible="False">
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="DotsSlide" />

@@ -67,4 +67,43 @@
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
+    <!-- Token semantik permukaan/teks (Sesi 2a/3) -->
+    <Color x:Key="IslandColor">#F3F1F8</Color>
+    <Color x:Key="DotsBarColor">#99000000</Color>
+    <Color x:Key="PanelColor">#14000000</Color>
+    <Color x:Key="CardColor">#0E000000</Color>
+    <Color x:Key="FillSubtleColor">#0A000000</Color>
+    <Color x:Key="FillMediumColor">#14000000</Color>
+    <Color x:Key="LineStrongColor">#33000000</Color>
+    <Color x:Key="AccentTintColor">#26000000</Color>
+    <Color x:Key="AccentHoverColor">#33000000</Color>
+    <Color x:Key="AccentBorderColor">#66000000</Color>
+    <Color x:Key="TrackColor">#26000000</Color>
+    <Color x:Key="TextFaintColor">#1B1726</Color>
+    <Color x:Key="OnPrimaryColor">#F3F1F8</Color>
+    <Color x:Key="PrimaryColor">#6A43C4</Color>
+    <Color x:Key="PrimaryHoverColor">#7A38C4</Color>
+    <Color x:Key="PrimaryPressedColor">#4F35C8</Color>
+    <Color x:Key="ShadowColor">#000000</Color>
+    <Color x:Key="GlowColor">#0B6E7E</Color>
+    <Color x:Key="OverlayColor">#E6F3F1F8</Color>
+
+    <SolidColorBrush x:Key="IslandBrush" Color="{StaticResource IslandColor}" />
+    <SolidColorBrush x:Key="DotsBarBrush" Color="{StaticResource DotsBarColor}" />
+    <SolidColorBrush x:Key="PanelBrush" Color="{StaticResource PanelColor}" />
+    <SolidColorBrush x:Key="CardBrush" Color="{StaticResource CardColor}" />
+    <SolidColorBrush x:Key="FillSubtleBrush" Color="{StaticResource FillSubtleColor}" />
+    <SolidColorBrush x:Key="FillMediumBrush" Color="{StaticResource FillMediumColor}" />
+    <SolidColorBrush x:Key="LineStrongBrush" Color="{StaticResource LineStrongColor}" />
+    <SolidColorBrush x:Key="AccentTintBrush" Color="{StaticResource AccentTintColor}" />
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHoverColor}" />
+    <SolidColorBrush x:Key="AccentBorderBrush" Color="{StaticResource AccentBorderColor}" />
+    <SolidColorBrush x:Key="TrackBrush" Color="{StaticResource TrackColor}" />
+    <SolidColorBrush x:Key="TextFaintBrush" Color="{StaticResource TextFaintColor}" />
+    <SolidColorBrush x:Key="OnPrimaryBrush" Color="{StaticResource OnPrimaryColor}" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}" />
+    <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{StaticResource PrimaryPressedColor}" />
+    <SolidColorBrush x:Key="OverlayBrush" Color="{StaticResource OverlayColor}" />
+
 </ResourceDictionary>

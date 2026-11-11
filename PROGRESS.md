@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sistem tema 3 palet (Void/Graphite/Light) selesai; siap sapu hex permukaan.
-- Terakhir selesai: Theme.Void.xaml (palet lama), Theme.Graphite.xaml (netral #0E0F12, Lime→Mint, gradien 2 titik), Theme.Light.xaml (surface terang #F3F1F8, teks gelap, aksen digelapkan); ThemeService map Void/Graphite/Light; Notch Fill → DynamicResource VoidBrush (1 baris, disetujui); build Release 0 error; Light diuji: island terang + teks gelap terbaca (10 Nov 2026).
-- Langkah berikutnya persis: Sapu hex permukaan di Views/MainWindow (DotsBar #99120A22, tint #26CDB4FF dll.) → token tema, lalu Settings UI pemilih tema.
-- Blocker / keputusan penting: Controls/*.xaml (LyricTicker, EqBars) masih StaticResource; hex permukaan di Views belum ikut tema (dijadwalkan sesi sapu hex).
+- Sedang dikerjakan: Sapu hex permukaan/teks/garis XAML ke token tema (Sesi 3) selesai; verifikasi visual diserahkan ke pengguna.
+- Terakhir selesai: Token semantik (Island, DotsBar, Panel, Card, FillSubtle, FillMedium, LineStrong, AccentTint, AccentHover, AccentBorder, Track, TextFaint, OnPrimary, Primary, PrimaryHover, PrimaryPressed, Shadow, Glow, Overlay) ditambahkan di Theme.Graphite/Light/Void; hex di MainWindow, Settings, Shelf, Player, Hub, Lyrics, Peek, Water, Focus, Idle, Styles dipetakan ke DynamicResource; build Release 0 error (11 Nov 2026).
+- Langkah berikutnya persis: Verifikasi visual Graphite/Void/Light oleh pengguna; lanjut Settings UI pemilih tema.
+- Blocker / keputusan penting: hex tanpa token persis (track #20/#22, aksen #12/#18/#1E/#2E/#30/#38/#40/#5C/#7F, garis #1F, teks samar #59/#66, hapus #D905060C, peek tint, progress #2EE9DEFF, thumb #F3EEFF, gradient stop #8F7BFF/#D96BFF/#B79CFF) masih hardcoded; perlu keputusan token tambahan.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -19,6 +19,10 @@
 - [ ] Installer dan build release otomatis
 
 ## Log harian
+### 2026-11-11
+- Sesi 3: tambah token semantik di Theme.Graphite/Light/Void (Graphite/Void = hex lama persis, Light = alpha hitam/semantik) + sapu hex XAML ke DynamicResource; build Release 0 error.
+- Sisa hex tanpa padanan token persis dilaporkan untuk keputusan lanjutan; verifikasi visual dilakukan pengguna.
+
 ### 2026-11-10
 - Selesai ikon sumber media di Idle (Spotify/YouTube Music/YouTube/browser/pemutar lain) + lirik 13.5; uji visual lolos; build Release 0 error; commit & push.
 - Pecah MainWindow tuntas: Hotkeys, Fullscreen, DragDrop, Peek & Dots, Guard, Pointer, Animation; MainWindow.xaml.cs tinggal inti (~481 baris), build Release 0 error.

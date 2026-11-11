@@ -12,11 +12,11 @@
         <StackPanel x:Name="ArtColumn" Width="66" VerticalAlignment="Center">
             <Grid x:Name="ArtBox" Width="56" Height="56" HorizontalAlignment="Left">
                 <Grid.Effect>
-                    <DropShadowEffect Color="#8B5CF6" BlurRadius="20" ShadowDepth="0" Opacity="0.28" />
+                    <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="20" ShadowDepth="0" Opacity="0.28" />
                 </Grid.Effect>
                 <Border x:Name="ArtPlaceholder" CornerRadius="16" Background="{DynamicResource AccentDiagonalBrush}"
                         Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
-                    <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="22" Height="22" Stretch="Uniform" Opacity="0.92" />
+                    <Path Data="{StaticResource IconMusic}" Fill="{DynamicResource TextFaintBrush}" Width="22" Height="22" Stretch="Uniform" Opacity="0.92" />
                 </Border>
                 <Border x:Name="ArtImage" CornerRadius="16">
                     <Border.Background>
@@ -64,7 +64,7 @@
                 </Button>
             </StackPanel>
 
-            <Border x:Name="MessagePanel" Grid.Row="0" Grid.RowSpan="2" Background="#E60C0817" CornerRadius="12"
+            <Border x:Name="MessagePanel" Grid.Row="0" Grid.RowSpan="2" Background="{DynamicResource OverlayBrush}" CornerRadius="12"
                     Padding="14,8" VerticalAlignment="Center" HorizontalAlignment="Center"
                     Visibility="{Binding ShowLyricsMessage, Converter={StaticResource BoolVis}}">
                 <StackPanel Orientation="Horizontal">

@@ -92,7 +92,7 @@
                 <Grid Width="40" Height="40">
                     <Border CornerRadius="11" Background="{DynamicResource AccentDiagonalBrush}"
                             Visibility="{Binding PeekHasArtwork, Converter={StaticResource InvBoolVis}}">
-                        <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="17" Height="17" Stretch="Uniform" />
+                        <Path Data="{StaticResource IconMusic}" Fill="{DynamicResource TextFaintBrush}" Width="17" Height="17" Stretch="Uniform" />
                     </Border>
                     <Border CornerRadius="11">
                         <Border.Background>

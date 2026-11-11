@@ -18,7 +18,7 @@
             <controls:ArcRing Percent="{Binding WaterProgress}" Thickness="8" TrackBrush="#20FFFFFF"
                               Stroke="{DynamicResource AquaBrush}">
                 <controls:ArcRing.Effect>
-                    <DropShadowEffect Color="#38D6E8" BlurRadius="18" ShadowDepth="0" Opacity="0.3" />
+                    <DropShadowEffect Color="{DynamicResource GlowColor}" BlurRadius="18" ShadowDepth="0" Opacity="0.3" />
                 </controls:ArcRing.Effect>
             </controls:ArcRing>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -42,7 +42,7 @@
                         Click="Add_Click">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="{StaticResource IconPlus}" Style="{StaticResource StrokeIcon}" Width="10" Height="10"
-                              Stroke="#120B20" Margin="0,0,5,0" />
+                              Stroke="{DynamicResource OnPrimaryBrush}" Margin="0,0,5,0" />
                         <TextBlock Text="250 ml" FontSize="10.5" FontWeight="Bold" />
                     </StackPanel>
                 </Button>

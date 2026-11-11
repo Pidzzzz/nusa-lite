@@ -4,7 +4,7 @@
              Width="512" Height="158">
     <UserControl.Resources>
         <Style x:Key="ShelfCard" TargetType="Border">
-            <Setter Property="Background" Value="#0EFFFFFF" />
+            <Setter Property="Background" Value="{DynamicResource CardBrush}" />
             <Setter Property="BorderBrush" Value="#12FFFFFF" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="13" />
@@ -155,7 +155,7 @@
                                                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                                 Margin="1,0,0,-2">
                                             <TextBlock Text="{Binding Badge}" FontSize="6.5" FontWeight="Bold"
-                                                       Foreground="#F7F2FF" />
+                                                       Foreground="{DynamicResource TextFaintBrush}" />
                                         </Border>
                                     </Grid>
 
@@ -184,7 +184,7 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <Border Background="#26CDB4FF" BorderBrush="{DynamicResource AmberBrush}" BorderThickness="1.4"
+            <Border Background="{DynamicResource AccentTintBrush}" BorderBrush="{DynamicResource AmberBrush}" BorderThickness="1.4"
                     CornerRadius="14" IsHitTestVisible="False"
                     Visibility="{Binding ShelfDropHover, Converter={StaticResource BoolVis}}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

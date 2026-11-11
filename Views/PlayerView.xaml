@@ -11,11 +11,11 @@
 
         <Grid Width="108" Height="108" VerticalAlignment="Top">
             <Grid.Effect>
-                <DropShadowEffect Color="#8B5CF6" BlurRadius="28" ShadowDepth="0" Opacity="0.32" />
+                <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="28" ShadowDepth="0" Opacity="0.32" />
             </Grid.Effect>
             <Border CornerRadius="22,18,22,18" Background="{DynamicResource AccentDiagonalBrush}"
                     Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
-                <Path Data="{StaticResource IconMusic}" Fill="#F7F2FF" Width="40" Height="40" Stretch="Uniform" Opacity="0.92" />
+                <Path Data="{StaticResource IconMusic}" Fill="{DynamicResource TextFaintBrush}" Width="40" Height="40" Stretch="Uniform" Opacity="0.92" />
             </Border>
             <Border CornerRadius="22,18,22,18">
                 <Border.Background>
@@ -74,9 +74,9 @@
                     </Button>
                     <Button Style="{StaticResource PlayButton}" Margin="8,0" Click="Play_Click" ToolTip="Putar / jeda">
                         <Grid Width="16" Height="16">
-                            <Path Data="{StaticResource IconPlay}" Fill="#120B20" Width="13" Height="13" Stretch="Uniform"
+                            <Path Data="{StaticResource IconPlay}" Fill="{DynamicResource OnPrimaryBrush}" Width="13" Height="13" Stretch="Uniform"
                                   Margin="1,0,0,0" Visibility="{Binding IsPlaying, Converter={StaticResource InvBoolVis}}" />
-                            <Path Data="{StaticResource IconPause}" Fill="#120B20" Width="11" Height="11" Stretch="Uniform"
+                            <Path Data="{StaticResource IconPause}" Fill="{DynamicResource OnPrimaryBrush}" Width="11" Height="11" Stretch="Uniform"
                                   Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
                         </Grid>
                     </Button>

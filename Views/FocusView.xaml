@@ -4,8 +4,8 @@
              xmlns:controls="clr-namespace:NusaLite.Controls"
              Width="512" Height="158">
     <UserControl.Resources>
-        <DropShadowEffect x:Key="FocusGlow" Color="#B57BFF" BlurRadius="18" ShadowDepth="0" Opacity="0.28" />
-        <DropShadowEffect x:Key="BreakGlow" Color="#6FE7D2" BlurRadius="18" ShadowDepth="0" Opacity="0.26" />
+        <DropShadowEffect x:Key="FocusGlow" Color="{DynamicResource CoralColor}" BlurRadius="18" ShadowDepth="0" Opacity="0.28" />
+        <DropShadowEffect x:Key="BreakGlow" Color="{DynamicResource MintColor}" BlurRadius="18" ShadowDepth="0" Opacity="0.26" />
     </UserControl.Resources>
     <Grid Margin="16,14,16,20">
         <Grid.ColumnDefinitions>

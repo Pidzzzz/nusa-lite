@@ -20,7 +20,7 @@
                     <ControlTemplate TargetType="CheckBox">
                         <StackPanel Orientation="Horizontal" Background="Transparent">
                             <Border x:Name="Box" Width="16" Height="16" CornerRadius="4"
-                                    Background="#14FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1"
+                                    Background="{DynamicResource FillMediumBrush}" BorderBrush="{DynamicResource LineStrongBrush}" BorderThickness="1"
                                     VerticalAlignment="Center">
                                 <Path x:Name="Check" Data="M 3,8 L 6.5,11.5 L 13,4.5"
                                       Stroke="{DynamicResource InkBrush}" StrokeThickness="1.8"
@@ -31,12 +31,12 @@
                         </StackPanel>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Box" Property="Background" Value="#33CDB4FF" />
+                                <Setter TargetName="Box" Property="Background" Value="{DynamicResource AccentHoverBrush}" />
                                 <Setter TargetName="Box" Property="BorderBrush" Value="#7FCDB4FF" />
                                 <Setter TargetName="Check" Property="Visibility" Value="Visible" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Box" Property="BorderBrush" Value="#66CDB4FF" />
+                                <Setter TargetName="Box" Property="BorderBrush" Value="{DynamicResource AccentBorderBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -51,7 +51,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Slider">
                         <Grid VerticalAlignment="Center" Background="Transparent">
-                            <Border Height="4" CornerRadius="2" Background="#26FFFFFF"
+                            <Border Height="4" CornerRadius="2" Background="{DynamicResource TrackBrush}"
                                     VerticalAlignment="Center" />
                             <Track x:Name="PART_Track">
                                 <Track.DecreaseRepeatButton>
@@ -90,10 +90,10 @@
         </Style>
 
         <Style x:Key="SettingText" TargetType="TextBox">
-            <Setter Property="Background" Value="#14FFFFFF" />
+            <Setter Property="Background" Value="{DynamicResource FillMediumBrush}" />
             <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
             <Setter Property="CaretBrush" Value="{DynamicResource InkBrush}" />
-            <Setter Property="BorderBrush" Value="#26FFFFFF" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TrackBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
             <Setter Property="FontSize" Value="12.5" />
@@ -148,7 +148,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" Background="#0AFFFFFF" BorderBrush="{DynamicResource LineBrush}"
+        <Border Grid.Column="0" Background="{DynamicResource FillSubtleBrush}" BorderBrush="{DynamicResource LineBrush}"
                 BorderThickness="0,0,1,0">
             <StackPanel Margin="14,18,14,18">
                 <TextBlock Text="Pengaturan" FontFamily="{StaticResource DisplayFont}"
@@ -173,10 +173,10 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="Bg" Property="Background" Value="#14FFFFFF" />
+                                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource FillMediumBrush}" />
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="Bg" Property="Background" Value="#26CDB4FF" />
+                                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource AccentTintBrush}" />
                                                 <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
                                                 <Setter Property="FontWeight" Value="SemiBold" />
                                             </Trigger>
