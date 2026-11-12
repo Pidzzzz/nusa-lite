@@ -119,13 +119,27 @@ NusaLite/
 
 ### Alur data
 
-```text
-Windows SMTC ──► MediaService ──► MainViewModel ──► Views
-                     │                  │
-                     ├─► ArtworkService │
-                     └─► LyricsService  └─► TrayService / SettingsStore
-Core Audio ─────────► AudioService
-Power / Pomodoro / Water / Shelf ─────► MainViewModel
+```mermaid
+flowchart LR
+    SMTC["Windows SMTC<br/>Spotify · browser · dll."] --> Media["MediaService"]
+    Media --> VM["MainViewModel"]
+    Media --> Art["ArtworkService"]
+    Media --> Lyr["LyricsService"]
+    Core["Core Audio"] --> Audio["AudioService"]
+    Lain["Power · Pomodoro<br/>Water · Shelf"] --> VM
+    VM --> Views["Views<br/>Hub · Player · Lyrics · Idle · Peek"]
+    VM --> Tray["TrayService"]
+    VM --> Set["SettingsStore<br/>settings.json"]
+
+    classDef sumber fill:#2B2440,stroke:#CDB4FF,color:#FFFFFF
+    classDef inti fill:#6A5AE0,stroke:#CDB4FF,color:#FFFFFF,stroke-width:2px
+    classDef layanan fill:#3A3358,stroke:#6A5AE0,color:#FFFFFF
+    classDef hasil fill:#1E1B2E,stroke:#8C6A5AE0,color:#FFFFFF
+
+    class SMTC,Core,Lain sumber
+    class Media,VM inti
+    class Art,Lyr,Audio layanan
+    class Views,Tray,Set hasil
 ```
 
 ## Tech stack
