@@ -11,6 +11,7 @@ public partial class ScrollingText : UserControl
     private const double Speed = 35.0;
     private const double Pause = 1.2;
     private const double Park = 1.2;
+    private const double Return = 1.0;
 
     private readonly Stopwatch _clock = new();
     private bool _ticking;
@@ -50,7 +51,13 @@ public partial class ScrollingText : UserControl
     private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = (ScrollingText)d;
-        control.Line.Text = e.NewValue as string ?? string.Empty;
+        var newText = e.NewValue as string ?? string.Empty;
+        if (string.Equals(e.OldValue as string, newText, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        control.Line.Text = newText;
         control._needsMeasure = true;
         control._clock.Reset();
         control.Slide.X = 0;
@@ -107,7 +114,7 @@ public partial class ScrollingText : UserControl
         }
 
         _scrollSeconds = _overflow / Speed;
-        _cycleSeconds = Pause + _scrollSeconds + Park;
+        _cycleSeconds = Pause + _scrollSeconds + Park + Return;
 
         if (startClock || !_clock.IsRunning)
         {
@@ -128,18 +135,25 @@ public partial class ScrollingText : UserControl
         }
 
         var elapsed = _clock.Elapsed.TotalSeconds % _cycleSeconds;
+        var scrollEnd = Pause + _scrollSeconds;
+        var parkEnd = scrollEnd + Park;
 
         if (elapsed < Pause)
         {
             Slide.X = 0;
         }
-        else if (elapsed < Pause + _scrollSeconds)
+        else if (elapsed < scrollEnd)
         {
             Slide.X = -_overflow * (elapsed - Pause) / _scrollSeconds;
         }
-        else
+        else if (elapsed < parkEnd)
         {
             Slide.X = -_overflow;
+        }
+        else
+        {
+            var progress = Math.Clamp((elapsed - parkEnd) / Return, 0, 1);
+            Slide.X = -_overflow * (1 - progress);
         }
     }
 }
