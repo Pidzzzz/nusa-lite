@@ -1,0 +1,21 @@
+<UserControl x:Class="NusaLite.Controls.MarqueeText"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             ClipToBounds="True">
+    <Grid x:Name="Host" ClipToBounds="True">
+        <TextBlock x:Name="Line"
+                   TextWrapping="NoWrap"
+                   TextTrimming="None"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontFamily="{Binding FontFamily, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   LineHeight="{Binding LineHeight, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <TextBlock.RenderTransform>
+                <TranslateTransform x:Name="Slide" />
+            </TextBlock.RenderTransform>
+        </TextBlock>
+    </Grid>
+</UserControl>

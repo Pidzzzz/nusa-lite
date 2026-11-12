@@ -119,9 +119,6 @@ public partial class LyricsView : UserControl
 
         CurrentLine.FontSize = compact ? 13.5 : 15.5;
         CurrentLine.LineHeight = compact ? 17 : 19;
-        CurrentLine.MaxHeight = compact ? 18 : 38;
-        CurrentLine.TextWrapping = compact ? TextWrapping.NoWrap : TextWrapping.Wrap;
-        CurrentLine.TextTrimming = compact ? TextTrimming.CharacterEllipsis : TextTrimming.None;
         CurrentLine.Margin = compact ? new Thickness(0, 2, 0, 2) : new Thickness(0, 3, 0, 3);
     }
 }

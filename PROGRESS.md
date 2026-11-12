@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 9 selesai; outline ungu lembut tepi jendela Pengaturan hanya di tema Terang via token FrameLine; build Release 0 error.
-- Terakhir selesai: SettingsWindow WindowStyle None/AllowsTransparency, ukuran 664x484 (konten tetap 640x460), drag via title bar; sidebar, halaman, dan logika settings tidak diubah.
-- Langkah berikutnya persis: Verifikasi visual pengguna (sudut rounded, bayangan, drag, min/close, ganti tema) lalu commit.
-- Blocker / keputusan penting: ShowInTaskbar default dipertahankan agar minimize/restore dari taskbar tetap bekerja.
+- Sedang dikerjakan: Sesi 13 — ScrollingText ditulis ulang berbasis Stopwatch + CompositionTarget.Rendering (tanpa storyboard/timer baru); offset = elapsed mod siklus; Loaded hanya attach, reload/re-parent tidak mereset origin; dipakai untuk DateText + TrackArtist Hub; build Release 0 error; menunggu verifikasi visual pengguna.
+- Terakhir selesai: Uji harness — siklus Date 3,527 dtk (scroll 1,127 dtk) offset akhir -39,43, "Nov" di 73,05–93; Sub 3,198 dtk (scroll 0,798 dtk) offset akhir -27,94, "memulai" di 105,15–147; keduanya fully visible; simulasi Unloaded+Loaded tidak mereset posisi (resetDetected=False).
+- Langkah berikutnya persis: Setelah dua teks Hub terbukti penuh, terapkan ScrollingText ke judul + baris lirik LyricsView, lalu commit Sesi 10–13.
+- Blocker / keputusan penting: Pemicu restart ±2 dtk pada build lama adalah re-parent view oleh MainWindow.AnimateTo (ContentHost.Content = GetView) yang memicu Loaded/IsVisibleChanged lalu storyboard Begin ulang; fix baru membuatnya tidak relevan (origin tidak direset saat reload). Klaim pemisah "-" tidak ada di sumber/commit; sumber memakai U+00B7 (·). MarqueeText lama dibiarkan untuk LyricsView sampai dua teks Hub lolos; LyricTicker pill idle tidak disentuh.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -20,6 +20,9 @@
 
 ## Log harian
 ### 2026-11-12
+- Sesi 12–13: ganti strategi marquee—ScrollingText baru (TextBlock+clip) lalu ditulis ulang berbasis Stopwatch + CompositionTarget.Rendering, offset = elapsed mod (1,2 dtk + overflow/35 + 1,2 dtk parkir), tanpa storyboard/timer baru; Loaded hanya attach, re-parent/reload tidak reset origin, hanya perubahan teks yang reset; dipakai untuk DateText + TrackArtist Hub; uji ukur: "Nov" 73,05–93, "memulai" 105,15–147, siklus 3,527/3,198 dtk, simulasi Unloaded+Loaded resetDetected=False; build Release 0 error.
+- Sesi 11: MarqueeText disegarkan layout-nya sebelum mengukur, overflow = lebar teks aktual − lebar Host ber-ClipToBounds, offset akhir -overflow, durasi overflow/35, restart saat ukuran Line berubah; ujung kalimat kini tampil saat jeda akhir; build Release 0 error.
+- Sesi 10: MarqueeText baru (TextBlock+clip, animasi 1,2 dtk/35 px per dtk/1,2 dtk, reset saat teks berubah) dipakai di TitleLine+Prev/Current/Next LyricsView, DateText dan TrackArtist Hub; elipsis/MaxWidth lama dilepas; LyricTicker idle tak berubah; build Release 0 error.
 - Sesi 9: token FrameLineColor/FrameLineBrush (Graphite/Void #1AFFFFFF, Light #8C6A5AE0); Border akar SettingsWindow pakai FrameLineBrush; mode gelap tak berubah; build Release 0 error.
 - Sesi 8: SettingsWindow jadi chrome custom rounded (WindowStyle None/AllowsTransparency, Border 16 + shadow ShadowColor, title bar ikon/judul/min/close, drag DragMove); ukuran 664x484 agar konten 640x460; logika settings utuh; build Release 0 error.
 

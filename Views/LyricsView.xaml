@@ -1,6 +1,7 @@
 <UserControl x:Class="NusaLite.Views.LyricsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:NusaLite.Controls"
              Width="360" Height="142">
     <Grid Margin="14,10,14,10">
         <Grid.ColumnDefinitions>
@@ -38,20 +39,26 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0,0,0,2">
-                <TextBlock x:Name="TitleLine" Text="{Binding TrackTitle}" Style="{StaticResource TitleText}" FontSize="10.5"
-                           TextTrimming="CharacterEllipsis" />
+                <controls:MarqueeText x:Name="TitleLine" Text="{Binding TrackTitle}"
+                                      FontFamily="{StaticResource DisplayFont}" FontSize="10.5"
+                                      FontWeight="SemiBold" LineHeight="19"
+                                      Foreground="{DynamicResource InkBrush}" />
                 <TextBlock x:Name="ArtistLine" Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="10"
                            TextTrimming="CharacterEllipsis" />
             </StackPanel>
 
             <StackPanel Grid.Row="1" VerticalAlignment="Top">
-                <TextBlock x:Name="PrevLine" Text="{Binding LyricPrev}" Style="{StaticResource BaseText}" FontSize="11"
-                           Foreground="{DynamicResource TextGhost59Brush}" TextTrimming="CharacterEllipsis" />
-                <TextBlock x:Name="CurrentLine" Text="{Binding LyricCurrent}" Style="{StaticResource TitleText}"
-                           FontSize="15.5" FontWeight="SemiBold" TextWrapping="Wrap" LineHeight="19"
-                           MaxHeight="38" Margin="0,3,0,3" />
-                <TextBlock x:Name="NextLine" Text="{Binding LyricNext}" Style="{StaticResource BaseText}" FontSize="11"
-                           Foreground="{DynamicResource TextGhost59Brush}" TextTrimming="CharacterEllipsis" />
+                <controls:MarqueeText x:Name="PrevLine" Text="{Binding LyricPrev}"
+                                      FontFamily="{StaticResource UiFont}" FontSize="11" LineHeight="16.5"
+                                      Foreground="{DynamicResource TextGhost59Brush}" />
+                <controls:MarqueeText x:Name="CurrentLine" Text="{Binding LyricCurrent}"
+                                      FontFamily="{StaticResource DisplayFont}" FontSize="15.5"
+                                      FontWeight="SemiBold" LineHeight="19"
+                                      Foreground="{DynamicResource InkBrush}"
+                                      Margin="0,3,0,3" />
+                <controls:MarqueeText x:Name="NextLine" Text="{Binding LyricNext}"
+                                      FontFamily="{StaticResource UiFont}" FontSize="11" LineHeight="16.5"
+                                      Foreground="{DynamicResource TextGhost59Brush}" />
             </StackPanel>
 
             <StackPanel x:Name="OffsetPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
