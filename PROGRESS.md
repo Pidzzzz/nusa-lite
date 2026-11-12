@@ -5,7 +5,7 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 13 — ScrollingText ditulis ulang berbasis Stopwatch + CompositionTarget.Rendering (tanpa storyboard/timer baru); offset = elapsed mod siklus; Loaded hanya attach, reload/re-parent tidak mereset origin; dipakai untuk DateText + TrackArtist Hub; build Release 0 error; menunggu verifikasi visual pengguna.
+- Sedang dikerjakan: Sesi 14 — mode judul idle: lagu baru menampilkan "Judul — Penyanyi" (5 dtk dan sampai baris lirik pertama aktif) lalu balik ke lirik; evaluasi memakai tick media 500 ms yang ada; build Release 0 error; menunggu verifikasi visual pengguna.
 - Terakhir selesai: Uji harness — siklus Date 3,527 dtk (scroll 1,127 dtk) offset akhir -39,43, "Nov" di 73,05–93; Sub 3,198 dtk (scroll 0,798 dtk) offset akhir -27,94, "memulai" di 105,15–147; keduanya fully visible; simulasi Unloaded+Loaded tidak mereset posisi (resetDetected=False).
 - Langkah berikutnya persis: Setelah dua teks Hub terbukti penuh, terapkan ScrollingText ke judul + baris lirik LyricsView, lalu commit Sesi 10–13.
 - Blocker / keputusan penting: Pemicu restart ±2 dtk pada build lama adalah re-parent view oleh MainWindow.AnimateTo (ContentHost.Content = GetView) yang memicu Loaded/IsVisibleChanged lalu storyboard Begin ulang; fix baru membuatnya tidak relevan (origin tidak direset saat reload). Klaim pemisah "-" tidak ada di sumber/commit; sumber memakai U+00B7 (·). MarqueeText lama dibiarkan untuk LyricsView sampai dua teks Hub lolos; LyricTicker pill idle tidak disentuh.
@@ -20,6 +20,7 @@
 
 ## Log harian
 ### 2026-11-12
+- Sesi 14: IdleLine mode judul untuk lagu baru (5 dtk + lirik pertama aktif) lewat tick ApplyMedia; IdleLine PropertyChanged sudah memicu BuildIdleSpec/UpdateIdleLayout (lebar pill ikut); IdleView/LyricTicker tidak diubah; build Release 0 error.
 - Sesi 12–13: ganti strategi marquee—ScrollingText baru (TextBlock+clip) lalu ditulis ulang berbasis Stopwatch + CompositionTarget.Rendering, offset = elapsed mod (1,2 dtk + overflow/35 + 1,2 dtk parkir), tanpa storyboard/timer baru; Loaded hanya attach, re-parent/reload tidak reset origin, hanya perubahan teks yang reset; dipakai untuk DateText + TrackArtist Hub; uji ukur: "Nov" 73,05–93, "memulai" 105,15–147, siklus 3,527/3,198 dtk, simulasi Unloaded+Loaded resetDetected=False; build Release 0 error.
 - Sesi 11: MarqueeText disegarkan layout-nya sebelum mengukur, overflow = lebar teks aktual − lebar Host ber-ClipToBounds, offset akhir -overflow, durasi overflow/35, restart saat ukuran Line berubah; ujung kalimat kini tampil saat jeda akhir; build Release 0 error.
 - Sesi 10: MarqueeText baru (TextBlock+clip, animasi 1,2 dtk/35 px per dtk/1,2 dtk, reset saat teks berubah) dipakai di TitleLine+Prev/Current/Next LyricsView, DateText dan TrackArtist Hub; elipsis/MaxWidth lama dilepas; LyricTicker idle tak berubah; build Release 0 error.

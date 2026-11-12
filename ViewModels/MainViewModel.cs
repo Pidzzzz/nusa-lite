@@ -32,6 +32,9 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     private CancellationTokenSource? _lyricsCts;
     private string _lastLyricKey = string.Empty;
     private int _lyricIndex = -1;
+    private static readonly TimeSpan TitleModeDuration = TimeSpan.FromSeconds(5);
+    private bool _titleMode;
+    private long _titleModeStartedTimestamp;
 
     private bool _syncingVolume;
     private DateTime _lastVolumeWrite = DateTime.MinValue;
@@ -199,8 +202,20 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
         if (track.Key != _track.Key)
         {
-            var hadTrack = _track.HasTrack;
+            var previous = _track;
+            var hadTrack = previous.HasTrack;
             _track = track;
+
+            if (!track.HasTrack)
+            {
+                _titleMode = false;
+            }
+            else if (IsNewSong(previous, track))
+            {
+                _titleMode = true;
+                _titleModeStartedTimestamp = Stopwatch.GetTimestamp();
+            }
+
             RaiseTrackChanged();
 
             if (track.HasTrack)
@@ -233,6 +248,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
             OnPropertyChanged(nameof(DurationText));
             OnPropertyChanged(nameof(TrackProgress));
             UpdateLyricIndex();
+            UpdateTitleMode();
 
             if (artworkChanged)
             {
@@ -256,6 +272,39 @@ public sealed class MainViewModel : ObservableObject, IDisposable
                 AutoLyricsRequested?.Invoke(track.IsPlaying);
             }
         }
+    }
+
+    private static bool IsNewSong(TrackInfo previous, TrackInfo current)
+    {
+        return !string.Equals(previous.Title, current.Title, StringComparison.Ordinal)
+            || !string.Equals(previous.Artist, current.Artist, StringComparison.Ordinal);
+    }
+
+    private void UpdateTitleMode()
+    {
+        if (!_titleMode || !_track.HasTrack)
+        {
+            return;
+        }
+
+        if (Stopwatch.GetElapsedTime(_titleModeStartedTimestamp) < TitleModeDuration)
+        {
+            return;
+        }
+
+        if (_lyricLines.Count == 0)
+        {
+            return;
+        }
+
+        var line = LyricsService.FindLine(_lyricLines, _track.Position, _settings.Current.LyricOffsetMs);
+        if (line < 0)
+        {
+            return;
+        }
+
+        _titleMode = false;
+        OnPropertyChanged(nameof(IdleLine));
     }
 
     private void RaiseTrackChanged()
@@ -293,6 +342,13 @@ public sealed class MainViewModel : ObservableObject, IDisposable
             if (!_track.HasTrack)
             {
                 return "Siap menemanimu";
+            }
+
+            if (_titleMode)
+            {
+                return string.IsNullOrWhiteSpace(_track.Artist)
+                    ? _track.Title
+                    : $"{_track.Title} — {_track.Artist}";
             }
 
             return string.IsNullOrWhiteSpace(_lyricCurrent) ? TrackTitle : _lyricCurrent;
