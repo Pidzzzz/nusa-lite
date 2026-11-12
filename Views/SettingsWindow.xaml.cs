@@ -4,7 +4,9 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using NusaLite.Services;
 
@@ -90,6 +92,51 @@ public partial class SettingsWindow : Window
         {
             ThemeGraphiteOption.IsChecked = true;
         }
+    }
+
+    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ButtonState != MouseButtonState.Pressed || IsFromButton(e.OriginalSource))
+        {
+            return;
+        }
+
+        try
+        {
+            DragMove();
+        }
+        catch (InvalidOperationException)
+        {
+        }
+    }
+
+    private static bool IsFromButton(object? originalSource)
+    {
+        var current = originalSource as DependencyObject;
+
+        while (current is not null)
+        {
+            if (current is ButtonBase)
+            {
+                return true;
+            }
+
+            current = current is Visual
+                ? VisualTreeHelper.GetParent(current)
+                : LogicalTreeHelper.GetParent(current);
+        }
+
+        return false;
+    }
+
+    private void Minimize_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void Close_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 
     private void SectionList_SelectionChanged(object sender, SelectionChangedEventArgs e)

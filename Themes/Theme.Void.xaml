@@ -81,6 +81,7 @@
     <Color x:Key="FillSubtleColor">#0AFFFFFF</Color>
     <Color x:Key="FillMediumColor">#14FFFFFF</Color>
     <Color x:Key="LineStrongColor">#33FFFFFF</Color>
+    <Color x:Key="FrameLineColor">#1AFFFFFF</Color>
     <Color x:Key="AccentTintColor">#26CDB4FF</Color>
     <Color x:Key="AccentHoverColor">#33CDB4FF</Color>
     <Color x:Key="AccentBorderColor">#66CDB4FF</Color>
@@ -102,6 +103,7 @@
     <SolidColorBrush x:Key="FillSubtleBrush" Color="{StaticResource FillSubtleColor}" />
     <SolidColorBrush x:Key="FillMediumBrush" Color="{StaticResource FillMediumColor}" />
     <SolidColorBrush x:Key="LineStrongBrush" Color="{StaticResource LineStrongColor}" />
+    <SolidColorBrush x:Key="FrameLineBrush" Color="{StaticResource FrameLineColor}" />
     <SolidColorBrush x:Key="AccentTintBrush" Color="{StaticResource AccentTintColor}" />
     <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHoverColor}" />
     <SolidColorBrush x:Key="AccentBorderBrush" Color="{StaticResource AccentBorderColor}" />

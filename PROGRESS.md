@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 7 selesai; warna dot Terang dibalik; header lirik dipindah ke kolom lebar; tinggi normal 108->142; build Release 0 error.
-- Terakhir selesai: Theme.Light DotsBar/DotIdle; LyricsView artwork-only + header Title/Artist full width; compact 76 tetap; spec/XAML disesuaikan.
-- Langkah berikutnya persis: Verifikasi visual tema Terang dan header Lirik (normal + mini/guard) oleh pengguna; commit Sesi 7.
-- Blocker / keputusan penting: Tinggi normal 142 dipilih agar area baris lirik lama tetap 72 setelah header; compact/guard tetap 76.
+- Sedang dikerjakan: Sesi 9 selesai; outline ungu lembut tepi jendela Pengaturan hanya di tema Terang via token FrameLine; build Release 0 error.
+- Terakhir selesai: SettingsWindow WindowStyle None/AllowsTransparency, ukuran 664x484 (konten tetap 640x460), drag via title bar; sidebar, halaman, dan logika settings tidak diubah.
+- Langkah berikutnya persis: Verifikasi visual pengguna (sudut rounded, bayangan, drag, min/close, ganti tema) lalu commit.
+- Blocker / keputusan penting: ShowInTaskbar default dipertahankan agar minimize/restore dari taskbar tetap bekerja.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -19,6 +19,10 @@
 - [ ] Installer dan build release otomatis
 
 ## Log harian
+### 2026-11-12
+- Sesi 9: token FrameLineColor/FrameLineBrush (Graphite/Void #1AFFFFFF, Light #8C6A5AE0); Border akar SettingsWindow pakai FrameLineBrush; mode gelap tak berubah; build Release 0 error.
+- Sesi 8: SettingsWindow jadi chrome custom rounded (WindowStyle None/AllowsTransparency, Border 16 + shadow ShadowColor, title bar ikon/judul/min/close, drag DragMove); ukuran 664x484 agar konten 640x460; logika settings utuh; build Release 0 error.
+
 ### 2026-11-11
 - Sesi 3/3b: token semantik + sapu hex XAML ke DynamicResource; token FillGhost10/FillFaint12/LineSoft1F/TrackSoft20/TextGhost59/TextMuted66/AccentTint12/18/1E/2E/30/38/40/AccentLine5C/AccentFill7F/MintTint1F/33/DangerSurface ditambahkan di tiga tema; AccentBrush Graphite/Light gradient sendiri; build 0 error.
 - Sesi 4/Hotfix: pemilih tema segmented Graphite/Void/Terang di Umum; klik langsung ThemeService.Apply + simpan AppSettings.Theme; reset ke bawaan menerapkan Graphite; LyricTicker internal TextBlock Foreground StaticResource -> DynamicResource InkBrush; build Release 0 error (aplikasi ditutup sementara).
