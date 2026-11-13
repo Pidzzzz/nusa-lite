@@ -37,7 +37,7 @@
                                          Stroke="{DynamicResource LineBrush}" StrokeThickness="1"
                                          CornerRadius="12" EarRadius="0" />
                     <Grid x:Name="PanelGlow" IsHitTestVisible="False" Visibility="Collapsed">
-                        <Ellipse Margin="48,20" Fill="{DynamicResource PanelGlowBrush}" Opacity="0.22">
+                        <Ellipse Margin="48,20" Fill="{DynamicResource PanelGlowBrush}" Opacity="{DynamicResource PanelGlowOpacity}">
                             <Ellipse.Effect>
                                 <BlurEffect Radius="24" RenderingBias="Performance" />
                             </Ellipse.Effect>

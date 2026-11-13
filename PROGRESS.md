@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 17 — poles tepi & glow island mengikuti resep Stitch: lapisan tepi gradien (token EdgeHi/EdgeLo/IslandEdgeBrush) mengikuti bentuk Notch di semua state; glow #7C5CFF 0.22 blur 24 (PanelGlow) hanya di panel Expanded (Hub/Player/Water/Shelf), Lyrics, dan Focus; Idle/Peek tanpa glow; bayangan tombol aksen (play/pause, Pause Fokus) disamakan ke ungu 0.40, blur 14, depth 4. SetWindowRgn tidak diubah dan tidak ada DropShadowEffect island baru.
-- Terakhir selesai: build Release 0 error/0 warning setelah instance NusaLite lama (PID 11144) dihentikan agar exe bisa ditimpa.
-- Langkah berikutnya persis: user verifikasi visual di Graphite, Void, dan Terang (tepi atas/bawah, glow panel, bayangan tombol); bila lolos, commit Sesi 17.
-- Blocker / keputusan penting: Glow dianggap milik keluarga "Expanded", jadi tampil di semua panel carousel (Hub/Player/Water/Shelf) selain Lyrics/Focus; Peek tetap tanpa glow. Aplikasi tidak dijalankan ulang oleh agen.
+- Sedang dikerjakan: Sesi 18 — PanelGlow dimatikan di tema gelap lewat token double `PanelGlowOpacity` per tema (Graphite 0.0, Void 0.0, Light 0.15); Opacity Ellipse PanelGlow di MainWindow.xaml memakai DynamicResource sehingga ikut berganti tema. Warna #7C5CFF, BlurEffect 24, token tepi, dan logika UpdatePanelGlow tidak berubah.
+- Terakhir selesai: build Release 0 error/0 warning setelah instance NusaLite lama (PID 4080) dihentikan agar exe bisa ditimpa.
+- Langkah berikutnya persis: user verifikasi visual glow mati di Graphite/Void dan tetap 0.15 di Terang, termasuk saat ganti tema live; bila lolos, commit Sesi 18.
+- Blocker / keputusan penting: Glow tetap ada di pohon visual panel (UpdatePanelGlow tidak diubah), tetapi opasitas 0 di tema gelap membuatnya tidak terlihat sama sekali. Aplikasi tidak dijalankan ulang oleh agen.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -23,6 +23,8 @@
 - Sesi 17: tambah token EdgeHi/EdgeLo/IslandEdgeBrush (putih 0.16→0 di 6% atas, hitam 0.35 di 3% bawah; Terang dibalik: putih 0.5 / hitam 0.08), PanelGlowColor/Brush (#7C5CFF) dan AccentShadowColor; lapisan tepi + glow dipasang di dalam IslandHost tanpa mengubah SetWindowRgn.
 - Glow panel aktif hanya untuk Expanded/Lyrics/Focus (Idle & Peek tanpa glow); bayangan PlayButton dan tombol Pause Fokus disamakan (opacity 0.40, blur 14, depth 4, arah bawah).
 - Build Release 0 error/0 warning; instance lama dihentikan hanya untuk melepas lock exe; visual belum diverifikasi agen.
+- Sesi 17b: turunkan Opacity Ellipse PanelGlow 0.22 → 0.15 di MainWindow.xaml; token warna dan blur tidak berubah; build Release 0 error/0 warning.
+- Sesi 18: token double PanelGlowOpacity per tema (Graphite/Void 0.0, Light 0.15) + Opacity Ellipse via DynamicResource; glow mati total di tema gelap, tetap 0.15 di Terang; build Release 0 error/0 warning.
 
 ### 2026-11-12
 - Sesi 15–16: perbaikan gaya A (4 fase + return halus) lalu perbaikan klip: Grid langsung membuat layout slot teks 93 px walau ActualWidth selebar konten, sehingga layout clip memotong glif >93 (probe: ink 0..92; Slide -54 hanya sampai x=38). `Line` dibungkus StackPanel horizontal → DesiredSize/ActualWidth selebar konten, clip hanya di Host (probe: Slide -54 mencapai x=90), tanpa trimming; build Release 0 error. MarqueeDiag dan seluruh log sudah dicabut sebelumnya.
