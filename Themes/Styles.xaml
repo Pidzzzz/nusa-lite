@@ -335,7 +335,8 @@
                             <ScaleTransform x:Name="HoverScale" />
                         </Border.RenderTransform>
                         <Border.Effect>
-                            <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="18" ShadowDepth="0" Opacity="0.32" />
+                            <DropShadowEffect Color="{DynamicResource AccentShadowColor}" BlurRadius="14"
+                                              ShadowDepth="4" Direction="270" Opacity="0.40" />
                         </Border.Effect>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>

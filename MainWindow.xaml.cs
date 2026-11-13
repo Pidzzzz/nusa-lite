@@ -324,6 +324,7 @@ public partial class MainWindow : Window
         }
 
         _view = view;
+        UpdatePanelGlow(view);
         UpdateDots();
         SetDotsVisible(view is not (IslandView.Idle or IslandView.Peek), fast);
 
@@ -334,6 +335,13 @@ public partial class MainWindow : Window
 
         AnimateTo(ResolveSpec(view), fast);
         UpdateClickThrough();
+    }
+
+    private void UpdatePanelGlow(IslandView view)
+    {
+        PanelGlow.Visibility = view is IslandView.Idle or IslandView.Peek
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
 
     private UserControl GetView(IslandView view)

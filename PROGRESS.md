@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 16 — perbaikan klip marquee: `Line` dibungkus `StackPanel` horizontal agar diukur selebar konten (DesiredSize penuh), clip hanya di `Host`/UserControl, `TextTrimming=None`; mekanisme 4 fase tidak diubah; build Release 0 error; menunggu verifikasi visual user (ekor "12 Nov"/"memulai" utuh saat parkir).
-- Terakhir selesai: Uji harness — siklus Date 3,527 dtk (scroll 1,127 dtk) offset akhir -39,43, "Nov" di 73,05–93; Sub 3,198 dtk (scroll 0,798 dtk) offset akhir -27,94, "memulai" di 105,15–147; keduanya fully visible; simulasi Unloaded+Loaded tidak mereset posisi (resetDetected=False).
-- Langkah berikutnya persis: Setelah dua teks Hub terbukti penuh, terapkan ScrollingText ke judul + baris lirik LyricsView, lalu commit Sesi 10–13.
-- Blocker / keputusan penting: Pemicu restart ±2 dtk pada build lama adalah re-parent view oleh MainWindow.AnimateTo (ContentHost.Content = GetView) yang memicu Loaded/IsVisibleChanged lalu storyboard Begin ulang; fix baru membuatnya tidak relevan (origin tidak direset saat reload). Klaim pemisah "-" tidak ada di sumber/commit; sumber memakai U+00B7 (·). MarqueeText lama dibiarkan untuk LyricsView sampai dua teks Hub lolos; LyricTicker pill idle tidak disentuh.
+- Sedang dikerjakan: Sesi 17 — poles tepi & glow island mengikuti resep Stitch: lapisan tepi gradien (token EdgeHi/EdgeLo/IslandEdgeBrush) mengikuti bentuk Notch di semua state; glow #7C5CFF 0.22 blur 24 (PanelGlow) hanya di panel Expanded (Hub/Player/Water/Shelf), Lyrics, dan Focus; Idle/Peek tanpa glow; bayangan tombol aksen (play/pause, Pause Fokus) disamakan ke ungu 0.40, blur 14, depth 4. SetWindowRgn tidak diubah dan tidak ada DropShadowEffect island baru.
+- Terakhir selesai: build Release 0 error/0 warning setelah instance NusaLite lama (PID 11144) dihentikan agar exe bisa ditimpa.
+- Langkah berikutnya persis: user verifikasi visual di Graphite, Void, dan Terang (tepi atas/bawah, glow panel, bayangan tombol); bila lolos, commit Sesi 17.
+- Blocker / keputusan penting: Glow dianggap milik keluarga "Expanded", jadi tampil di semua panel carousel (Hub/Player/Water/Shelf) selain Lyrics/Focus; Peek tetap tanpa glow. Aplikasi tidak dijalankan ulang oleh agen.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -19,6 +19,11 @@
 - [ ] Installer dan build release otomatis
 
 ## Log harian
+### 2026-11-13
+- Sesi 17: tambah token EdgeHi/EdgeLo/IslandEdgeBrush (putih 0.16→0 di 6% atas, hitam 0.35 di 3% bawah; Terang dibalik: putih 0.5 / hitam 0.08), PanelGlowColor/Brush (#7C5CFF) dan AccentShadowColor; lapisan tepi + glow dipasang di dalam IslandHost tanpa mengubah SetWindowRgn.
+- Glow panel aktif hanya untuk Expanded/Lyrics/Focus (Idle & Peek tanpa glow); bayangan PlayButton dan tombol Pause Fokus disamakan (opacity 0.40, blur 14, depth 4, arah bawah).
+- Build Release 0 error/0 warning; instance lama dihentikan hanya untuk melepas lock exe; visual belum diverifikasi agen.
+
 ### 2026-11-12
 - Sesi 15–16: perbaikan gaya A (4 fase + return halus) lalu perbaikan klip: Grid langsung membuat layout slot teks 93 px walau ActualWidth selebar konten, sehingga layout clip memotong glif >93 (probe: ink 0..92; Slide -54 hanya sampai x=38). `Line` dibungkus StackPanel horizontal → DesiredSize/ActualWidth selebar konten, clip hanya di Host (probe: Slide -54 mencapai x=90), tanpa trimming; build Release 0 error. MarqueeDiag dan seluruh log sudah dicabut sebelumnya.
 - Sesi 14: IdleLine mode judul untuk lagu baru (5 dtk + lirik pertama aktif) lewat tick ApplyMedia; IdleLine PropertyChanged sudah memicu BuildIdleSpec/UpdateIdleLayout (lebar pill ikut); IdleView/LyricTicker tidak diubah; build Release 0 error.

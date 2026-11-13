@@ -57,6 +57,10 @@
             <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom">
                 <Button Style="{StaticResource PrimaryButton}" Width="86" Height="30" Padding="0"
                         FontSize="11.5" Click="Start_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Color="{DynamicResource AccentShadowColor}" BlurRadius="14"
+                                          ShadowDepth="4" Direction="270" Opacity="0.40" />
+                    </Button.Effect>
                     <TextBlock Text="{Binding PomodoroStartLabel}" />
                 </Button>
                 <Button Style="{StaticResource IconButton}" Width="30" Height="30" Margin="8,0,0,0"

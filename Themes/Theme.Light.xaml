@@ -148,4 +148,19 @@
     <SolidColorBrush x:Key="MintTint33Brush" Color="{StaticResource MintTint33Color}" />
     <SolidColorBrush x:Key="DangerSurfaceBrush" Color="{StaticResource DangerSurfaceColor}" />
 
+    <!-- Token tepi & glow island (Sesi 17) — tema terang dibalik -->
+    <Color x:Key="EdgeHiColor">#80FFFFFF</Color>
+    <Color x:Key="EdgeLoColor">#14000000</Color>
+    <Color x:Key="PanelGlowColor">#7C5CFF</Color>
+    <Color x:Key="AccentShadowColor">#7C5CFF</Color>
+
+    <LinearGradientBrush x:Key="IslandEdgeBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="{StaticResource EdgeHiColor}" />
+        <GradientStop Offset="0.06" Color="#00FFFFFF" />
+        <GradientStop Offset="0.97" Color="#00000000" />
+        <GradientStop Offset="1" Color="{StaticResource EdgeLoColor}" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="PanelGlowBrush" Color="{StaticResource PanelGlowColor}" />
+
 </ResourceDictionary>

@@ -36,12 +36,23 @@
                     <controls:NotchShape x:Name="Notch" Fill="{DynamicResource VoidBrush}"
                                          Stroke="{DynamicResource LineBrush}" StrokeThickness="1"
                                          CornerRadius="12" EarRadius="0" />
+                    <Grid x:Name="PanelGlow" IsHitTestVisible="False" Visibility="Collapsed">
+                        <Ellipse Margin="48,20" Fill="{DynamicResource PanelGlowBrush}" Opacity="0.22">
+                            <Ellipse.Effect>
+                                <BlurEffect Radius="24" RenderingBias="Performance" />
+                            </Ellipse.Effect>
+                        </Ellipse>
+                    </Grid>
                     <ContentControl x:Name="ContentHost" HorizontalAlignment="Center" VerticalAlignment="Center"
                                     Focusable="False" IsTabStop="False">
                         <ContentControl.RenderTransform>
                             <TranslateTransform x:Name="ContentSlide" />
                         </ContentControl.RenderTransform>
                     </ContentControl>
+                    <controls:NotchShape x:Name="EdgeLayer" Fill="{DynamicResource IslandEdgeBrush}"
+                                         CornerRadius="{Binding CornerRadius, ElementName=Notch}"
+                                         EarRadius="{Binding EarRadius, ElementName=Notch}"
+                                         IsHitTestVisible="False" />
                 </Grid>
             </Grid>
 
