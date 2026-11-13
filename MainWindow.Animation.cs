@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using NusaLite.Infrastructure;
 using NusaLite.Models;
 using NusaLite.Views;
 
@@ -12,17 +13,16 @@ public partial class MainWindow
     private void AnimateTo(IslandSpec spec, bool fast)
     {
         var generation = ++_transition;
-        var fadeOutMs = fast ? 60 : 90;
-        var fadeInMs = fast ? 180 : 260;
-        var easeOut = new CubicEase { EasingMode = EasingMode.EaseOut };
-        var easeIn = new CubicEase { EasingMode = EasingMode.EaseIn };
+        var fadeOutMs = 150;
+        var morphMs = fast ? 300 : 340;
+        var ease = MorphEase.Shared;
 
         var fadeOut = new DoubleAnimation(
             ContentHost.Opacity,
             0,
             TimeSpan.FromMilliseconds(fadeOutMs))
         {
-            EasingFunction = easeIn
+            EasingFunction = ease
         };
 
         var slideOut = new DoubleAnimation(
@@ -30,7 +30,7 @@ public partial class MainWindow
             -4,
             TimeSpan.FromMilliseconds(fadeOutMs))
         {
-            EasingFunction = easeIn,
+            EasingFunction = ease,
             FillBehavior = FillBehavior.Stop
         };
 
@@ -48,18 +48,18 @@ public partial class MainWindow
             ContentHost.Content = GetView(_view);
             ApplySpec(spec, fast);
 
-            var beginTime = TimeSpan.FromMilliseconds(fast ? 20 : 60);
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(fadeInMs))
+            var beginTime = TimeSpan.Zero;
+            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(morphMs))
             {
                 BeginTime = beginTime,
-                EasingFunction = easeOut
+                EasingFunction = ease
             };
             ContentHost.BeginAnimation(OpacityProperty, fadeIn);
 
-            var slideIn = new DoubleAnimation(7, 0, TimeSpan.FromMilliseconds(fast ? 220 : 320))
+            var slideIn = new DoubleAnimation(7, 0, TimeSpan.FromMilliseconds(morphMs))
             {
                 BeginTime = beginTime,
-                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut },
+                EasingFunction = ease,
                 FillBehavior = FillBehavior.Stop
             };
             ContentSlide.BeginAnimation(TranslateTransform.YProperty, slideIn);
@@ -80,8 +80,8 @@ public partial class MainWindow
         ApplyContentScale();
 
         var generation = _transition;
-        var duration = TimeSpan.FromMilliseconds(fast ? 190 : 320);
-        var ease = new QuinticEase { EasingMode = EasingMode.EaseOut };
+        var duration = TimeSpan.FromMilliseconds(fast ? 300 : 340);
+        var ease = MorphEase.Shared;
 
         var width = IslandHost.ActualWidth > 0 ? IslandHost.ActualWidth : spec.Width;
         var height = IslandHost.ActualHeight > 0 ? IslandHost.ActualHeight : spec.Height;
@@ -211,7 +211,7 @@ public partial class MainWindow
         var width = Math.Ceiling((fixedWidth + widest + 10) / 24) * 24;
         width = Math.Clamp(width, min, max);
         var height = compact ? 76.0 : 142.0;
-        var radius = compact ? 16.0 : 20.0;
+        var radius = compact ? 16.0 : 24.0;
 
         return new IslandSpec(width, height, radius, 0);
     }
@@ -277,10 +277,10 @@ public partial class MainWindow
     private static IslandSpec SpecFor(IslandView view) => view switch
     {
         IslandView.Idle => new IslandSpec(198, 34, 12, 0),
-        IslandView.Hub => new IslandSpec(410, 88, 18, 0),
-        IslandView.Lyrics => new IslandSpec(360, 142, 20, 0),
+        IslandView.Hub => new IslandSpec(410, 88, 24, 0),
+        IslandView.Lyrics => new IslandSpec(360, 142, 24, 0),
         IslandView.Peek => new IslandSpec(362, 68, 16, 0),
-        _ => new IslandSpec(554, 158, 22, 0)
+        _ => new IslandSpec(554, 158, 24, 0)
     };
 
     private readonly record struct IslandSpec(double Width, double Height, double Radius, double Ear);

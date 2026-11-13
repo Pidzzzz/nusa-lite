@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 18 — PanelGlow dimatikan di tema gelap lewat token double `PanelGlowOpacity` per tema (Graphite 0.0, Void 0.0, Light 0.15); Opacity Ellipse PanelGlow di MainWindow.xaml memakai DynamicResource sehingga ikut berganti tema. Warna #7C5CFF, BlurEffect 24, token tepi, dan logika UpdatePanelGlow tidak berubah.
-- Terakhir selesai: build Release 0 error/0 warning setelah instance NusaLite lama (PID 4080) dihentikan agar exe bisa ditimpa.
-- Langkah berikutnya persis: user verifikasi visual glow mati di Graphite/Void dan tetap 0.15 di Terang, termasuk saat ganti tema live; bila lolos, commit Sesi 18.
-- Blocker / keputusan penting: Glow tetap ada di pohon visual panel (UpdatePanelGlow tidak diubah), tetapi opasitas 0 di tema gelap membuatnya tidak terlihat sama sekali. Aplikasi tidak dijalankan ulang oleh agen.
+- Sedang dikerjakan: Sesi 20 — perbaikan regresi tinggi panel Lyrics compact yang terpotong sejak Sesi 19.
+- Terakhir selesai: akar masalah ditemukan—padding akar Lyrics 16 memakan 12 px dari tinggi tetap compact 76 sehingga baris lirik hanya tersisa 11 px; margin akar compact kini 8 (full tetap 16), tinggi full tetap 142 dan compact tetap 76; build Release 0 error/6 warning lama CS0169/CS0067.
+- Langkah berikutnya persis: user verifikasi visual full Lyrics 142 dan compact 76 (termasuk saat browser foreground); bila lolos, lanjut commit.
+- Blocker / keputusan penting: perubahan P2 lain (font, spacing, MorphEase, EqBars, radius) tidak diubah; artwork header/P3 tidak disentuh. Agen tidak menjalankan aplikasi atau berinteraksi desktop.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -23,8 +23,9 @@
 - Sesi 17: tambah token EdgeHi/EdgeLo/IslandEdgeBrush (putih 0.16→0 di 6% atas, hitam 0.35 di 3% bawah; Terang dibalik: putih 0.5 / hitam 0.08), PanelGlowColor/Brush (#7C5CFF) dan AccentShadowColor; lapisan tepi + glow dipasang di dalam IslandHost tanpa mengubah SetWindowRgn.
 - Glow panel aktif hanya untuk Expanded/Lyrics/Focus (Idle & Peek tanpa glow); bayangan PlayButton dan tombol Pause Fokus disamakan (opacity 0.40, blur 14, depth 4, arah bawah).
 - Build Release 0 error/0 warning; instance lama dihentikan hanya untuk melepas lock exe; visual belum diverifikasi agen.
-- Sesi 17b: turunkan Opacity Ellipse PanelGlow 0.22 → 0.15 di MainWindow.xaml; token warna dan blur tidak berubah; build Release 0 error/0 warning.
-- Sesi 18: token double PanelGlowOpacity per tema (Graphite/Void 0.0, Light 0.15) + Opacity Ellipse via DynamicResource; glow mati total di tema gelap, tetap 0.15 di Terang; build Release 0 error/0 warning.
+- Sesi 17b–18: PanelGlow 0.22 → 0.15 lalu token PanelGlowOpacity per tema (Graphite/Void 0.0, Light 0.15) via DynamicResource; glow mati di tema gelap; build Release 0 error.
+- Sesi 19: font 6 view ke tangga resmi (Focus timer 32 Light; lirik non-aktif 13; Hub clock 18); margin/padding kelipatan 4 dan radius panel 24/kartu 16/artwork 12-8; EqBars Idle 4×2 px, 4–14 px, 0.8/0.9/1.1/1.3 dtk; MorphEase bersama untuk morph 300–340 ms + crossfade konten mulai bersamaan; build Release 0 error.
+- Sesi 20: regresi Lyrics compact—padding akar 16 menyisakan 11 px untuk baris lirik di tinggi tetap 76; margin akar compact 8 (full tetap 16) dan baris aktif full tanpa margin; full tetap 142/compact 76; build Release 0 error.
 
 ### 2026-11-12
 - Sesi 15–16: perbaikan gaya A (4 fase + return halus) lalu perbaikan klip: Grid langsung membuat layout slot teks 93 px walau ActualWidth selebar konten, sehingga layout clip memotong glif >93 (probe: ink 0..92; Slide -54 hanya sampai x=38). `Line` dibungkus StackPanel horizontal → DesiredSize/ActualWidth selebar konten, clip hanya di Host (probe: Slide -54 mencapai x=90), tanpa trimming; build Release 0 error. MarqueeDiag dan seluruh log sudah dicabut sebelumnya.

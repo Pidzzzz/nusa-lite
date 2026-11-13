@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using NusaLite.Infrastructure;
 using NusaLite.Models;
 
 namespace NusaLite;
@@ -53,11 +54,11 @@ public partial class MainWindow
             var active = dotView == _view;
             var target = active ? 16.0 : 4.0;
             var from = dot.ActualWidth > 0 ? dot.ActualWidth : target;
-            var ease = new CubicEase { EasingMode = EasingMode.EaseOut };
+            var ease = MorphEase.Shared;
 
             dot.Width = target;
             dot.Background = active ? AccentFor(dotView) : _dotIdleBrush;
-            dot.BeginAnimation(WidthProperty, new DoubleAnimation(from, target, TimeSpan.FromMilliseconds(180))
+            dot.BeginAnimation(WidthProperty, new DoubleAnimation(from, target, TimeSpan.FromMilliseconds(150))
             {
                 EasingFunction = ease,
                 FillBehavior = FillBehavior.Stop
@@ -65,7 +66,7 @@ public partial class MainWindow
             dot.BeginAnimation(OpacityProperty, new DoubleAnimation(
                 dot.Opacity,
                 active ? 1.0 : 0.7,
-                TimeSpan.FromMilliseconds(180))
+                TimeSpan.FromMilliseconds(150))
             {
                 EasingFunction = ease
             });
@@ -88,8 +89,8 @@ public partial class MainWindow
             _dotsVisible = visible;
             DotsBar.IsHitTestVisible = visible;
             var beginTime = visible ? TimeSpan.FromMilliseconds(fast ? 40 : 190) : TimeSpan.Zero;
-            var duration = TimeSpan.FromMilliseconds(visible ? 220 : 140);
-            var ease = new CubicEase { EasingMode = EasingMode.EaseOut };
+            var duration = TimeSpan.FromMilliseconds(150);
+            var ease = MorphEase.Shared;
             var fromY = DotsSlide.Y;
 
             DotsSlide.BeginAnimation(TranslateTransform.YProperty, null);

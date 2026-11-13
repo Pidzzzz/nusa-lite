@@ -114,11 +114,12 @@ public partial class LyricsView : UserControl
         PrevLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
         NextLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
 
+        Root.Margin = compact ? new Thickness(16, 8, 16, 8) : new Thickness(16);
         Divider.Margin = compact ? new Thickness(0, 2, 10, 2) : new Thickness(0, 2, 12, 2);
         LyricHost.Margin = compact ? new Thickness(12, 0, 0, 0) : new Thickness(14, 0, 0, 0);
 
-        CurrentLine.FontSize = compact ? 13.5 : 15.5;
+        CurrentLine.FontSize = compact ? 13.5 : 15;
         CurrentLine.LineHeight = compact ? 17 : 19;
-        CurrentLine.Margin = compact ? new Thickness(0, 2, 0, 2) : new Thickness(0, 3, 0, 3);
+        CurrentLine.Margin = compact ? new Thickness(0, 2, 0, 2) : new Thickness(0);
     }
 }

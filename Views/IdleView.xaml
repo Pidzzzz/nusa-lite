@@ -22,7 +22,7 @@
             </StackPanel.Style>
 
             <Path Width="14" Height="14" Stretch="Uniform"
-                  Margin="0,0,7,0" VerticalAlignment="Center"
+                  Margin="0,0,8,0" VerticalAlignment="Center"
                   Visibility="{Binding HasSourceIcon, Converter={StaticResource BoolVis}}">
                 <Path.Style>
                     <Style TargetType="Path">
@@ -62,17 +62,17 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding ShowAltHint, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolVis}}">
             <TextBlock Text="Tahan" FontFamily="{StaticResource UiFont}" FontSize="10"
-                       Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                       Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="0,0,4,0" />
             <Border Background="{DynamicResource AccentTintBrush}" BorderBrush="{DynamicResource AccentTint40Brush}" BorderThickness="1"
                     CornerRadius="4,3,4,3" Padding="4,0" VerticalAlignment="Center">
-                <TextBlock Text="Alt" FontFamily="{StaticResource UiFont}" FontSize="8.5"
+                <TextBlock Text="Alt" FontFamily="{StaticResource UiFont}" FontSize="10"
                            Foreground="{DynamicResource InkBrush}" />
             </Border>
             <TextBlock Text="untuk membuka" FontFamily="{StaticResource UiFont}" FontSize="10"
-                       Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="6,0,0,0" />
+                       Foreground="{DynamicResource MistBrush}" VerticalAlignment="Center" Margin="8,0,0,0" />
         </StackPanel>
 
-        <controls:EqBars Width="17" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center"
+        <controls:EqBars Width="16" Height="14" HorizontalAlignment="Right" VerticalAlignment="Center"
                          Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
 
         <Ellipse Width="4.5" Height="4.5" Fill="{DynamicResource RoseBrush}" HorizontalAlignment="Right"
