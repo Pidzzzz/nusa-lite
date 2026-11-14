@@ -185,8 +185,20 @@ public partial class MainWindow
     private IslandSpec BuildIdleSpec()
     {
         var widest = MeasureTextWidth(_viewModel.IdleLine, _uiFont, 13.5, FontWeights.Medium);
-        var width = Math.Ceiling((widest + 88 + (_viewModel.HasSourceIcon ? 24 : 0)) / 12) * 12;
-        width = Math.Clamp(width, 216, 400);
+        var width = Math.Clamp(
+            Math.Ceiling((widest + 88 + (_viewModel.HasSourceIcon ? 24 : 0)) / 12) * 12, 216, 400);
+
+        if (_viewModel.PomodoroActive)
+        {
+            var label = Math.Max(
+                MeasureTextWidth("F\u200AO\u200AK\u200AU\u200AS", _uiFont, 9, FontWeights.Normal),
+                MeasureTextWidth("I\u200AS\u200AT\u200AI\u200AR\u200AA\u200AH\u200AA\u200AT", _uiFont, 9, FontWeights.Normal));
+            var time = MeasureTextWidth(
+                string.IsNullOrEmpty(_viewModel.PomodoroTime) ? "00:00" : _viewModel.PomodoroTime,
+                _uiFont, 12, FontWeights.Normal);
+            width = Math.Ceiling((width + 12 + 14 + 6 + label + 6 + time) / 12) * 12;
+        }
+
         return new IslandSpec(width, 40, 20, 0);
     }
 

@@ -385,6 +385,7 @@ public partial class MainWindow : Window
                 case nameof(MainViewModel.IdleLine):
                 case nameof(MainViewModel.TrackTitle):
                 case nameof(MainViewModel.HasMedia):
+                case nameof(MainViewModel.PomodoroActive):
                     UpdateIdleLayout();
                     break;
             }

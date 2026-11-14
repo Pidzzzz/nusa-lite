@@ -9,6 +9,25 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" ClipToBounds="True" IsHitTestVisible="False">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="OpacityMask" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PomodoroActive}" Value="True">
+                            <Setter Property="OpacityMask">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Offset="0" Color="#FF000000" />
+                                        <GradientStop Offset="0.88" Color="#FF000000" />
+                                        <GradientStop Offset="1" Color="#00000000" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
         <Path Data="{StaticResource IconBolt}" Fill="{DynamicResource MintBrush}" Width="9" Height="9" Stretch="Uniform"
               HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False"
               Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
@@ -103,7 +122,7 @@
             </Ellipse>
 
             <Button x:Name="FocusChip" Click="FocusChip_Click" Cursor="Hand" Focusable="False"
-                    VerticalAlignment="Center" Margin="10,0,0,0"
+                    VerticalAlignment="Center" Margin="12,0,0,0"
                     ToolTip="Timer Fokus — klik untuk membuka"
                     Visibility="{Binding PomodoroActive, Converter={StaticResource BoolVis}}">
                 <Button.Style>
@@ -125,9 +144,12 @@
                     </ControlTemplate>
                 </Button.Template>
                 <StackPanel Orientation="Horizontal">
-                    <controls:ArcRing Width="12" Height="12" Percent="{Binding PomodoroProgress}" Thickness="1.5"
+                    <controls:ArcRing Width="14" Height="14" Percent="{Binding PomodoroProgress}" Thickness="2"
                                       VerticalAlignment="Center"
-                                      TrackBrush="{DynamicResource TrackSoft20Brush}">
+                                      TrackBrush="{DynamicResource RingTrackBrush}">
+                        <controls:ArcRing.RenderTransform>
+                            <TranslateTransform Y="-1" />
+                        </controls:ArcRing.RenderTransform>
                         <controls:ArcRing.Style>
                             <Style TargetType="controls:ArcRing">
                                 <Setter Property="Stroke" Value="{DynamicResource EmberBrush}" />
@@ -140,6 +162,9 @@
                         </controls:ArcRing.Style>
                     </controls:ArcRing>
                     <TextBlock VerticalAlignment="Center" Margin="6,0,0,0">
+                        <TextBlock.RenderTransform>
+                            <TranslateTransform Y="1" />
+                        </TextBlock.RenderTransform>
                         <TextBlock.Style>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource TinyText}">
                                 <Setter Property="FontSize" Value="9" />
@@ -156,7 +181,11 @@
                     </TextBlock>
                     <TextBlock Style="{StaticResource TinyText}" FontSize="12" LineHeight="15"
                                Text="{Binding PomodoroTime}" Typography.NumeralAlignment="Tabular"
-                               VerticalAlignment="Center" Margin="6,0,0,0" />
+                               VerticalAlignment="Center" Margin="6,0,0,0">
+                        <TextBlock.RenderTransform>
+                            <TranslateTransform Y="0.5" />
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>
