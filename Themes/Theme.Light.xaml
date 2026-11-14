@@ -4,7 +4,7 @@
 
     <Color x:Key="VoidColor">#F3F1F8</Color>
     <Color x:Key="InkColor">#1B1726</Color>
-    <Color x:Key="MistColor">#6B6478</Color>
+    <Color x:Key="MistColor">#4C4659</Color>
     <Color x:Key="CyanColor">#0A6E92</Color>
     <Color x:Key="IndigoColor">#4738C0</Color>
     <Color x:Key="VioletColor">#5A37C9</Color>
@@ -15,6 +15,9 @@
     <Color x:Key="AquaColor">#0B6E7E</Color>
     <Color x:Key="LimeColor">#667D1C</Color>
     <Color x:Key="OrchidColor">#4F35C8</Color>
+
+    <FontWeight x:Key="SecondaryTextWeight">Regular</FontWeight>
+    <FontWeight x:Key="MicroTextWeight">Medium</FontWeight>
 
     <SolidColorBrush x:Key="VoidBrush" Color="{StaticResource VoidColor}" />
     <SolidColorBrush x:Key="InkBrush" Color="{StaticResource InkColor}" />
@@ -123,8 +126,8 @@
     <Color x:Key="FillFaint12Color">#12000000</Color>
     <Color x:Key="LineSoft1FColor">#1F000000</Color>
     <Color x:Key="TrackSoft20Color">#20000000</Color>
-    <Color x:Key="TextGhost59Color">#59000000</Color>
-    <Color x:Key="TextMuted66Color">#66000000</Color>
+    <Color x:Key="TextGhost59Color">#7A000000</Color>
+    <Color x:Key="TextMuted66Color">#80000000</Color>
     <Color x:Key="AccentTint12Color">#126A5AE0</Color>
     <Color x:Key="AccentTint18Color">#186A5AE0</Color>
     <Color x:Key="AccentTint1EColor">#1E6A5AE0</Color>
@@ -142,6 +145,7 @@
     <SolidColorBrush x:Key="FillFaint12Brush" Color="{StaticResource FillFaint12Color}" />
     <SolidColorBrush x:Key="LineSoft1FBrush" Color="{StaticResource LineSoft1FColor}" />
     <SolidColorBrush x:Key="TrackSoft20Brush" Color="{StaticResource TrackSoft20Color}" />
+    <SolidColorBrush x:Key="RingTrackBrush" Color="#1A000000" />
     <SolidColorBrush x:Key="TextGhost59Brush" Color="{StaticResource TextGhost59Color}" />
     <SolidColorBrush x:Key="TextMuted66Brush" Color="{StaticResource TextMuted66Color}" />
     <SolidColorBrush x:Key="AccentTint12Brush" Color="{StaticResource AccentTint12Color}" />

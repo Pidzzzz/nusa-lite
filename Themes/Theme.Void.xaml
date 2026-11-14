@@ -16,6 +16,9 @@
     <Color x:Key="LimeColor">#C7F36B</Color>
     <Color x:Key="OrchidColor">#7C5CFF</Color>
 
+    <FontWeight x:Key="SecondaryTextWeight">Normal</FontWeight>
+    <FontWeight x:Key="MicroTextWeight">Normal</FontWeight>
+
     <SolidColorBrush x:Key="VoidBrush" Color="{StaticResource VoidColor}" />
     <SolidColorBrush x:Key="InkBrush" Color="{StaticResource InkColor}" />
     <SolidColorBrush x:Key="MistBrush" Color="{StaticResource MistColor}" />
@@ -147,6 +150,7 @@
     <SolidColorBrush x:Key="FillFaint12Brush" Color="{StaticResource FillFaint12Color}" />
     <SolidColorBrush x:Key="LineSoft1FBrush" Color="{StaticResource LineSoft1FColor}" />
     <SolidColorBrush x:Key="TrackSoft20Brush" Color="{StaticResource TrackSoft20Color}" />
+    <SolidColorBrush x:Key="RingTrackBrush" Color="#1AFFFFFF" />
     <SolidColorBrush x:Key="TextGhost59Brush" Color="{StaticResource TextGhost59Color}" />
     <SolidColorBrush x:Key="TextMuted66Brush" Color="{StaticResource TextMuted66Color}" />
     <SolidColorBrush x:Key="AccentTint12Brush" Color="{StaticResource AccentTint12Color}" />

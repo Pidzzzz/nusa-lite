@@ -64,37 +64,31 @@
                                TextTrimming="CharacterEllipsis" />
                 </StackPanel>
 
-                <Grid x:Name="FocusChipHost" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                <Grid x:Name="FocusChipHost" Grid.Column="1" Margin="8,2,0,0" VerticalAlignment="Top">
                     <Button x:Name="FocusChip" Click="FocusChip_Click" Cursor="Hand" Focusable="False"
                             ToolTip="Timer Fokus — klik untuk membuka"
                             Visibility="{Binding PomodoroActive, Converter={StaticResource BoolVis}}">
                         <Button.Style>
                             <Style TargetType="Button">
-                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Opacity" Value="0.75" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding PomodoroRunning}" Value="False">
-                                        <Setter Property="Opacity" Value="0.55" />
+                                        <Setter Property="Opacity" Value="0.5" />
                                     </DataTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </Trigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border x:Name="ChipBorder" CornerRadius="999"
-                                        Background="{DynamicResource SoftFillBrush}"
-                                        BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
-                                        Padding="6,3">
-                                    <ContentPresenter />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="ChipBorder" Property="BorderBrush" Value="{DynamicResource LineStrongBrush}" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
+                                <ContentPresenter />
                             </ControlTemplate>
                         </Button.Template>
                         <StackPanel Orientation="Horizontal">
-                            <controls:ArcRing Width="16" Height="16" Percent="{Binding PomodoroProgress}" Thickness="2"
+                            <controls:ArcRing Width="13" Height="13" Percent="{Binding PomodoroProgress}" Thickness="1.5"
+                                              VerticalAlignment="Center"
                                               TrackBrush="{DynamicResource TrackSoft20Brush}">
                                 <controls:ArcRing.Style>
                                     <Style TargetType="controls:ArcRing">
@@ -107,26 +101,24 @@
                                     </Style>
                                 </controls:ArcRing.Style>
                             </controls:ArcRing>
-                            <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
-                                <TextBlock HorizontalAlignment="Left">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock" BasedOn="{StaticResource TinyText}">
-                                            <Setter Property="FontSize" Value="9" />
-                                            <Setter Property="LineHeight" Value="11" />
-                                            <Setter Property="Opacity" Value="0.85" />
-                                            <Setter Property="Text" Value="F&#x200A;O&#x200A;K&#x200A;U&#x200A;S" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
-                                                    <Setter Property="Text" Value="I&#x200A;S&#x200A;T&#x200A;I&#x200A;R&#x200A;A&#x200A;H&#x200A;A&#x200A;T" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <TextBlock Style="{StaticResource TinyText}" FontSize="10"
-                                           Text="{Binding PomodoroTime}" Typography.NumeralAlignment="Tabular"
-                                           HorizontalAlignment="Left" />
-                            </StackPanel>
+                            <TextBlock VerticalAlignment="Center" Margin="6,0,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource TinyText}">
+                                        <Setter Property="FontSize" Value="9" />
+                                        <Setter Property="LineHeight" Value="11" />
+                                        <Setter Property="FontWeight" Value="{DynamicResource MicroTextWeight}" />
+                                        <Setter Property="Text" Value="F&#x200A;O&#x200A;K&#x200A;U&#x200A;S" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
+                                                <Setter Property="Text" Value="I&#x200A;S&#x200A;T&#x200A;I&#x200A;R&#x200A;A&#x200A;H&#x200A;A&#x200A;T" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Style="{StaticResource TinyText}" FontSize="12.5" LineHeight="15"
+                                       Text="{Binding PomodoroTime}" Typography.NumeralAlignment="Tabular"
+                                       VerticalAlignment="Center" Margin="6,0,0,0" />
                         </StackPanel>
                     </Button>
                 </Grid>

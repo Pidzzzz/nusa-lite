@@ -10,6 +10,7 @@
         <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
         <Setter Property="FontSize" Value="12.5" />
         <Setter Property="LineHeight" Value="16.5" />
+        <Setter Property="FontWeight" Value="{DynamicResource SecondaryTextWeight}" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>

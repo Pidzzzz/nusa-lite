@@ -669,6 +669,14 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     public bool PomodoroActive => _pomodoro.IsSessionActive;
 
+    public string PomodoroPrimaryLabel => _pomodoro.IsRunning
+        ? "Jeda"
+        : _pomodoro.IsSessionActive ? "Lanjut" : "Mulai";
+
+    public string PomodoroEndLabel => _pomodoro.IsSessionActive
+        ? $"selesai pukul {DateTime.Now.Add(_pomodoro.Remaining):HH:mm}"
+        : _pomodoro.DurationText;
+
     public string PomodoroDuration => _pomodoro.DurationText;
 
     public bool PomodoroIsBreak => _pomodoro.Phase == PomodoroPhase.Break;
@@ -688,6 +696,8 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(PomodoroStartLabel));
         OnPropertyChanged(nameof(PomodoroRunning));
         OnPropertyChanged(nameof(PomodoroActive));
+        OnPropertyChanged(nameof(PomodoroPrimaryLabel));
+        OnPropertyChanged(nameof(PomodoroEndLabel));
         OnPropertyChanged(nameof(PomodoroDuration));
         OnPropertyChanged(nameof(PomodoroIsBreak));
     }
