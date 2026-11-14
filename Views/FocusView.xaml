@@ -24,6 +24,7 @@
                 </controls:ArcRing.Style>
             </controls:ArcRing>
             <TextBlock Text="{Binding PomodoroTime}"
+                       Foreground="{DynamicResource InkBrush}"
                        FontFamily="{StaticResource DisplayFont}" FontSize="28" FontWeight="Normal"
                        LineHeight="32" Typography.NumeralAlignment="Tabular"
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
