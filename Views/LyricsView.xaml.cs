@@ -8,15 +8,52 @@ namespace NusaLite.Views;
 
 public partial class LyricsView : UserControl
 {
+    private const bool LyricsActiveGlowEnabled = false;
+
     private MainViewModel? _vm;
     private bool? _compact;
 
     public LyricsView()
     {
         InitializeComponent();
+        ApplyActiveGlow();
         DataContextChanged += OnDataContextChanged;
         Loaded += (_, _) => Attach();
         Unloaded += (_, _) => Detach();
+    }
+
+    private void ApplyActiveGlow()
+    {
+        if (LyricsActiveGlowEnabled)
+        {
+            ActiveGlow.Visibility = Visibility.Visible;
+            ActiveGlow.Background = (System.Windows.Media.Brush)FindResource("LyricsGlowFillBrush");
+            ActiveGlow.BorderBrush = (System.Windows.Media.Brush)FindResource("LyricsGlowBorderBrush");
+            ActiveGlow.BorderThickness = new Thickness(1);
+            if (ActiveGlow.Effect is null)
+            {
+                ActiveGlow.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                {
+                    Color = (System.Windows.Media.Color)FindResource("AccentShadowColor"),
+                    BlurRadius = 24,
+                    ShadowDepth = 0,
+                    Opacity = 0.2
+                };
+            }
+
+            FadeTop.Visibility = Visibility.Visible;
+            FadeBottom.Visibility = Visibility.Visible;
+            return;
+        }
+
+        ActiveGlow.Visibility = Visibility.Collapsed;
+        ActiveGlow.Background = System.Windows.Media.Brushes.Transparent;
+        ActiveGlow.BorderBrush = System.Windows.Media.Brushes.Transparent;
+        ActiveGlow.BorderThickness = new Thickness(0);
+        ActiveGlow.Effect = null;
+
+        FadeTop.Visibility = Visibility.Collapsed;
+        FadeBottom.Visibility = Visibility.Collapsed;
     }
 
     private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -100,12 +137,11 @@ public partial class LyricsView : UserControl
 
     private void ApplyCompact(bool compact)
     {
-        var artSize = compact ? 40.0 : 56.0;
-        ArtColumn.Width = compact ? 46 : 66;
-        ArtBox.Width = artSize;
-        ArtBox.Height = artSize;
+        ArtColumn.Width = compact ? 46 : 56;
+        ArtBox.Width = 40;
+        ArtBox.Height = 40;
 
-        var radius = new CornerRadius(compact ? 12 : 16);
+        var radius = new CornerRadius(10);
         ArtPlaceholder.CornerRadius = radius;
         ArtImage.CornerRadius = radius;
         ArtOutline.CornerRadius = radius;
@@ -115,8 +151,8 @@ public partial class LyricsView : UserControl
         NextLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
 
         Root.Margin = compact ? new Thickness(16, 8, 16, 8) : new Thickness(16);
-        Divider.Margin = compact ? new Thickness(0, 2, 10, 2) : new Thickness(0, 2, 12, 2);
-        LyricHost.Margin = compact ? new Thickness(12, 0, 0, 0) : new Thickness(14, 0, 0, 0);
+        Divider.Margin = compact ? new Thickness(0, 2, 10, 2) : new Thickness(0, 4, 16, 4);
+        LyricHost.Margin = compact ? new Thickness(12, 0, 0, 0) : new Thickness(16, 0, 0, 0);
 
         CurrentLine.FontSize = compact ? 13.5 : 15;
         CurrentLine.LineHeight = compact ? 17 : 19;

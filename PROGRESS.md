@@ -5,10 +5,10 @@
 > Log harian: maks. 5 baris per hari, tanpa paste kode. Detail teknis masuk ke commit message / issue, bukan di sini.
 
 ## Status saat ini
-- Sedang dikerjakan: Sesi 20 — perbaikan regresi tinggi panel Lyrics compact yang terpotong sejak Sesi 19.
-- Terakhir selesai: akar masalah ditemukan—padding akar Lyrics 16 memakan 12 px dari tinggi tetap compact 76 sehingga baris lirik hanya tersisa 11 px; margin akar compact kini 8 (full tetap 16), tinggi full tetap 142 dan compact tetap 76; build Release 0 error/6 warning lama CS0169/CS0067.
-- Langkah berikutnya persis: user verifikasi visual full Lyrics 142 dan compact 76 (termasuk saat browser foreground); bila lolos, lanjut commit.
-- Blocker / keputusan penting: perubahan P2 lain (font, spacing, MorphEase, EqBars, radius) tidak diubah; artwork header/P3 tidak disentuh. Agen tidak menjalankan aplikasi atau berinteraksi desktop.
+- Sedang dikerjakan: —
+- Terakhir selesai: Sesi 21c — penyebab pita terang di balik baris aktif LyricsView ditemukan pasti: dua `Rectangle` vignette 40 px (`LyricsFadeTopBrush`/`LyricsFadeBottomBrush`) yang gradiennya berhenti di `Color="Transparent"` = `#00FFFFFF` (putih alfa 0), sehingga interpolasi VoidColor→PUTIH menghasilkan tint terang di area tumpang-tindih kedua rect — terbukti lewat pencocokan warna piksel (band ≈ rgb 67/66/74 = putih 50% di atas Void). Saat `LyricsActiveGlowEnabled = false` kedua vignette kini di-Collapse (tidak melukis apa pun di balik baris aktif); saat true keduanya Visible sehingga tampilan lama utuh. ActiveGlow (sejak Sesi 21 sudah Collapsed) dan PanelGlow (opasitas 0 di tema gelap) dipastikan bukan penyebab. Sakelar tetap false. Build Release 0 error.
+- Langkah berikutnya persis: user verifikasi visual — pastikan tidak ada lagi pita terang di balik baris aktif; bila kelak mengaktifkan sakelar, vignette + glow kembali seperti semula.
+- Blocker / keputusan penting: panel hanya menampilkan tiga baris (-1/0/+1); level -2/+2 belum punya elemen karena ViewModel hanya mengekspos prev/current/next — tidak diubah di sesi ini (bukan kerusakan). ScrollingText baris aktif tetap mengikuti siklus jeda-gulir-parkir untuk teks lebih lebar dari panel. Glow nonaktif default. Agen tidak menjalankan aplikasi atau berinteraksi desktop.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -26,6 +26,9 @@
 - Sesi 17b–18: PanelGlow 0.22 → 0.15 lalu token PanelGlowOpacity per tema (Graphite/Void 0.0, Light 0.15) via DynamicResource; glow mati di tema gelap; build Release 0 error.
 - Sesi 19: font 6 view ke tangga resmi (Focus timer 32 Light; lirik non-aktif 13; Hub clock 18); margin/padding kelipatan 4 dan radius panel 24/kartu 16/artwork 12-8; EqBars Idle 4×2 px, 4–14 px, 0.8/0.9/1.1/1.3 dtk; MorphEase bersama untuk morph 300–340 ms + crossfade konten mulai bersamaan; build Release 0 error.
 - Sesi 20: regresi Lyrics compact—padding akar 16 menyisakan 11 px untuk baris lirik di tinggi tetap 76; margin akar compact 8 (full tetap 16) dan baris aktif full tanpa margin; full tetap 142/compact 76; build Release 0 error.
+- Sesi 21: gradien lirik aktif per tema + glow aksen 20%/30% di balik sakelar mati; vignette 40 px; ScrollingText untuk judul/lirik dan MarqueeText dihapus; header 40/10, judul 15, artis 11, jarak header 8, divider 0.2; build Release 0 error.
+- Sesi 21b: perbaikan wadah glow baris aktif yang bocor visual saat sakelar mati — dulu hanya Visibility Collapsed sehingga bg 20%/border 30% tetap berpotensi ter-render; kini ApplyActiveGlow() menetralkan total (Background/Border Transparent, BorderThickness 0, Effect null) saat false dan memulihkan nilai penuh saat true; XAML rapi; tangga opasitas/gradien/vignette/ScrollingText/header tidak disentuh; build Release 0 error (build normal terblokir lock exe instance berjalan, verifikasi via output terpisah).
+- Sesi 21c: akar pita terang di balik baris aktif = dua Rectangle vignette 40 px; GradienStop `Transparent` = `#00FFFFFF` (putih alfa 0) sehingga gradien VoidColor→putih menint terang di area overlap dua rect (cocok dengan band terukur rgb 67/66/74). ActiveGlow sudah Collapsed sejak Sesi 21 dan PanelGlow opasitas 0 di tema gelap, jadi bukan sumbernya. Perbaikan: beri x:Name FadeTop/FadeBottom lalu ApplyActiveGlow() me-Collapse keduanya saat sakelar false, Visible saat true; sakelar tetap false; build Release 0 error.
 
 ### 2026-11-12
 - Sesi 15–16: perbaikan gaya A (4 fase + return halus) lalu perbaikan klip: Grid langsung membuat layout slot teks 93 px walau ActualWidth selebar konten, sehingga layout clip memotong glif >93 (probe: ink 0..92; Slide -54 hanya sampai x=38). `Line` dibungkus StackPanel horizontal → DesiredSize/ActualWidth selebar konten, clip hanya di Host (probe: Slide -54 mencapai x=90), tanpa trimming; build Release 0 error. MarqueeDiag dan seluruh log sudah dicabut sebelumnya.

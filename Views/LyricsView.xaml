@@ -3,6 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:NusaLite.Controls"
              Width="360" Height="142">
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="LyricsFadeTopBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="{DynamicResource VoidColor}" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="LyricsFadeBottomBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="1" Color="{DynamicResource VoidColor}" />
+        </LinearGradientBrush>
+    </UserControl.Resources>
+
     <Grid x:Name="Root" Margin="16">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -10,25 +21,25 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel x:Name="ArtColumn" Width="66" VerticalAlignment="Center">
-            <Grid x:Name="ArtBox" Width="56" Height="56" HorizontalAlignment="Left">
+        <StackPanel x:Name="ArtColumn" Width="56" VerticalAlignment="Center">
+            <Grid x:Name="ArtBox" Width="40" Height="40" HorizontalAlignment="Left">
                 <Grid.Effect>
                     <DropShadowEffect Color="{DynamicResource ShadowColor}" BlurRadius="20" ShadowDepth="0" Opacity="0.28" />
                 </Grid.Effect>
-                <Border x:Name="ArtPlaceholder" CornerRadius="8" Background="{DynamicResource AccentDiagonalBrush}"
+                <Border x:Name="ArtPlaceholder" CornerRadius="10" Background="{DynamicResource AccentDiagonalBrush}"
                         Visibility="{Binding HasArtwork, Converter={StaticResource InvBoolVis}}">
-                    <Path Data="{StaticResource IconMusic}" Fill="{DynamicResource TextFaintBrush}" Width="22" Height="22" Stretch="Uniform" Opacity="0.92" />
+                    <Path Data="{StaticResource IconMusic}" Fill="{DynamicResource TextFaintBrush}" Width="18" Height="18" Stretch="Uniform" Opacity="0.92" />
                 </Border>
-                <Border x:Name="ArtImage" CornerRadius="8">
+                <Border x:Name="ArtImage" CornerRadius="10">
                     <Border.Background>
                         <ImageBrush ImageSource="{Binding Artwork}" Stretch="UniformToFill" />
                     </Border.Background>
                 </Border>
-                <Border x:Name="ArtOutline" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource LineSoft1FBrush}" />
+                <Border x:Name="ArtOutline" CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource LineSoft1FBrush}" />
             </Grid>
         </StackPanel>
 
-        <Border x:Name="Divider" Grid.Column="1" Width="1" Background="{DynamicResource AmberBrush}" Opacity="0.4"
+        <Border x:Name="Divider" Grid.Column="1" Width="1" Background="{DynamicResource AmberBrush}" Opacity="0.2"
                 Margin="0,4,16,4" />
 
         <Grid x:Name="LyricHost" Grid.Column="2" Margin="16,0,0,0">
@@ -38,28 +49,46 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="0,0,0,4">
-                <controls:MarqueeText x:Name="TitleLine" Text="{Binding TrackTitle}"
-                                      FontFamily="{StaticResource DisplayFont}" FontSize="11"
-                                      FontWeight="SemiBold" LineHeight="19"
-                                      Foreground="{DynamicResource InkBrush}" />
+            <StackPanel Grid.Row="0" Margin="0,0,0,8">
+                <controls:ScrollingText x:Name="TitleLine" Text="{Binding TrackTitle}"
+                                        FontFamily="{StaticResource DisplayFont}" FontSize="15"
+                                        FontWeight="SemiBold" LineHeight="18"
+                                        Foreground="{DynamicResource InkBrush}" />
                 <TextBlock x:Name="ArtistLine" Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="11"
                            TextTrimming="CharacterEllipsis" />
             </StackPanel>
 
-            <StackPanel Grid.Row="1" VerticalAlignment="Top">
-                <controls:MarqueeText x:Name="PrevLine" Text="{Binding LyricPrev}"
-                                      FontFamily="{StaticResource UiFont}" FontSize="13" LineHeight="18"
-                                      Foreground="{DynamicResource TextGhost59Brush}" />
-                <controls:MarqueeText x:Name="CurrentLine" Text="{Binding LyricCurrent}"
-                                      FontFamily="{StaticResource DisplayFont}" FontSize="15"
-                                      FontWeight="SemiBold" LineHeight="19"
-                                      Foreground="{DynamicResource InkBrush}"
-                                      Margin="0" />
-                <controls:MarqueeText x:Name="NextLine" Text="{Binding LyricNext}"
-                                      FontFamily="{StaticResource UiFont}" FontSize="13" LineHeight="18"
-                                      Foreground="{DynamicResource TextGhost59Brush}" />
-            </StackPanel>
+            <Grid Grid.Row="1" ClipToBounds="True">
+                <StackPanel VerticalAlignment="Top">
+                    <controls:ScrollingText x:Name="PrevLine" Text="{Binding LyricPrev}"
+                                            FontFamily="{StaticResource UiFont}" FontSize="13" LineHeight="18"
+                                            Foreground="{DynamicResource InkBrush}" Opacity="0.40" />
+                    <Grid x:Name="ActiveLineHost">
+                        <Border x:Name="ActiveGlow" Margin="-8,0" CornerRadius="16"
+                                Background="{DynamicResource LyricsGlowFillBrush}"
+                                BorderBrush="{DynamicResource LyricsGlowBorderBrush}" BorderThickness="1"
+                                Visibility="Collapsed">
+                            <Border.Effect>
+                                <DropShadowEffect Color="{DynamicResource AccentShadowColor}" BlurRadius="24"
+                                                  ShadowDepth="0" Opacity="0.2" />
+                            </Border.Effect>
+                        </Border>
+                        <controls:ScrollingText x:Name="CurrentLine" Text="{Binding LyricCurrent}"
+                                                FontFamily="{StaticResource DisplayFont}" FontSize="15"
+                                                FontWeight="SemiBold" LineHeight="19"
+                                                Foreground="{DynamicResource LyricsActiveBrush}"
+                                                Margin="0" />
+                    </Grid>
+                    <controls:ScrollingText x:Name="NextLine" Text="{Binding LyricNext}"
+                                            FontFamily="{StaticResource UiFont}" FontSize="13" LineHeight="18"
+                                            Foreground="{DynamicResource InkBrush}" Opacity="0.50" />
+                </StackPanel>
+
+                <Rectangle x:Name="FadeTop" Height="40" VerticalAlignment="Top" Fill="{StaticResource LyricsFadeTopBrush}"
+                           IsHitTestVisible="False" />
+                <Rectangle x:Name="FadeBottom" Height="40" VerticalAlignment="Bottom" Fill="{StaticResource LyricsFadeBottomBrush}"
+                           IsHitTestVisible="False" />
+            </Grid>
 
             <StackPanel x:Name="OffsetPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{StaticResource IconButton}" Width="18" Height="16" Click="OffsetMinus_Click"

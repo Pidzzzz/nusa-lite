@@ -43,6 +43,14 @@
         <GradientStop Offset="1" Color="{StaticResource OrchidColor}" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="LyricsActiveBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Offset="0" Color="#CDB4FF" />
+        <GradientStop Offset="1" Color="#9D7BFF" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="LyricsGlowFillBrush" Color="#33CDB4FF" />
+    <SolidColorBrush x:Key="LyricsGlowBorderBrush" Color="#4DCDB4FF" />
+
     <LinearGradientBrush x:Key="AquaBrush" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Offset="0" Color="{StaticResource MintColor}" />
         <GradientStop Offset="1" Color="{StaticResource AquaColor}" />
