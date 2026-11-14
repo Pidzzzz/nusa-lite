@@ -50,6 +50,9 @@ public sealed class PomodoroService : IDisposable
 
     public bool IsRunning => _running;
 
+    public bool IsSessionActive => _running
+        || (_durationSeconds > 0 && Remaining.TotalSeconds < _durationSeconds);
+
     public int SessionsCompleted { get; private set; }
 
     public string PhaseLabel => Phase == PomodoroPhase.Focus ? "Fokus" : "Istirahat";

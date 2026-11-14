@@ -6,9 +6,9 @@
 
 ## Status saat ini
 - Sedang dikerjakan: —
-- Terakhir selesai: Sesi 21c — penyebab pita terang di balik baris aktif LyricsView ditemukan pasti: dua `Rectangle` vignette 40 px (`LyricsFadeTopBrush`/`LyricsFadeBottomBrush`) yang gradiennya berhenti di `Color="Transparent"` = `#00FFFFFF` (putih alfa 0), sehingga interpolasi VoidColor→PUTIH menghasilkan tint terang di area tumpang-tindih kedua rect — terbukti lewat pencocokan warna piksel (band ≈ rgb 67/66/74 = putih 50% di atas Void). Saat `LyricsActiveGlowEnabled = false` kedua vignette kini di-Collapse (tidak melukis apa pun di balik baris aktif); saat true keduanya Visible sehingga tampilan lama utuh. ActiveGlow (sejak Sesi 21 sudah Collapsed) dan PanelGlow (opasitas 0 di tema gelap) dipastikan bukan penyebab. Sakelar tetap false. Build Release 0 error.
-- Langkah berikutnya persis: user verifikasi visual — pastikan tidak ada lagi pita terang di balik baris aktif; bila kelak mengaktifkan sakelar, vignette + glow kembali seperti semula.
-- Blocker / keputusan penting: panel hanya menampilkan tiga baris (-1/0/+1); level -2/+2 belum punya elemen karena ViewModel hanya mengekspos prev/current/next — tidak diubah di sesi ini (bukan kerusakan). ScrollingText baris aktif tetap mengikuti siklus jeda-gulir-parkir untuk teks lebih lebar dari panel. Glow nonaktif default. Agen tidak menjalankan aplikasi atau berinteraksi desktop.
+- Terakhir selesai: Sesi 23 — chip Timer Fokus kini menjelaskan diri: label fase mungil 9 px kapital ber-hair-space ("FOKUS"/"ISTIRAHAT" mengikuti `PomodoroIsBreak`) ditumpuk di atas angka waktu, memakai token redup yang sama dan tidak lebih menonjol dari angka; cincin tetap pembawa warna fase. ToolTip chip jadi "Timer Fokus — klik untuk membuka". Perilaku Sesi 22 utuh (muncul saat sesi hidup, meredup 0,55 saat jeda, Collapsed saat selesai/compact, klik RequestView(Focus)); tumpukan label+waktu muat di tinggi header, tinggi/margin panel 142/76 tidak berubah. Build Release 0 error.
+- Langkah berikutnya persis: user verifikasi visual 3 tema — label fase terbaca, tidak melebihi tinggi header, tooltip muncul, perilaku chip tetap seperti Sesi 22.
+- Blocker / keputusan penting: build normal terblokir lock exe instance berjalan (PID 1896) sehingga verifikasi compile memakai output terpisah; aplikasi tidak dihentikan. Chip tetap tanpa glow; baris lirik aktif tetap satu-satunya elemen bersinar. WPF tidak punya properti letter-spacing, jadi jarak huruf label didekati dengan hair space (U+200A) di dalam teks.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -19,6 +19,10 @@
 - [ ] Installer dan build release otomatis
 
 ## Log harian
+### 2026-11-14
+- Sesi 23: chip Timer Fokus diberi label fase mungil di atas waktu ("FOKUS"/"ISTIRAHAT", 9 px kapital ber-hair-space, token redup sama dengan angka), cincin tetap warna fase; tooltip "Timer Fokus — klik untuk membuka"; perilaku Sesi 22 (visibilitas, redam jeda 0.55, compact, klik RequestView) dan tinggi/margin panel tidak berubah; build Release 0 error (build normal terblokir lock exe, verifikasi via output terpisah).
+- Sesi 22: chip Timer Fokus menyatu di header LyricsView full (kanan judul): ArcRing 16 px + sisa waktu tabular m:ss; tampil hanya saat sesi Pomodoro hidup (berjalan/jeda) via binding PomodoroActive baru (turunan IsSessionActive di PomodoroService, tanpa timer/state duplikat); jeda meredup 0.55; busur mengikuti fase FocusView (Ember/Mint); klik pindah ke view Fokus lewat RequestView; hidden di strip compact; tinggi/margin/tangga opasitas/gradien/vignette/artwork tidak disentuh; build Release 0 error (build normal terblokir lock exe, verifikasi via output terpisah).
+
 ### 2026-11-13
 - Sesi 17: tambah token EdgeHi/EdgeLo/IslandEdgeBrush (putih 0.16→0 di 6% atas, hitam 0.35 di 3% bawah; Terang dibalik: putih 0.5 / hitam 0.08), PanelGlowColor/Brush (#7C5CFF) dan AccentShadowColor; lapisan tepi + glow dipasang di dalam IslandHost tanpa mengubah SetWindowRgn.
 - Glow panel aktif hanya untuk Expanded/Lyrics/Focus (Idle & Peek tanpa glow); bayangan PlayButton dan tombol Pause Fokus disamakan (opacity 0.40, blur 14, depth 4, arah bawah).

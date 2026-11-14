@@ -49,14 +49,88 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="0,0,0,8">
-                <controls:ScrollingText x:Name="TitleLine" Text="{Binding TrackTitle}"
-                                        FontFamily="{StaticResource DisplayFont}" FontSize="15"
-                                        FontWeight="SemiBold" LineHeight="18"
-                                        Foreground="{DynamicResource InkBrush}" />
-                <TextBlock x:Name="ArtistLine" Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="11"
-                           TextTrimming="CharacterEllipsis" />
-            </StackPanel>
+            <Grid Grid.Row="0" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <controls:ScrollingText x:Name="TitleLine" Text="{Binding TrackTitle}"
+                                            FontFamily="{StaticResource DisplayFont}" FontSize="15"
+                                            FontWeight="SemiBold" LineHeight="18"
+                                            Foreground="{DynamicResource InkBrush}" />
+                    <TextBlock x:Name="ArtistLine" Text="{Binding TrackArtist}" Style="{StaticResource TinyText}" FontSize="11"
+                               TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+
+                <Grid x:Name="FocusChipHost" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                    <Button x:Name="FocusChip" Click="FocusChip_Click" Cursor="Hand" Focusable="False"
+                            ToolTip="Timer Fokus — klik untuk membuka"
+                            Visibility="{Binding PomodoroActive, Converter={StaticResource BoolVis}}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Opacity" Value="1" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PomodoroRunning}" Value="False">
+                                        <Setter Property="Opacity" Value="0.55" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="ChipBorder" CornerRadius="999"
+                                        Background="{DynamicResource SoftFillBrush}"
+                                        BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                                        Padding="6,3">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ChipBorder" Property="BorderBrush" Value="{DynamicResource LineStrongBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <StackPanel Orientation="Horizontal">
+                            <controls:ArcRing Width="16" Height="16" Percent="{Binding PomodoroProgress}" Thickness="2"
+                                              TrackBrush="{DynamicResource TrackSoft20Brush}">
+                                <controls:ArcRing.Style>
+                                    <Style TargetType="controls:ArcRing">
+                                        <Setter Property="Stroke" Value="{DynamicResource EmberBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
+                                                <Setter Property="Stroke" Value="{DynamicResource MintBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </controls:ArcRing.Style>
+                            </controls:ArcRing>
+                            <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
+                                <TextBlock HorizontalAlignment="Left">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource TinyText}">
+                                            <Setter Property="FontSize" Value="9" />
+                                            <Setter Property="LineHeight" Value="11" />
+                                            <Setter Property="Opacity" Value="0.85" />
+                                            <Setter Property="Text" Value="F&#x200A;O&#x200A;K&#x200A;U&#x200A;S" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
+                                                    <Setter Property="Text" Value="I&#x200A;S&#x200A;T&#x200A;I&#x200A;R&#x200A;A&#x200A;H&#x200A;A&#x200A;T" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource TinyText}" FontSize="10"
+                                           Text="{Binding PomodoroTime}" Typography.NumeralAlignment="Tabular"
+                                           HorizontalAlignment="Left" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
 
             <Grid Grid.Row="1" ClipToBounds="True">
                 <StackPanel VerticalAlignment="Top">

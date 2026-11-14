@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using NusaLite.Models;
 using NusaLite.ViewModels;
 
 namespace NusaLite.Views;
@@ -110,6 +111,8 @@ public partial class LyricsView : UserControl
             System.Windows.Media.TranslateTransform.YProperty, slide);
     }
 
+    private void FocusChip_Click(object sender, RoutedEventArgs e) => _vm?.RequestView(IslandView.Focus);
+
     private void OffsetMinus_Click(object sender, RoutedEventArgs e) => _vm?.ShiftLyricOffset(-500);
 
     private void OffsetPlus_Click(object sender, RoutedEventArgs e) => _vm?.ShiftLyricOffset(500);
@@ -149,6 +152,7 @@ public partial class LyricsView : UserControl
         TitleLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
         PrevLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
         NextLine.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+        FocusChipHost.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
 
         Root.Margin = compact ? new Thickness(16, 8, 16, 8) : new Thickness(16);
         Divider.Margin = compact ? new Thickness(0, 2, 10, 2) : new Thickness(0, 4, 16, 4);

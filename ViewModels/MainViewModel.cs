@@ -667,6 +667,8 @@ public sealed class MainViewModel : ObservableObject, IDisposable
 
     public bool PomodoroRunning => _pomodoro.IsRunning;
 
+    public bool PomodoroActive => _pomodoro.IsSessionActive;
+
     public string PomodoroDuration => _pomodoro.DurationText;
 
     public bool PomodoroIsBreak => _pomodoro.Phase == PomodoroPhase.Break;
@@ -685,6 +687,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(PomodoroSessions));
         OnPropertyChanged(nameof(PomodoroStartLabel));
         OnPropertyChanged(nameof(PomodoroRunning));
+        OnPropertyChanged(nameof(PomodoroActive));
         OnPropertyChanged(nameof(PomodoroDuration));
         OnPropertyChanged(nameof(PomodoroIsBreak));
     }
