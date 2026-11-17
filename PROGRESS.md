@@ -6,9 +6,9 @@
 
 ## Status saat ini
 - Sedang dikerjakan: —
-- Terakhir selesai: Sesi 31 — ekor lirik Idle diperbaiki. Penyebab terbukti (b): fade OpacityMask 12% kolom konten (≈43–45 px) menutupi 19–23 px tepi kanan ticker 320 px sehingga ellipsis dirender pada alpha ≈0,46–0,58. Idle memakai `LyricTicker` + `TextTrimming`, bukan `ScrollingText`, jadi tersangka (a) gugur. Perbaikan: viewport ticker dihitung dari `TickerZone` aktual setelah kolom chip + ikon dicadangkan; fade tetap ada tetapi dipersempit menjadi 18 px alfa-hitam; layout Idle tanpa sesi dikembalikan ke overlay pra-Sesi 28. Sapuan grep: tidak ada perhitungan lebar ticker Idle lain. Build Release 0 error.
-- Langkah berikutnya persis: user verifikasi visual Idle saat sesi Fokus aktif — ekor lirik berhenti dengan ellipsis penuh sebelum fade, celah 12 px dan fade 18 px tetap ada; Idle tanpa sesi harus identik dengan sebelum Sesi 28.
-- Blocker / keputusan penting: tidak ada blocker baru; build Release normal sukses. `PlayerView` di luar cakupan sesi ini dan tidak diubah.
+- Terakhir selesai: Sesi 32 — lirik aktif PlayerView tidak lagi memakai lebar penuh saat chip Fokus terlihat. Penyebab terbukti (b): baris lirik tidak punya kolom cadangan setara chip. Perbaikan layout: baris lirik jadi Grid `*` + `Auto` dengan `SharedSizeGroup` yang sama dengan kolom chip; saat chip Collapsed kolom cadangan 0 sehingga Player tanpa sesi identik pra-Sesi 30; chip tidak diubah. Sapuan grep: judul/artis sudah punya kolom kanan; tidak ada teks lain di zona chip. Build Release 0 error.
+- Langkah berikutnya persis: user verifikasi visual PlayerView saat sesi Fokus aktif — ujung kanan lirik berhenti sebelum zona chip (celah 8 px), label FOKUS/ISTIRAHAT dan waktu tidak berubah; tanpa sesi lirik kembali selebar semula.
+- Blocker / keputusan penting: tidak ada; build normal `bin\Release` sukses 0 error/0 warning.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -20,6 +20,8 @@
 
 ## Log harian
 ### 2026-11-17
+- Sesi 32 (bukti): PlayerView baris 1 menaruh chip Fokus di kolom Auto; baris 2 LyricTicker memakai lebar penuh tanpa kolom cadangan, jadi zona chip ≈86 px tidak dikurangkan dari baris lirik. Penyebab (b) terbukti; (a) bukan overlap vertikal karena baris terpisah.
+- Sesi 32 (perbaikan): baris lirik PlayerView dipecah jadi Grid `*` + `Auto` dengan SharedSizeGroup yang sama dengan kolom chip; zona cadangan 0 saat chip Collapsed sehingga tanpa sesi identik pra-Sesi 30; chip tidak diubah; sapuan grep bersih; build Release 0 error/0 warning (normal).
 - Sesi 31 (bukti): IdleView memakai LyricTicker TextTrimming, bukan ScrollingText; fade OpacityMask 12% kolom konten (≈43–45 px) menutupi 19–23 px tepi kanan ticker 320 px dan ellipsis dirender pada alpha ≈0,46–0,58. Tersangka rentang scroll (a) tidak berlaku.
 - Sesi 31 (perbaikan): viewport ticker dihitung dari lebar TickerZone aktual setelah kolom chip + ikon dicadangkan, fade dipersempit jadi 18 px alfa-hitam di tepi celah; layout Idle tanpa sesi dikembalikan ke overlay pra-Sesi 28. Sapuan grep bersih; build Release 0 error.
 

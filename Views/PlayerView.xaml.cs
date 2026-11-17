@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using NusaLite.Models;
 using NusaLite.ViewModels;
 
 namespace NusaLite.Views;
@@ -23,6 +24,8 @@ public partial class PlayerView : UserControl
     private void Previous_Click(object sender, RoutedEventArgs e) => Vm?.PreviousTrack();
 
     private void Mute_Click(object sender, RoutedEventArgs e) => Vm?.ToggleMute();
+
+    private void FocusChip_Click(object sender, RoutedEventArgs e) => Vm?.RequestView(IslandView.Focus);
 
     private void SeekArea_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {

@@ -25,7 +25,7 @@
             <Border CornerRadius="16" BorderThickness="1" BorderBrush="{DynamicResource LineSoft1FBrush}" />
         </Grid>
 
-        <Grid Grid.Column="1" Margin="16,0,0,0">
+        <Grid Grid.Column="1" Margin="16,0,0,0" Grid.IsSharedSizeScope="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -44,12 +44,81 @@
                                  Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
             </Grid>
 
-            <TextBlock Grid.Row="1" Text="{Binding TrackArtist}" Style="{StaticResource CaptionText}"
-                       Margin="0,4,0,0" FontSize="11" />
+            <Grid Grid.Row="1" Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="PlayerFocusChip" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding TrackArtist}" Style="{StaticResource CaptionText}" FontSize="11" />
 
-            <controls:LyricTicker Grid.Row="2" Current="{Binding LyricCurrent}" Height="16" FontSize="12"
-                                  VerticalAlignment="Center" Margin="0,0,0,4"
-                                  Visibility="{Binding HasLyrics, Converter={StaticResource BoolVis}}" />
+                <Button x:Name="FocusChip" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center"
+                        Click="FocusChip_Click" Cursor="Hand" Focusable="False"
+                        ToolTip="Timer Fokus — klik untuk membuka"
+                        Visibility="{Binding PomodoroActive, Converter={StaticResource BoolVis}}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Opacity" Value="0.75" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PomodoroRunning}" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </DataTrigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="1" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <controls:ArcRing Width="13" Height="13" Percent="{Binding PomodoroProgress}" Thickness="1.5"
+                                          VerticalAlignment="Center"
+                                          TrackBrush="{DynamicResource TrackSoft20Brush}">
+                            <controls:ArcRing.Style>
+                                <Style TargetType="controls:ArcRing">
+                                    <Setter Property="Stroke" Value="{DynamicResource EmberBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
+                                            <Setter Property="Stroke" Value="{DynamicResource MintBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </controls:ArcRing.Style>
+                        </controls:ArcRing>
+                        <TextBlock VerticalAlignment="Center" Margin="6,0,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource TinyText}">
+                                    <Setter Property="FontSize" Value="9" />
+                                    <Setter Property="LineHeight" Value="11" />
+                                    <Setter Property="FontWeight" Value="{DynamicResource MicroTextWeight}" />
+                                    <Setter Property="Text" Value="F&#x200A;O&#x200A;K&#x200A;U&#x200A;S" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PomodoroIsBreak}" Value="True">
+                                            <Setter Property="Text" Value="I&#x200A;S&#x200A;T&#x200A;I&#x200A;R&#x200A;A&#x200A;H&#x200A;A&#x200A;T" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource TinyText}" FontSize="12.5" LineHeight="15"
+                                   Text="{Binding PomodoroTime}" Typography.NumeralAlignment="Tabular"
+                                   VerticalAlignment="Center" Margin="6,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="PlayerFocusChip" />
+                </Grid.ColumnDefinitions>
+                <controls:LyricTicker Current="{Binding LyricCurrent}" Height="16" FontSize="12"
+                                      VerticalAlignment="Center"
+                                      Visibility="{Binding HasLyrics, Converter={StaticResource BoolVis}}" />
+            </Grid>
 
             <StackPanel Grid.Row="3" Margin="0,0,0,0">
                 <Grid x:Name="SeekArea" Height="13" Background="Transparent" Cursor="Hand"
