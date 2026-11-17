@@ -479,11 +479,12 @@ public partial class MainWindow : Window
             var dotsOrigin = DotsBar.TranslatePoint(new Point(0, 0), Root);
             var dotsWidth = (int)Math.Ceiling(DotsBar.ActualWidth * scale);
             var dotsHeight = (int)Math.Ceiling(DotsBar.ActualHeight * scale);
+            var dotsHitHeight = Math.Max(dotsHeight, (int)Math.Ceiling(24 * scale));
             var dotsX = (int)Math.Round(dotsOrigin.X * scale);
-            var dotsY = (int)Math.Round(dotsOrigin.Y * scale);
+            var dotsY = (int)Math.Round(dotsOrigin.Y * scale) - (dotsHitHeight - dotsHeight) / 2;
 
             var dotsRegion = NativeMethods.CreateRoundRectRgn(
-                dotsX, dotsY, dotsX + dotsWidth + 1, dotsY + dotsHeight + 1, dotsHeight, dotsHeight);
+                dotsX, dotsY, dotsX + dotsWidth + 1, dotsY + dotsHitHeight + 1, dotsHitHeight, dotsHitHeight);
             NativeMethods.CombineRgn(region, region, dotsRegion, NativeMethods.RgnOr);
             NativeMethods.DeleteObject(dotsRegion);
         }

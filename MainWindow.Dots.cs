@@ -46,6 +46,20 @@ public partial class MainWindow
         UpdateDots();
     }
 
+    private void DotsPrev_Click(object sender, RoutedEventArgs e) => StepView(-1);
+
+    private void DotsNext_Click(object sender, RoutedEventArgs e) => StepView(1);
+
+    private void StepView(int direction)
+    {
+        var index = Array.IndexOf(Carousel, _view);
+        var nextIndex = index < 0
+            ? (direction < 0 ? Carousel.Length - 1 : 0)
+            : (index + direction + Carousel.Length) % Carousel.Length;
+
+        SwitchTo(Carousel[nextIndex]);
+    }
+
     private void UpdateDots()
     {
         foreach (var dot in _dots)
