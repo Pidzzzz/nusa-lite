@@ -16,6 +16,8 @@ public partial class App : System.Windows.Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        System.Windows.Forms.Application.EnableVisualStyles();
+
         _mutex = new Mutex(true, MutexName, out var createdNew);
         if (!createdNew)
         {

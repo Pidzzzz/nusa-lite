@@ -282,24 +282,12 @@ internal static class Autostart
     }
 }
 
-internal sealed class DarkColorTable : WinForms.ProfessionalColorTable
+internal sealed class DarkColorTable : TrayColorTable
 {
-    private static TrayPalette Palette => TrayThemePalettes.Dark;
-
-    public override Drawing.Color MenuBorder => Palette.Border;
-    public override Drawing.Color MenuItemBorder => Drawing.Color.Transparent;
-    public override Drawing.Color MenuItemSelected => Palette.Hover;
-    public override Drawing.Color MenuItemSelectedGradientBegin => Palette.Hover;
-    public override Drawing.Color MenuItemSelectedGradientEnd => Palette.Hover;
-    public override Drawing.Color MenuStripGradientBegin => Palette.Background;
-    public override Drawing.Color MenuStripGradientEnd => Palette.Background;
-    public override Drawing.Color ToolStripDropDownBackground => Palette.Background;
-    public override Drawing.Color SeparatorDark => Palette.Separator;
-    public override Drawing.Color SeparatorLight => Palette.Separator;
-    public override Drawing.Color CheckBackground => Palette.CheckBackground;
-    public override Drawing.Color CheckSelectedBackground => Palette.CheckSelectedBackground;
-    public override Drawing.Color ImageMarginGradientBegin => Palette.Background;
-    public override Drawing.Color ImageMarginGradientEnd => Palette.Background;
+    public DarkColorTable()
+        : base(TrayThemePalettes.Dark)
+    {
+    }
 }
 
 internal sealed record TrayPalette(
@@ -308,6 +296,7 @@ internal sealed record TrayPalette(
     Drawing.Color Foreground,
     Drawing.Color DisabledForeground,
     Drawing.Color Border,
+    Drawing.Color SelectionBorder,
     Drawing.Color Hover,
     Drawing.Color Separator,
     Drawing.Color CheckBackground,
@@ -322,10 +311,11 @@ internal static class TrayThemePalettes
         Drawing.Color.FromArgb(236, 239, 247),
         Drawing.SystemColors.GrayText,
         Drawing.Color.FromArgb(40, 44, 58),
-        Drawing.Color.FromArgb(34, 38, 52),
+        Drawing.Color.FromArgb(0x7C, 0x5C, 0xFF),
+        Drawing.Color.FromArgb(0x2B, 0x25, 0x54),
         Drawing.Color.FromArgb(36, 40, 52),
-        Drawing.Color.FromArgb(50, 60, 85),
-        Drawing.Color.FromArgb(60, 72, 100),
+        Drawing.Color.FromArgb(0x26, 0x21, 0x48),
+        Drawing.Color.FromArgb(0x3B, 0x30, 0x76),
         Drawing.Color.White);
 
     public static TrayPalette CreateLight()
@@ -334,11 +324,13 @@ internal static class TrayThemePalettes
         var foreground = ResourceColor("InkColor", Drawing.Color.FromArgb(0x1B, 0x17, 0x26));
         var border = Blend(ResourceColor("LineStrongColor", Drawing.Color.FromArgb(0x33, 0, 0, 0)), background);
         var separator = Blend(ResourceColor("LineSoft1FColor", Drawing.Color.FromArgb(0x1F, 0, 0, 0)), background);
-        var hover = Blend(ResourceColor("AccentTint2EColor", Drawing.Color.FromArgb(0x2E, 0x6A, 0x5A, 0xE0)), background);
+        var hoverTint = ResourceColor("AccentTint2EColor", Drawing.Color.FromArgb(0x2E, 0x6A, 0x5A, 0xE0));
+        var hover = Blend(hoverTint, background);
         var check = Blend(ResourceColor("AccentTint1EColor", Drawing.Color.FromArgb(0x1E, 0x6A, 0x5A, 0xE0)), background);
         var checkSelected = Blend(ResourceColor("AccentTint40Color", Drawing.Color.FromArgb(0x40, 0x6A, 0x5A, 0xE0)), background);
         var disabled = Blend(ResourceColor("TextGhost59Color", Drawing.Color.FromArgb(0x7A, 0, 0, 0)), background);
         var checkMark = ResourceColor("PrimaryColor", Drawing.Color.FromArgb(0x6A, 0x43, 0xC4));
+        var selectionBorder = Drawing.Color.FromArgb(255, hoverTint.R, hoverTint.G, hoverTint.B);
 
         return new TrayPalette(
             true,
@@ -346,6 +338,7 @@ internal static class TrayThemePalettes
             foreground,
             disabled,
             border,
+            selectionBorder,
             hover,
             separator,
             check,
@@ -380,35 +373,62 @@ internal static class TrayThemePalettes
     }
 }
 
-internal sealed class LightColorTable : WinForms.ProfessionalColorTable
+internal class TrayColorTable : WinForms.ProfessionalColorTable
 {
-    private readonly TrayPalette _palette;
+    protected TrayPalette Palette { get; }
 
-    public LightColorTable(TrayPalette palette)
+    public TrayColorTable(TrayPalette palette)
     {
-        _palette = palette;
+        Palette = palette;
+        UseSystemColors = false;
     }
 
-    public override Drawing.Color MenuBorder => _palette.Border;
-    public override Drawing.Color MenuItemBorder => Drawing.Color.Transparent;
-    public override Drawing.Color MenuItemSelected => _palette.Hover;
-    public override Drawing.Color MenuItemSelectedGradientBegin => _palette.Hover;
-    public override Drawing.Color MenuItemSelectedGradientEnd => _palette.Hover;
-    public override Drawing.Color MenuItemPressedGradientBegin => _palette.Hover;
-    public override Drawing.Color MenuItemPressedGradientMiddle => _palette.Hover;
-    public override Drawing.Color MenuItemPressedGradientEnd => _palette.Hover;
-    public override Drawing.Color MenuStripGradientBegin => _palette.Background;
-    public override Drawing.Color MenuStripGradientEnd => _palette.Background;
-    public override Drawing.Color ToolStripDropDownBackground => _palette.Background;
-    public override Drawing.Color ToolStripBorder => _palette.Border;
-    public override Drawing.Color SeparatorDark => _palette.Separator;
-    public override Drawing.Color SeparatorLight => _palette.Separator;
-    public override Drawing.Color CheckBackground => _palette.CheckBackground;
-    public override Drawing.Color CheckSelectedBackground => _palette.CheckSelectedBackground;
-    public override Drawing.Color CheckPressedBackground => _palette.CheckSelectedBackground;
-    public override Drawing.Color ImageMarginGradientBegin => _palette.Background;
-    public override Drawing.Color ImageMarginGradientMiddle => _palette.Background;
-    public override Drawing.Color ImageMarginGradientEnd => _palette.Background;
+    public override Drawing.Color MenuBorder => Palette.Border;
+    public override Drawing.Color MenuItemBorder => Palette.SelectionBorder;
+    public override Drawing.Color MenuItemSelected => Palette.Hover;
+    public override Drawing.Color MenuItemSelectedGradientBegin => Palette.Hover;
+    public override Drawing.Color MenuItemSelectedGradientEnd => Palette.Hover;
+    public override Drawing.Color MenuItemPressedGradientBegin => Palette.Hover;
+    public override Drawing.Color MenuItemPressedGradientMiddle => Palette.Hover;
+    public override Drawing.Color MenuItemPressedGradientEnd => Palette.Hover;
+    public override Drawing.Color MenuStripGradientBegin => Palette.Background;
+    public override Drawing.Color MenuStripGradientEnd => Palette.Background;
+    public override Drawing.Color ToolStripDropDownBackground => Palette.Background;
+    public override Drawing.Color SeparatorDark => Palette.Separator;
+    public override Drawing.Color SeparatorLight => Palette.Separator;
+    public override Drawing.Color CheckBackground => Palette.CheckBackground;
+    public override Drawing.Color CheckSelectedBackground => Palette.CheckSelectedBackground;
+    public override Drawing.Color CheckPressedBackground => Palette.CheckSelectedBackground;
+    public override Drawing.Color ImageMarginGradientBegin => Palette.Background;
+    public override Drawing.Color ImageMarginGradientEnd => Palette.Background;
+    public override Drawing.Color ButtonSelectedHighlight => Palette.Hover;
+    public override Drawing.Color ButtonSelectedHighlightBorder => Palette.SelectionBorder;
+    public override Drawing.Color ButtonSelectedBorder => Palette.SelectionBorder;
+    public override Drawing.Color ButtonSelectedGradientBegin => Palette.Hover;
+    public override Drawing.Color ButtonSelectedGradientMiddle => Palette.Hover;
+    public override Drawing.Color ButtonSelectedGradientEnd => Palette.Hover;
+    public override Drawing.Color ButtonPressedHighlight => Palette.Hover;
+    public override Drawing.Color ButtonPressedHighlightBorder => Palette.SelectionBorder;
+    public override Drawing.Color ButtonPressedBorder => Palette.SelectionBorder;
+    public override Drawing.Color ButtonPressedGradientBegin => Palette.Hover;
+    public override Drawing.Color ButtonPressedGradientMiddle => Palette.Hover;
+    public override Drawing.Color ButtonPressedGradientEnd => Palette.Hover;
+    public override Drawing.Color ButtonCheckedHighlight => Palette.CheckSelectedBackground;
+    public override Drawing.Color ButtonCheckedHighlightBorder => Palette.SelectionBorder;
+    public override Drawing.Color ButtonCheckedGradientBegin => Palette.CheckSelectedBackground;
+    public override Drawing.Color ButtonCheckedGradientMiddle => Palette.CheckSelectedBackground;
+    public override Drawing.Color ButtonCheckedGradientEnd => Palette.CheckSelectedBackground;
+}
+
+internal sealed class LightColorTable : TrayColorTable
+{
+    public LightColorTable(TrayPalette palette)
+        : base(palette)
+    {
+    }
+
+    public override Drawing.Color ToolStripBorder => Palette.Border;
+    public override Drawing.Color ImageMarginGradientMiddle => Palette.Background;
 }
 
 internal sealed class TrayRenderer : WinForms.ToolStripProfessionalRenderer
@@ -451,7 +471,7 @@ internal sealed class TrayRenderer : WinForms.ToolStripProfessionalRenderer
             e.Graphics.FillRectangle(background, rect);
         }
 
-        using (var border = new Drawing.Pen(_palette.Border))
+        using (var border = new Drawing.Pen(_palette.SelectionBorder))
         {
             e.Graphics.DrawRectangle(border, rect.Left, rect.Top, rect.Width - 1, rect.Height - 1);
         }
