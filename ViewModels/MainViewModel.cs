@@ -368,16 +368,21 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private void ClearLyrics(LyricsStatus status)
+    private void ResetLyricDisplay()
     {
-        _lyricsCts?.Cancel();
-        _lyricsCts = null;
         _lyricLines = Array.Empty<LyricLine>();
         _lyricIndex = -1;
         _lyricPrev = string.Empty;
         _lyricCurrent = string.Empty;
         _lyricNext = string.Empty;
         _lastLyricKey = string.Empty;
+    }
+
+    private void ClearLyrics(LyricsStatus status)
+    {
+        _lyricsCts?.Cancel();
+        _lyricsCts = null;
+        ResetLyricDisplay();
         _lyricsResult = new LyricsResult { Status = status };
         RaiseLyrics();
     }
@@ -388,8 +393,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
         var cts = new CancellationTokenSource();
         _lyricsCts = cts;
         _lastLyricsTrack = track;
-        _lyricLines = Array.Empty<LyricLine>();
-        _lyricIndex = -1;
+        ResetLyricDisplay();
         _lyricsResult = new LyricsResult { Status = LyricsStatus.Loading };
         RaiseLyrics();
 
@@ -421,8 +425,7 @@ public sealed class MainViewModel : ObservableObject, IDisposable
             Log.Write("Loading lyrics failed.", ex);
             if (!cts.IsCancellationRequested)
             {
-                _lyricsResult = new LyricsResult { Status = LyricsStatus.Error };
-                RaiseLyrics();
+                ClearLyrics(LyricsStatus.Error);
             }
         }
     }
@@ -431,6 +434,16 @@ public sealed class MainViewModel : ObservableObject, IDisposable
     {
         if (_lyricLines.Count == 0)
         {
+            if (_lyricIndex < 0 && _lyricPrev.Length == 0 && _lyricCurrent.Length == 0 && _lyricNext.Length == 0)
+            {
+                return;
+            }
+
+            ResetLyricDisplay();
+            OnPropertyChanged(nameof(LyricPrev));
+            OnPropertyChanged(nameof(LyricCurrent));
+            OnPropertyChanged(nameof(LyricNext));
+            OnPropertyChanged(nameof(IdleLine));
             return;
         }
 

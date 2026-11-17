@@ -6,8 +6,8 @@
 
 ## Status saat ini
 - Sedang dikerjakan: —
-- Terakhir selesai: Sesi 32 — lirik aktif PlayerView tidak lagi memakai lebar penuh saat chip Fokus terlihat. Penyebab terbukti (b): baris lirik tidak punya kolom cadangan setara chip. Perbaikan layout: baris lirik jadi Grid `*` + `Auto` dengan `SharedSizeGroup` yang sama dengan kolom chip; saat chip Collapsed kolom cadangan 0 sehingga Player tanpa sesi identik pra-Sesi 30; chip tidak diubah. Sapuan grep: judul/artis sudah punya kolom kanan; tidak ada teks lain di zona chip. Build Release 0 error.
-- Langkah berikutnya persis: user verifikasi visual PlayerView saat sesi Fokus aktif — ujung kanan lirik berhenti sebelum zona chip (celah 8 px), label FOKUS/ISTIRAHAT dan waktu tidak berubah; tanpa sesi lirik kembali selebar semula.
+- Terakhir selesai: Sesi 33 — sisa lirik lagu lama saat `NotFound` dihapus di sumber state `MainViewModel`: `ResetLyricDisplay` membersihkan `_lyricLines` + `_lyricPrev/Current/Next` + `_lyricIndex` + `_lastLyricKey` di awal load, `ClearLyrics`, dan `UpdateLyricIndex` kosong; error lewat `ClearLyrics`. LyricsView/Player/Hub berbagi state, Idle via `IdleLine`. Build Release normal 0 error/0 warning.
+- Langkah berikutnya persis: user verifikasi visual — lagu A berlyrics → lagu B tanpa lirik: LyricsView hanya pil "Liriknya belum ketemu" tanpa sisa baris; ticker Player/Hub kosong; lagu C berlyrics tampil normal lagi; Idle menampilkan judul/artis, bukan lirik B lama.
 - Blocker / keputusan penting: tidak ada; build normal `bin\Release` sukses 0 error/0 warning.
 
 ## Roadmap (dari README)
@@ -24,6 +24,7 @@
 - Sesi 32 (perbaikan): baris lirik PlayerView dipecah jadi Grid `*` + `Auto` dengan SharedSizeGroup yang sama dengan kolom chip; zona cadangan 0 saat chip Collapsed sehingga tanpa sesi identik pra-Sesi 30; chip tidak diubah; sapuan grep bersih; build Release 0 error/0 warning (normal).
 - Sesi 31 (bukti): IdleView memakai LyricTicker TextTrimming, bukan ScrollingText; fade OpacityMask 12% kolom konten (≈43–45 px) menutupi 19–23 px tepi kanan ticker 320 px dan ellipsis dirender pada alpha ≈0,46–0,58. Tersangka rentang scroll (a) tidak berlaku.
 - Sesi 31 (perbaikan): viewport ticker dihitung dari lebar TickerZone aktual setelah kolom chip + ikon dicadangkan, fade dipersempit jadi 18 px alfa-hitam di tepi celah; layout Idle tanpa sesi dikembalikan ke overlay pra-Sesi 28. Sapuan grep bersih; build Release 0 error.
+- Sesi 33: penyebab (a) — `LoadLyricsAsync` mengosongkan `_lyricLines`/`_lyricIndex` tetapi tidak `_lyricPrev/_lyricCurrent/_lyricNext`; `UpdateLyricIndex` keluar awal saat kosong sehingga string lama tetap ter-bind, sementara pil "Liriknya belum ketemu" sudah tampil. Perbaikan sumber: `ResetLyricDisplay` di awal load, `ClearLyrics`, dan `UpdateLyricIndex` kosong; error lewat `ClearLyrics`; LyricsView/Player/Hub berbagi state, Idle via `IdleLine`. Sapuan grep jalur status bersih; build Release normal 0 error/0 warning.
 
 ### 2026-11-14
 - Sesi 30: chip Timer Fokus hadir di PlayerView dengan resep identik chip LyricsView (ArcRing 13/1.5, label 9 px, waktu tabular 12.5 px, Ember/Mint, redam 0.5 jeda, hover 1.0, tooltip, klik ke Fokus) memakai binding Pomodoro yang sama tanpa state baru; baris artis jadi dua kolom—artis kiri dengan trimming lama, chip rata kanan tepat di bawah EqBars—lebar kolom chip otomatis sehingga tanpa sesi PlayerView tidak berubah dan judul panjang memendek lebih dulu; artwork, progres, kontrol, pill sumber, ukuran panel, chip lain, dan logika Pomodoro utuh; build Release 0 error.
