@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.Win32;
 using NusaLite.Models;
 using Drawing = System.Drawing;
+using Drawing2D = System.Drawing.Drawing2D;
 using WinForms = System.Windows.Forms;
 
 namespace NusaLite.Services;
@@ -19,6 +20,7 @@ public sealed class TrayService : IDisposable
     private readonly WinForms.ToolStripMenuItem _hotkeyItem;
     private readonly WinForms.ToolStripMenuItem _startupItem;
     private Stream? _iconStream;
+    private string? _appliedTheme;
 
     public TrayService(SettingsStore settings, Func<bool> isPinned)
     {
@@ -34,9 +36,6 @@ public sealed class TrayService : IDisposable
 
         _menu = new WinForms.ContextMenuStrip
         {
-            Renderer = new WinForms.ToolStripProfessionalRenderer(new DarkColorTable()),
-            BackColor = Drawing.Color.FromArgb(16, 18, 26),
-            ForeColor = Drawing.Color.FromArgb(236, 239, 247),
             Font = new Drawing.Font("Segoe UI", 9f),
             ShowImageMargin = false,
             Padding = new WinForms.Padding(4)
@@ -80,8 +79,11 @@ public sealed class TrayService : IDisposable
         _menu.Items.Add(new WinForms.ToolStripSeparator());
         _menu.Items.Add(Item("Keluar", (_, _) => ExitRequested?.Invoke()));
 
+        ApplyMenuTheme();
+
         _menu.Opening += (_, _) =>
         {
+            ApplyMenuTheme();
             _pinItem.Checked = _isPinned();
             _autoLyricsItem.Checked = _settings.Current.AutoLyricsOnPlay;
             _fullscreenItem.Checked = _settings.Current.FullscreenAutoHide;
@@ -103,6 +105,8 @@ public sealed class TrayService : IDisposable
         {
             Autostart.SetEnabled(true);
         }
+
+        ThemeService.ThemeChanged += OnThemeChanged;
     }
 
     public event Action<IslandView>? OpenRequested;
@@ -179,11 +183,43 @@ public sealed class TrayService : IDisposable
         _startupItem.Checked = enabled;
     }
 
+    private void OnThemeChanged(object? sender, EventArgs e)
+    {
+        ApplyMenuTheme();
+    }
+
+    private void ApplyMenuTheme()
+    {
+        var theme = ThemeService.Current;
+        if (string.Equals(theme, _appliedTheme, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        _appliedTheme = theme;
+        var palette = string.Equals(theme, "Light", StringComparison.OrdinalIgnoreCase)
+            ? TrayThemePalettes.CreateLight()
+            : TrayThemePalettes.Dark;
+
+        _menu.BackColor = palette.Background;
+        _menu.ForeColor = palette.Foreground;
+        _menu.Renderer = new TrayRenderer(palette);
+
+        foreach (WinForms.ToolStripItem item in _menu.Items)
+        {
+            if (item is WinForms.ToolStripMenuItem menuItem)
+            {
+                menuItem.ForeColor = palette.Foreground;
+            }
+        }
+
+        _menu.Invalidate();
+    }
+
     private static WinForms.ToolStripMenuItem Item(string text, EventHandler onClick)
     {
         var item = new WinForms.ToolStripMenuItem(text)
         {
-            ForeColor = Drawing.Color.FromArgb(236, 239, 247),
             Padding = new WinForms.Padding(4, 3, 4, 3)
         };
         item.Click += onClick;
@@ -192,6 +228,7 @@ public sealed class TrayService : IDisposable
 
     public void Dispose()
     {
+        ThemeService.ThemeChanged -= OnThemeChanged;
         _notifyIcon.Visible = false;
         _notifyIcon.Dispose();
         _menu.Dispose();
@@ -247,18 +284,198 @@ internal static class Autostart
 
 internal sealed class DarkColorTable : WinForms.ProfessionalColorTable
 {
-    public override Drawing.Color MenuBorder => Drawing.Color.FromArgb(40, 44, 58);
+    private static TrayPalette Palette => TrayThemePalettes.Dark;
+
+    public override Drawing.Color MenuBorder => Palette.Border;
     public override Drawing.Color MenuItemBorder => Drawing.Color.Transparent;
-    public override Drawing.Color MenuItemSelected => Drawing.Color.FromArgb(34, 38, 52);
-    public override Drawing.Color MenuItemSelectedGradientBegin => Drawing.Color.FromArgb(34, 38, 52);
-    public override Drawing.Color MenuItemSelectedGradientEnd => Drawing.Color.FromArgb(34, 38, 52);
-    public override Drawing.Color MenuStripGradientBegin => Drawing.Color.FromArgb(16, 18, 26);
-    public override Drawing.Color MenuStripGradientEnd => Drawing.Color.FromArgb(16, 18, 26);
-    public override Drawing.Color ToolStripDropDownBackground => Drawing.Color.FromArgb(16, 18, 26);
-    public override Drawing.Color SeparatorDark => Drawing.Color.FromArgb(36, 40, 52);
-    public override Drawing.Color SeparatorLight => Drawing.Color.FromArgb(36, 40, 52);
-    public override Drawing.Color CheckBackground => Drawing.Color.FromArgb(50, 60, 85);
-    public override Drawing.Color CheckSelectedBackground => Drawing.Color.FromArgb(60, 72, 100);
-    public override Drawing.Color ImageMarginGradientBegin => Drawing.Color.FromArgb(16, 18, 26);
-    public override Drawing.Color ImageMarginGradientEnd => Drawing.Color.FromArgb(16, 18, 26);
+    public override Drawing.Color MenuItemSelected => Palette.Hover;
+    public override Drawing.Color MenuItemSelectedGradientBegin => Palette.Hover;
+    public override Drawing.Color MenuItemSelectedGradientEnd => Palette.Hover;
+    public override Drawing.Color MenuStripGradientBegin => Palette.Background;
+    public override Drawing.Color MenuStripGradientEnd => Palette.Background;
+    public override Drawing.Color ToolStripDropDownBackground => Palette.Background;
+    public override Drawing.Color SeparatorDark => Palette.Separator;
+    public override Drawing.Color SeparatorLight => Palette.Separator;
+    public override Drawing.Color CheckBackground => Palette.CheckBackground;
+    public override Drawing.Color CheckSelectedBackground => Palette.CheckSelectedBackground;
+    public override Drawing.Color ImageMarginGradientBegin => Palette.Background;
+    public override Drawing.Color ImageMarginGradientEnd => Palette.Background;
+}
+
+internal sealed record TrayPalette(
+    bool IsLight,
+    Drawing.Color Background,
+    Drawing.Color Foreground,
+    Drawing.Color DisabledForeground,
+    Drawing.Color Border,
+    Drawing.Color Hover,
+    Drawing.Color Separator,
+    Drawing.Color CheckBackground,
+    Drawing.Color CheckSelectedBackground,
+    Drawing.Color CheckMark);
+
+internal static class TrayThemePalettes
+{
+    public static TrayPalette Dark { get; } = new(
+        false,
+        Drawing.Color.FromArgb(16, 18, 26),
+        Drawing.Color.FromArgb(236, 239, 247),
+        Drawing.SystemColors.GrayText,
+        Drawing.Color.FromArgb(40, 44, 58),
+        Drawing.Color.FromArgb(34, 38, 52),
+        Drawing.Color.FromArgb(36, 40, 52),
+        Drawing.Color.FromArgb(50, 60, 85),
+        Drawing.Color.FromArgb(60, 72, 100),
+        Drawing.Color.White);
+
+    public static TrayPalette CreateLight()
+    {
+        var background = ResourceColor("IslandColor", Drawing.Color.FromArgb(0xF3, 0xF1, 0xF8));
+        var foreground = ResourceColor("InkColor", Drawing.Color.FromArgb(0x1B, 0x17, 0x26));
+        var border = Blend(ResourceColor("LineStrongColor", Drawing.Color.FromArgb(0x33, 0, 0, 0)), background);
+        var separator = Blend(ResourceColor("LineSoft1FColor", Drawing.Color.FromArgb(0x1F, 0, 0, 0)), background);
+        var hover = Blend(ResourceColor("AccentTint2EColor", Drawing.Color.FromArgb(0x2E, 0x6A, 0x5A, 0xE0)), background);
+        var check = Blend(ResourceColor("AccentTint1EColor", Drawing.Color.FromArgb(0x1E, 0x6A, 0x5A, 0xE0)), background);
+        var checkSelected = Blend(ResourceColor("AccentTint40Color", Drawing.Color.FromArgb(0x40, 0x6A, 0x5A, 0xE0)), background);
+        var disabled = Blend(ResourceColor("TextGhost59Color", Drawing.Color.FromArgb(0x7A, 0, 0, 0)), background);
+        var checkMark = ResourceColor("PrimaryColor", Drawing.Color.FromArgb(0x6A, 0x43, 0xC4));
+
+        return new TrayPalette(
+            true,
+            background,
+            foreground,
+            disabled,
+            border,
+            hover,
+            separator,
+            check,
+            checkSelected,
+            checkMark);
+    }
+
+    private static Drawing.Color ResourceColor(string key, Drawing.Color fallback)
+    {
+        var resource = System.Windows.Application.Current?.TryFindResource(key);
+        return resource switch
+        {
+            System.Windows.Media.Color color => Drawing.Color.FromArgb(color.A, color.R, color.G, color.B),
+            System.Windows.Media.SolidColorBrush brush => Drawing.Color.FromArgb(brush.Color.A, brush.Color.R, brush.Color.G, brush.Color.B),
+            _ => fallback
+        };
+    }
+
+    private static Drawing.Color Blend(Drawing.Color overlay, Drawing.Color background)
+    {
+        if (overlay.A >= 255)
+        {
+            return Drawing.Color.FromArgb(255, overlay.R, overlay.G, overlay.B);
+        }
+
+        var alpha = overlay.A / 255.0;
+        return Drawing.Color.FromArgb(
+            255,
+            (int)Math.Round(overlay.R * alpha + background.R * (1 - alpha)),
+            (int)Math.Round(overlay.G * alpha + background.G * (1 - alpha)),
+            (int)Math.Round(overlay.B * alpha + background.B * (1 - alpha)));
+    }
+}
+
+internal sealed class LightColorTable : WinForms.ProfessionalColorTable
+{
+    private readonly TrayPalette _palette;
+
+    public LightColorTable(TrayPalette palette)
+    {
+        _palette = palette;
+    }
+
+    public override Drawing.Color MenuBorder => _palette.Border;
+    public override Drawing.Color MenuItemBorder => Drawing.Color.Transparent;
+    public override Drawing.Color MenuItemSelected => _palette.Hover;
+    public override Drawing.Color MenuItemSelectedGradientBegin => _palette.Hover;
+    public override Drawing.Color MenuItemSelectedGradientEnd => _palette.Hover;
+    public override Drawing.Color MenuItemPressedGradientBegin => _palette.Hover;
+    public override Drawing.Color MenuItemPressedGradientMiddle => _palette.Hover;
+    public override Drawing.Color MenuItemPressedGradientEnd => _palette.Hover;
+    public override Drawing.Color MenuStripGradientBegin => _palette.Background;
+    public override Drawing.Color MenuStripGradientEnd => _palette.Background;
+    public override Drawing.Color ToolStripDropDownBackground => _palette.Background;
+    public override Drawing.Color ToolStripBorder => _palette.Border;
+    public override Drawing.Color SeparatorDark => _palette.Separator;
+    public override Drawing.Color SeparatorLight => _palette.Separator;
+    public override Drawing.Color CheckBackground => _palette.CheckBackground;
+    public override Drawing.Color CheckSelectedBackground => _palette.CheckSelectedBackground;
+    public override Drawing.Color CheckPressedBackground => _palette.CheckSelectedBackground;
+    public override Drawing.Color ImageMarginGradientBegin => _palette.Background;
+    public override Drawing.Color ImageMarginGradientMiddle => _palette.Background;
+    public override Drawing.Color ImageMarginGradientEnd => _palette.Background;
+}
+
+internal sealed class TrayRenderer : WinForms.ToolStripProfessionalRenderer
+{
+    private readonly TrayPalette _palette;
+
+    public TrayRenderer(TrayPalette palette)
+        : base(palette.IsLight ? new LightColorTable(palette) : new DarkColorTable())
+    {
+        _palette = palette;
+    }
+
+    protected override void OnRenderItemText(WinForms.ToolStripItemTextRenderEventArgs e)
+    {
+        if (_palette.IsLight && !e.Item.Enabled)
+        {
+            e.TextColor = _palette.DisabledForeground;
+        }
+
+        base.OnRenderItemText(e);
+    }
+
+    protected override void OnRenderItemCheck(WinForms.ToolStripItemImageRenderEventArgs e)
+    {
+        if (!_palette.IsLight)
+        {
+            base.OnRenderItemCheck(e);
+            return;
+        }
+
+        var rect = e.ImageRectangle;
+        if (rect.Width <= 0 || rect.Height <= 0)
+        {
+            return;
+        }
+
+        var selected = e.Item.Selected || e.Item.Pressed;
+        using (var background = new Drawing.SolidBrush(selected ? _palette.CheckSelectedBackground : _palette.CheckBackground))
+        {
+            e.Graphics.FillRectangle(background, rect);
+        }
+
+        using (var border = new Drawing.Pen(_palette.Border))
+        {
+            e.Graphics.DrawRectangle(border, rect.Left, rect.Top, rect.Width - 1, rect.Height - 1);
+        }
+
+        var previous = e.Graphics.SmoothingMode;
+        e.Graphics.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias;
+        try
+        {
+            using var check = new Drawing.Pen(_palette.CheckMark, Math.Max(1.5f, rect.Height / 8f))
+            {
+                StartCap = Drawing2D.LineCap.Round,
+                EndCap = Drawing2D.LineCap.Round,
+                LineJoin = Drawing2D.LineJoin.Round
+            };
+            e.Graphics.DrawLines(check, new[]
+            {
+                new Drawing.PointF(rect.Left + rect.Width * 0.24f, rect.Top + rect.Height * 0.52f),
+                new Drawing.PointF(rect.Left + rect.Width * 0.43f, rect.Top + rect.Height * 0.70f),
+                new Drawing.PointF(rect.Left + rect.Width * 0.78f, rect.Top + rect.Height * 0.30f)
+            });
+        }
+        finally
+        {
+            e.Graphics.SmoothingMode = previous;
+        }
+    }
 }
