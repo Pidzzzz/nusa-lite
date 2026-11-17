@@ -8,31 +8,13 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" ClipToBounds="True" IsHitTestVisible="False">
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="OpacityMask" Value="{x:Null}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding PomodoroActive}" Value="True">
-                            <Setter Property="OpacityMask">
-                                <Setter.Value>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                        <GradientStop Offset="0" Color="#FF000000" />
-                                        <GradientStop Offset="0.88" Color="#FF000000" />
-                                        <GradientStop Offset="1" Color="#00000000" />
-                                    </LinearGradientBrush>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
+        <Grid x:Name="TickerZone" Grid.Column="0" ClipToBounds="True" IsHitTestVisible="False">
 
         <Path Data="{StaticResource IconBolt}" Fill="{DynamicResource MintBrush}" Width="9" Height="9" Stretch="Uniform"
               HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False"
               Visibility="{Binding IsCharging, Converter={StaticResource BoolVis}}" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
+        <StackPanel x:Name="ContentGroup" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
                     IsHitTestVisible="False">
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
@@ -46,7 +28,7 @@
                 </Style>
             </StackPanel.Style>
 
-            <Path Width="14" Height="14" Stretch="Uniform"
+            <Path x:Name="SourceIcon" Width="14" Height="14" Stretch="Uniform"
                   Margin="0,0,8,0" VerticalAlignment="Center"
                   Visibility="{Binding HasSourceIcon, Converter={StaticResource BoolVis}}">
                 <Path.Style>
@@ -79,7 +61,7 @@
                 </Path.Style>
             </Path>
 
-            <controls:LyricTicker Current="{Binding IdleLine}" FontSize="13.5" Height="19"
+            <controls:LyricTicker x:Name="IdleTicker" Current="{Binding IdleLine}" FontSize="13.5" Height="19"
                                   FontWeight="Medium" Foreground="{DynamicResource InkBrush}"
                                   MaxWidth="320" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </StackPanel>
@@ -99,7 +81,7 @@
         </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <StackPanel x:Name="TrailingZone" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
             <controls:EqBars Width="16" Height="14" VerticalAlignment="Center" IsHitTestVisible="False"
                              Visibility="{Binding IsPlaying, Converter={StaticResource BoolVis}}" />
 
