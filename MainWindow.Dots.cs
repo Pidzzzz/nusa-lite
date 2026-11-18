@@ -134,7 +134,7 @@ public partial class MainWindow
                 EasingFunction = ease
             };
             DotsBar.BeginAnimation(OpacityProperty, animation);
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }
     }
 

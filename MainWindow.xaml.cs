@@ -63,6 +63,7 @@ public partial class MainWindow : Window
     private IslandSpec _spec = new(198, 34, 12, 0);
     private bool _browserForeground;
     private bool _browserArmed;
+    private bool _regionUpdateScheduled;
     private long _insideSince;
     private const double CompactUiScale = 0.86;
     private const int BrowserArmHoldMs = 140;
@@ -113,13 +114,14 @@ public partial class MainWindow : Window
         _viewModel.AutoLyricsRequested += OnAutoLyricsRequested;
         _viewModel.PropertyChanged += OnViewModelPropertyChanged;
 
-        IslandHost.SizeChanged += (_, _) => UpdateWindowRegion();
-        DotsBar.SizeChanged += (_, _) => UpdateWindowRegion();
+        IslandHost.SizeChanged += (_, _) => ScheduleWindowRegionUpdate();
+        DotsBar.SizeChanged += (_, _) => ScheduleWindowRegionUpdate();
+        DotsBar.LayoutUpdated += (_, _) => ScheduleWindowRegionUpdate();
         SourceInitialized += OnSourceInitialized;
         DpiChanged += (_, _) => Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
         {
             RepositionWindow();
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }));
         Closed += (_, _) =>
         {
@@ -142,7 +144,7 @@ public partial class MainWindow : Window
             _isFullscreenSuppressed = false;
             Visibility = Visibility.Visible;
             RepositionWindow();
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }
 
         if (!IsVisible)
@@ -161,7 +163,7 @@ public partial class MainWindow : Window
             _isFullscreenSuppressed = false;
             Visibility = Visibility.Visible;
             RepositionWindow();
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }
 
         if (!IsVisible)
@@ -241,7 +243,7 @@ public partial class MainWindow : Window
             _isFullscreenSuppressed = false;
             Visibility = Visibility.Visible;
             RepositionWindow();
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }
 
         if (!IsVisible)
@@ -299,7 +301,7 @@ public partial class MainWindow : Window
             SwitchTo(IslandView.Hub, force: true);
         }
 
-        UpdateWindowRegion();
+        ScheduleWindowRegionUpdate();
     }
 
     // ----- Views ---------------------------------------------------------
@@ -444,6 +446,21 @@ public partial class MainWindow : Window
     }
 
     // ----- Window region -------------------------------------------------
+
+    private void ScheduleWindowRegionUpdate()
+    {
+        if (_hwnd == IntPtr.Zero || _regionUpdateScheduled)
+        {
+            return;
+        }
+
+        _regionUpdateScheduled = true;
+        Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
+        {
+            _regionUpdateScheduled = false;
+            UpdateWindowRegion();
+        }));
+    }
 
     private void UpdateWindowRegion()
     {

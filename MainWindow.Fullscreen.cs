@@ -14,7 +14,7 @@ public partial class MainWindow
             _isFullscreenSuppressed = false;
             Visibility = Visibility.Visible;
             RepositionWindow();
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }
     }
 
@@ -32,7 +32,7 @@ public partial class MainWindow
                 _isFullscreenSuppressed = false;
                 Visibility = Visibility.Visible;
                 RepositionWindow();
-                UpdateWindowRegion();
+                ScheduleWindowRegionUpdate();
             }
             return;
         }
@@ -48,7 +48,7 @@ public partial class MainWindow
             _isFullscreenSuppressed = false;
             Visibility = Visibility.Visible;
             RepositionWindow();
-            UpdateWindowRegion();
+            ScheduleWindowRegionUpdate();
         }
     }
 
