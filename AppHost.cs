@@ -15,10 +15,12 @@ public sealed class AppHost : IDisposable
     private PomodoroService? _pomodoro;
     private WaterService? _water;
     private ShelfService? _shelf;
+    private UpdateService? _updates;
     private TrayService? _tray;
     private MainViewModel? _viewModel;
     private MainWindow? _window;
     private SettingsWindow? _settingsWindow;
+    private bool _updateCheckRunning;
 
     public void Start()
     {
@@ -33,6 +35,7 @@ public sealed class AppHost : IDisposable
             _pomodoro = new PomodoroService(_settings);
             _water = new WaterService(_settings);
             _shelf = new ShelfService(_settings);
+            _updates = new UpdateService();
 
             _viewModel = new MainViewModel(_settings, _media, _lyrics, _audio, _power, _pomodoro, _water, _shelf);
 
@@ -45,6 +48,8 @@ public sealed class AppHost : IDisposable
             _tray.GlobalHotkeysToggled += enabled => _window?.SetGlobalHotkeysEnabled(enabled);
             _tray.ExitRequested += () => Application.Current.Shutdown();
             _tray.SettingsRequested += ShowSettings;
+            _tray.UpdateCheckRequested += () => _ = CheckUpdatesAsync(manual: true);
+            _tray.UpdateOpenRequested += UpdateService.OpenReleasePage;
 
             _viewModel.NotifyRequested += (title, message) => _tray?.ShowNotification(title, message);
             _viewModel.PinRequested += pinned => _tray?.SetPinned(pinned);
@@ -54,12 +59,53 @@ public sealed class AppHost : IDisposable
             _window.SetClickGuard(_settings.Current.ClickGuardEnabled);
 
             _ = _viewModel.InitializeAsync();
+            _ = CheckUpdatesAsync(manual: false, delaySeconds: 6);
         }
         catch (Exception ex)
         {
             Infrastructure.Log.Write("NusaLite failed to start.", ex);
             MessageBox.Show(ex.Message, "NusaLite", MessageBoxButton.OK, MessageBoxImage.Error);
             Application.Current.Shutdown();
+        }
+    }
+
+    private async Task CheckUpdatesAsync(bool manual, int delaySeconds = 0)
+    {
+        if (_updates is null || _tray is null || _updateCheckRunning)
+        {
+            return;
+        }
+
+        _updateCheckRunning = true;
+        try
+        {
+            if (delaySeconds > 0)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+            }
+
+            var result = await _updates.CheckAsync();
+
+            if (result is { Status: UpdateCheckStatus.UpdateAvailable, Release: { } release })
+            {
+                _tray.ShowUpdateAvailable(release);
+            }
+            else if (manual && result.Status == UpdateCheckStatus.UpToDate)
+            {
+                _tray.ShowNotification("Periksa Pembaruan", "Sudah versi terbaru");
+            }
+            else if (manual)
+            {
+                _tray.ShowNotification("Periksa Pembaruan", "Tidak dapat memeriksa pembaruan saat ini.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Infrastructure.Log.Write("Update check failed.", ex);
+        }
+        finally
+        {
+            _updateCheckRunning = false;
         }
     }
 

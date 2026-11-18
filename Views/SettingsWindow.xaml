@@ -498,7 +498,7 @@
 
             <StackPanel x:Name="PanelTentang" Visibility="Collapsed">
                 <TextBlock Text="Tentang" Style="{StaticResource SectionTitle}" />
-                <TextBlock x:Name="VersionText" Text="NusaLite v1.3.0"
+                <TextBlock x:Name="VersionText" Text=""
                            Style="{StaticResource RowLabel}" Margin="0,8,0,0" />
                 <TextBlock Text="Pengaturan disimpan lokal di %APPDATA%\NusaLite\settings.json."
                            Style="{StaticResource SectionNote}" Margin="0,6,0,0" />

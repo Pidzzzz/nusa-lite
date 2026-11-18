@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -42,19 +41,11 @@ public partial class SettingsWindow : Window
 
         InitializeComponent();
 
-        VersionText.Text = $"NusaLite v{GetVersion()}";
+        VersionText.Text = $"NusaLite v{UpdateService.CurrentVersion}";
 
         SectionList.SelectedIndex = 0;
         LoadFromSettings();
         _loading = false;
-    }
-
-    private static string GetVersion()
-    {
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        return version is null
-            ? "1.0.0"
-            : $"{version.Major}.{version.Minor}.{version.Build}";
     }
 
     private void LoadFromSettings()

@@ -51,7 +51,7 @@ public sealed class LyricsService : IDisposable
         {
             Timeout = TimeSpan.FromSeconds(12)
         };
-        _http.DefaultRequestHeaders.UserAgent.ParseAdd("NusaLite/1.0 (Windows; living notch)");
+        _http.DefaultRequestHeaders.UserAgent.ParseAdd($"NusaLite/{UpdateService.CurrentVersion} (Windows; living notch)");
         _http.DefaultRequestHeaders.Accept.ParseAdd("application/json");
     }
 

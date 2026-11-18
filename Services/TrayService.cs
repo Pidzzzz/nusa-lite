@@ -21,6 +21,8 @@ public sealed class TrayService : IDisposable
     private readonly WinForms.ToolStripMenuItem _startupItem;
     private Stream? _iconStream;
     private string? _appliedTheme;
+    private string? _lastReleaseUrl;
+    private string? _balloonActionUrl;
 
     public TrayService(SettingsStore settings, Func<bool> isPinned)
     {
@@ -75,6 +77,7 @@ public sealed class TrayService : IDisposable
 
         _menu.Items.Add(new WinForms.ToolStripSeparator());
         _menu.Items.Add(Item("Pengaturan...", (_, _) => SettingsRequested?.Invoke()));
+        _menu.Items.Add(Item("Periksa Pembaruan", (_, _) => OnCheckUpdatesClicked()));
 
         _menu.Items.Add(new WinForms.ToolStripSeparator());
         _menu.Items.Add(Item("Keluar", (_, _) => ExitRequested?.Invoke()));
@@ -100,6 +103,14 @@ public sealed class TrayService : IDisposable
             ContextMenuStrip = _menu
         };
         _notifyIcon.DoubleClick += (_, _) => OpenRequested?.Invoke(IslandView.Player);
+        _notifyIcon.BalloonTipClicked += (_, _) =>
+        {
+            if (_balloonActionUrl is { Length: > 0 } url)
+            {
+                _balloonActionUrl = null;
+                UpdateOpenRequested?.Invoke(url);
+            }
+        };
 
         if (_settings.Current.StartWithWindows)
         {
@@ -125,6 +136,10 @@ public sealed class TrayService : IDisposable
 
     public event Action? SettingsRequested;
 
+    public event Action? UpdateCheckRequested;
+
+    public event Action<string>? UpdateOpenRequested;
+
     public void SetPinned(bool pinned)
     {
         _pinItem.Checked = pinned;
@@ -132,10 +147,33 @@ public sealed class TrayService : IDisposable
 
     public void ShowNotification(string title, string message)
     {
+        _balloonActionUrl = null;
         _notifyIcon.BalloonTipTitle = title;
         _notifyIcon.BalloonTipText = message;
         _notifyIcon.BalloonTipIcon = WinForms.ToolTipIcon.None;
         _notifyIcon.ShowBalloonTip(4000);
+    }
+
+    public void ShowUpdateAvailable(UpdateInfo release)
+    {
+        _lastReleaseUrl = release.HtmlUrl;
+        ShowNotification(
+            "Pembaruan tersedia",
+            $"NusaLite {release.DisplayTag} sudah tersedia. Klik untuk membuka halaman rilis.");
+        _balloonActionUrl = release.HtmlUrl;
+    }
+
+    private void OnCheckUpdatesClicked()
+    {
+        if (_lastReleaseUrl is { Length: > 0 } url)
+        {
+            _lastReleaseUrl = null;
+            _balloonActionUrl = null;
+            UpdateOpenRequested?.Invoke(url);
+            return;
+        }
+
+        UpdateCheckRequested?.Invoke();
     }
 
     private void ToggleAutoLyrics()

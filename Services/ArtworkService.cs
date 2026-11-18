@@ -371,7 +371,7 @@ public sealed class ArtworkService
         {
             Timeout = TimeSpan.FromSeconds(8)
         };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("NusaLite/1.0 (Windows)");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd($"NusaLite/{UpdateService.CurrentVersion} (Windows)");
         return client;
     }
 
