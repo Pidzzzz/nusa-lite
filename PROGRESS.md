@@ -6,9 +6,9 @@
 
 ## Status saat ini
 - Sedang dikerjakan: —
-- Terakhir selesai: Sesi 35 — chevron `‹`/`›` mengapit grup dot di `DotsBar`: target klik 24×24 px dengan glyph 16 px, warna `MistBrush` tema opacity 0,6 → 1,0 saat hover, cursor Hand, tooltip "View sebelumnya"/"View berikutnya". Navigasi mengikuti `Carousel` Player→Lyrics→Focus→Water→Shelf dengan putar balik; Hub memakai ujung deret. Klik dot langsung, pil, scroll, tray, hotkey, dan urutan view tidak berubah. Tinggi visual bar tetap 12 px; window region diperluas agar area klik 24 px tetap aktif. Build Release 0 error (8 warning pre-existing; exe terkunci instance berjalan).
-- Langkah berikutnya persis: user verifikasi visual — chevron mengapit dot di tengah, target terasa 24×24, opacity 0,6 → 1,0 saat hover, tooltip benar, navigasi maju/mundur memutar di ujung, klik dot langsung tetap, dan bar tidak berubah tinggi; perubahan belum di-commit.
-- Blocker / keputusan penting: tidak ada; build normal `bin\Release` sukses 0 error (8 warning pre-existing tidak berubah; exe tidak tersalin karena instance berjalan).
+- Terakhir selesai: Sesi 37 — desinkronisasi `_view` ↔ `ContentHost.Content` saat island menyusut ke Idle lewat hover-out/mouse-leave (Click Guard mati). Akar: konten hanya di-assign di `fadeOut.Completed` (`MainWindow.Animation.cs`, dulu baris 48) yang dibatalkan guard `generation != _transition` atau exception ditelan `DispatcherUnhandledException` (`App.xaml.cs:61-65`), sementara `UpdateIdleLayout`/`RefreshBrowserState` memanggil `ApplySpec` tanpa swap konten → PlayerView tetap ter-mount & ter-clip di pill Idle. Perbaikan hanya di `MainWindow.Animation.cs`: `CompleteTransition` idempotent (`_appliedGeneration`), `DispatcherTimer` fallback 400 ms (`ScheduleContentFallback`) yang memaksa transisi selesai, dan `ReconcileContentIfIdle` di awal `ApplySpec` menyamakan `ContentHost.Content` dengan `_view`. Sapuan grep `ContentHost.Content =` hanya 3 titik (startup, transisi, rekonsiliasi). Build Release 0 error (18 warning pre-existing; exe terkunci instance berjalan, verifikasi via output terpisah).
+- Langkah berikutnya persis: user verifikasi visual — hover-out dari view mana pun (Click Guard mati) harus mendarat di IdleView penuh (bukan PlayerView terkompres); hover-in tetap mengembang ke view benar; jalur Click Guard aktif, ganti lagu/pause, chevron & dot Sesi 35 tidak berubah. Perubahan belum di-commit.
+- Blocker / keputusan penting: Sesi 36 masih terbuka — perbaikan ini tidak menyentuh `ScheduleWindowRegionUpdate`/`UpdateWindowRegion`; verifikasi region tetap tugas user.
 
 ## Roadmap (dari README)
 - [ ] Persistensi item Shelf setelah restart
@@ -19,6 +19,11 @@
 - [ ] Installer dan build release otomatis
 
 ## Log harian
+### 2026-11-18
+- Sesi 37: penyebab (c) — `_view` diganti di `SwitchTo` (`MainWindow.xaml.cs:328`) sebelum `AnimateTo`, tetapi swap `ContentHost.Content` hanya terjadi di `fadeOut.Completed` yang bisa dibatalkan guard generasi atau gagal senyap (exception ditelan `App.xaml.cs:61-65`); jalur shrink ke Idle (`UpdateIdleLayout`, `RefreshBrowserState`) memanggil `ApplySpec` tanpa swap sehingga PlayerView fixed 512×158 ter-clip di pill Idle.
+- Perbaikan di `MainWindow.Animation.cs` saja: `CompleteTransition` idempotent + `ScheduleContentFallback` (DispatcherTimer 400 ms) sebagai jaring pengaman bila callback gagal, lalu `ReconcileContentIfIdle` di awal `ApplySpec` menyelaraskan konten dengan `_view` saat tidak ada transisi berjalan.
+- Sapuan grep: assignment konten hanya startup (`MainWindow.xaml.cs:295`), transisi, dan rekonsiliasi; tidak ada jalur lain. Build Release 0 error (warning pre-existing); region Sesi 36 tidak disentuh (masih terbuka).
+
 ### 2026-11-17
 - Sesi 31–32: IdleView memakai LyricTicker TextTrimming (bukan ScrollingText) dengan fade OpacityMask 18 px alfa-hitam hanya saat PomodoroActive; viewport dihitung dari lebar TickerZone aktual dan layout Idle tanpa sesi kembali ke overlay pra-Sesi 28. Bukti baris PlayerView memakai kolom Auto untuk chip Fokus sehingga zona chip ≈86 px tidak mengurangi baris lirik; baris lirik dipecah Grid `*` + `Auto` dengan SharedSizeGroup dan zona cadangan 0 saat chip Collapsed; sapuan grep bersih; build Release 0 error/0 warning.
 - Sesi 33: penyebab (a) — `LoadLyricsAsync` mengosongkan `_lyricLines`/`_lyricIndex` tetapi tidak `_lyricPrev/_lyricCurrent/_lyricNext`; `UpdateLyricIndex` keluar awal saat kosong sehingga string lama tetap ter-bind, sementara pil "Liriknya belum ketemu" sudah tampil. Perbaikan sumber: `ResetLyricDisplay` di awal load, `ClearLyrics`, dan `UpdateLyricIndex` kosong; error lewat `ClearLyrics`; LyricsView/Player/Hub berbagi state, Idle via `IdleLine`. Sapuan grep jalur status bersih; build Release normal 0 error/0 warning.

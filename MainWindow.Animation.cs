@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using NusaLite.Infrastructure;
 using NusaLite.Models;
 using NusaLite.Views;
@@ -10,12 +11,23 @@ namespace NusaLite;
 
 public partial class MainWindow
 {
+    private DispatcherTimer? _contentSyncTimer;
+    private int _appliedGeneration;
+    private int _pendingGeneration;
+    private IslandView _pendingView;
+    private IslandSpec _pendingSpec;
+    private bool _pendingFast;
+    private IslandView _contentView = IslandView.Idle;
+
     private void AnimateTo(IslandSpec spec, bool fast)
     {
         var generation = ++_transition;
+        var view = _view;
         var fadeOutMs = 150;
         var morphMs = fast ? 300 : 340;
         var ease = MorphEase.Shared;
+
+        ScheduleContentFallback(generation, view, spec, fast);
 
         var fadeOut = new DoubleAnimation(
             ContentHost.Opacity,
@@ -34,39 +46,87 @@ public partial class MainWindow
             FillBehavior = FillBehavior.Stop
         };
 
-        fadeOut.Completed += (_, _) =>
-        {
-            if (generation != _transition)
-            {
-                return;
-            }
-
-            ContentHost.BeginAnimation(OpacityProperty, null);
-            ContentHost.Opacity = 0;
-            ContentSlide.BeginAnimation(TranslateTransform.YProperty, null);
-            ContentSlide.Y = 7;
-            ContentHost.Content = GetView(_view);
-            ApplySpec(spec, fast);
-
-            var beginTime = TimeSpan.Zero;
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(morphMs))
-            {
-                BeginTime = beginTime,
-                EasingFunction = ease
-            };
-            ContentHost.BeginAnimation(OpacityProperty, fadeIn);
-
-            var slideIn = new DoubleAnimation(7, 0, TimeSpan.FromMilliseconds(morphMs))
-            {
-                BeginTime = beginTime,
-                EasingFunction = ease,
-                FillBehavior = FillBehavior.Stop
-            };
-            ContentSlide.BeginAnimation(TranslateTransform.YProperty, slideIn);
-        };
+        fadeOut.Completed += (_, _) => CompleteTransition(generation, view, spec, fast, morphMs, ease);
 
         ContentHost.BeginAnimation(OpacityProperty, fadeOut);
         ContentSlide.BeginAnimation(TranslateTransform.YProperty, slideOut);
+    }
+
+    private void ScheduleContentFallback(int generation, IslandView view, IslandSpec spec, bool fast)
+    {
+        _pendingGeneration = generation;
+        _pendingView = view;
+        _pendingSpec = spec;
+        _pendingFast = fast;
+
+        if (_contentSyncTimer is null)
+        {
+            _contentSyncTimer = new DispatcherTimer(DispatcherPriority.Loaded)
+            {
+                Interval = TimeSpan.FromMilliseconds(400)
+            };
+            _contentSyncTimer.Tick += (_, _) =>
+            {
+                _contentSyncTimer?.Stop();
+                CompleteTransition(
+                    _pendingGeneration, _pendingView, _pendingSpec, _pendingFast,
+                    _pendingFast ? 300 : 340, MorphEase.Shared);
+            };
+            Closed += (_, _) => _contentSyncTimer?.Stop();
+        }
+
+        _contentSyncTimer.Stop();
+        _contentSyncTimer.Start();
+    }
+
+    private void CompleteTransition(
+        int generation, IslandView view, IslandSpec spec, bool fast, int morphMs, IEasingFunction ease)
+    {
+        if (generation != _transition || generation == _appliedGeneration)
+        {
+            return;
+        }
+
+        _appliedGeneration = generation;
+        _contentSyncTimer?.Stop();
+
+        var targetView = _view;
+        var targetSpec = targetView == view ? spec : ResolveSpec(targetView);
+
+        ContentHost.BeginAnimation(OpacityProperty, null);
+        ContentHost.Opacity = 0;
+        ContentSlide.BeginAnimation(TranslateTransform.YProperty, null);
+        ContentSlide.Y = 7;
+        ContentHost.Content = GetView(targetView);
+        _contentView = targetView;
+        ApplySpec(targetSpec, fast);
+
+        var beginTime = TimeSpan.Zero;
+        var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(morphMs))
+        {
+            BeginTime = beginTime,
+            EasingFunction = ease
+        };
+        ContentHost.BeginAnimation(OpacityProperty, fadeIn);
+
+        var slideIn = new DoubleAnimation(7, 0, TimeSpan.FromMilliseconds(morphMs))
+        {
+            BeginTime = beginTime,
+            EasingFunction = ease,
+            FillBehavior = FillBehavior.Stop
+        };
+        ContentSlide.BeginAnimation(TranslateTransform.YProperty, slideIn);
+    }
+
+    private void ReconcileContentIfIdle()
+    {
+        if (_transition != _appliedGeneration || _contentView == _view)
+        {
+            return;
+        }
+
+        _contentView = _view;
+        ContentHost.Content = GetView(_view);
     }
 
     private void ApplySpec(IslandSpec spec, bool fast)
@@ -78,6 +138,7 @@ public partial class MainWindow
         }
 
         ApplyContentScale();
+        ReconcileContentIfIdle();
 
         var generation = _transition;
         var duration = TimeSpan.FromMilliseconds(fast ? 300 : 340);
@@ -155,7 +216,7 @@ public partial class MainWindow
         {
             if (generation == _transition)
             {
-                UpdateWindowRegion();
+                ScheduleWindowRegionUpdate();
             }
         };
 
