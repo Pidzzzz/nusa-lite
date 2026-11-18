@@ -1,14 +1,33 @@
 # Patch Notes
 
-## v1.4.0 — 10 November 2026
+## v1.4.0 — 18 November 2026
 
-Penanda aplikasi sumber media di tampilan Idle.
+Pembaruan tampilan besar: tiga tema, chip Fokus di tiga tampilan, komposisi Fokus baru, tray yang menyatu dengan tema, navigasi chevron, plus perbaikan lirik dan transisi — ditutup dengan fitur cek pembaruan.
 
 > **Catatan pemasangan** — File `.exe` belum ditandatangani secara digital. Saat pertama dijalankan, Windows SmartScreen mungkin menampilkan peringatan; klik **More info** lalu **Run anyway** untuk melanjutkan.
 
 ### Fitur baru
 
-- **Ikon aplikasi sumber di tampilan Idle** — ikon kecil di samping lirik menunjukkan aplikasi yang sedang memutar media (Spotify, YouTube Music, YouTube, browser, atau pemutar lain) dengan warna khas masing-masing; lebar notch menyesuaikan otomatis.
+- **Tema Graphite, Void, dan Terang** — Pilihan tema di jendela Pengaturan dengan token warna semantik, aksen gradien per tema, dan bobot tipografi yang dikalibrasi; pilihan tersimpan otomatis.
+- **Chip Timer Fokus di tiga tampilan** — Ring kecil, label fase, dan waktu tabular muncul di Idle, Lirik, dan Pemutar selama sesi Pomodoro berjalan; klik chip langsung membuka tampilan Fokus.
+- **Tampilan Fokus "Cincin Panggung"** — Cincin besar dengan timer di tengah, label fase, jam selesai, tombol Mulai/Jeda/Lanjut, serta Reset dan Lewati.
+- **Chevron navigasi di bar dot** — Tombol `‹` dan `›` mengapit deret dot (target 24×24 px, tooltip), memutar urutan Pemutar → Lirik → Fokus → Air → Shelf; klik dot langsung tetap berfungsi.
+- **Cek pembaruan** — Item tray "Periksa Pembaruan" dan pemeriksaan otomatis sekali di latar belakang beberapa detik setelah start; bila ada versi lebih baru, notifikasi tray membuka halaman rilis di browser.
+- **Menu tray mengikuti tema** — Latar, teks, hover, checkbox, pemisah, dan sorotan pilihan ikut tema aktif (sorotan ungu per tema, bukan biru bawaan Windows).
+- **Ikon sumber media di tampilan Idle** — Ikon kecil di samping lirik menunjukkan aplikasi yang sedang memutar media (Spotify, YouTube Music, YouTube, browser, atau pemutar lain); lebar notch menyesuaikan otomatis.
+
+### Perbaikan
+
+- **Lirik lama tidak lagi tertinggal** — Saat lirik tidak ditemukan atau gagal dimuat, baris lama langsung dibersihkan di Lirik, Pemutar, Hub, dan Idle.
+- **Lirik Idle lebih rapi saat Pomodoro** — Baris lirik menghormati lebar chip Fokus dan tepi kanan ticker memudar halus hanya selama sesi aktif.
+- **Transisi tampilan lebih andal** — Area jendela mengikuti layout terbaru setelah perubahan ukuran, dan konten island selalu disinkronkan dengan tampilan aktif meski animasi transisi terputus, sehingga island yang menyusut ke Idle tidak lagi menampilkan sisa tampilan Pemutar.
+- **Timer Fokus terbaca di tema gelap** — Angka timer mengikuti warna teks tema, tidak lagi hitam.
+- **Lirik mode compact tidak terpotong** — Padding baris dan margin akar dikembalikan agar tinggi tetap 76 px tanpa memotong baris aktif.
+- **Sorotan tray tidak lagi biru** — Warna seleksi/pressed/checkbox diganti palette ungu yang konsisten per tema.
+
+### Catatan perilaku
+
+- **Pemeriksaan pembaruan tidak mengunduh apa pun** — Aplikasi hanya memberi tahu dan membuka halaman rilis; unduh dan pasang tetap manual. Saat offline atau gagal, pemeriksaan otomatis diam tanpa pesan; pemeriksaan manual saat versi sudah terbaru menampilkan "Sudah versi terbaru".
 
 ---
 
